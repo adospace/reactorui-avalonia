@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.0-preview6" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.0-preview6" />
+    <PackageReference Include="System.CodeDom" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="TypeSourceGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>TypeSourceGenerator.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="TypeSourceGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TypeSourceGenerator.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>
