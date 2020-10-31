@@ -13,10 +13,12 @@ namespace AvaloniaReactorUI.DemoApp
         
         public override void OnFrameworkInitializationCompleted()
         {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                desktop.MainWindow = new MainWindow();
-            }
+            //if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            //{
+            //    desktop.MainWindow = new MainWindow();
+            //}
+
+            //RxApplication.Create<MainComponent>().WithHotReload();
 
             base.OnFrameworkInitializationCompleted();
         }
