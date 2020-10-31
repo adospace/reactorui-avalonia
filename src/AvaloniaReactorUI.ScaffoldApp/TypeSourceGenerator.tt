@@ -16,18 +16,29 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Avalonia;
+using Avalonia.Animation;
+using Avalonia.Controls;
+using Avalonia.Layout;
+using Avalonia.Media;
+using Avalonia.Interactivity;
+using Avalonia.Input;
+using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
+using Avalonia.Platform;
 
+using AvaloniaReactorUI.Internals;
 
 namespace AvaloniaReactorUI
 {
-    public interface IRx<#= TypeName #> : IRx<#= BaseTypeName #>
+    public interface IRx<#= TypeName #> : I<#= BaseTypeName #>
     {
     <# foreach (var property in Properties) { #>
         <#= property.PropertyType.Name.ToResevedWordTypeName() #> <#= property.Name #> { get; set; }
     <# } #>
     }
     
-    public class Rx<#= TypeName #><T> : Rx<#= BaseTypeName #><T>, IRx<#= TypeName #> where T : <#= TypeName #>, new()
+    public partial class Rx<#= TypeName #><T> : <#= BaseTypeName #><T>, IRx<#= TypeName #> where T : <#= TypeName #>, new()
     {
         public Rx<#= TypeName #>()
         { 
@@ -41,7 +52,7 @@ namespace AvaloniaReactorUI
         }
 
         <# foreach (var property in Properties) { #>
-        public <#= property.PropertyType.Name.ToResevedWordTypeName() #> <#= property.Name #> { get; set; } = (<#= property.PropertyType.Name.ToResevedWordTypeName() #>)<#= TypeName #>.<#= property.Name #>Property.DefaultMetadata.Value;
+        public <#= property.PropertyType.Name.ToResevedWordTypeName() #> <#= property.Name #> { get; set; } = (<#= property.PropertyType.Name.ToResevedWordTypeName() #>)<#= TypeName #>.<#= property.Name #>Property.GetDefaultValue<T>();
         <# } #>
 
         protected override void OnUpdate()
@@ -53,13 +64,9 @@ namespace AvaloniaReactorUI
             base.OnUpdate();
         }
 
-        protected override IEnumerable<VisualNode> RenderChildren()
-        {
-            yield break;
-        }
     }
-
-    public class Rx<#= TypeName #> : Rx<#= TypeName #><<#= TypeName #>>
+    <# if (IsTypeNotAbstractWithEmptyConstructur) { #>
+    public partial class Rx<#= TypeName #> : Rx<#= TypeName #><<#= TypeName #>>
     {
         public Rx<#= TypeName #>()
         { 
@@ -72,8 +79,8 @@ namespace AvaloniaReactorUI
 
         }
     }
-
-    public static class Rx<#= TypeName #>Extensions
+    <# } #>
+    public static partial class Rx<#= TypeName #>Extensions
     {
         <# foreach (var property in Properties) { #>
         public static T <#= property.Name #><T>(this T <#= TypeName.ToLowerInvariant() #>, <#= property.PropertyType.Name.ToResevedWordTypeName() #> <#= property.Name.CamelCase() #>) where T : IRx<#= TypeName #>
@@ -93,13 +100,7 @@ namespace AvaloniaReactorUI
             return <#= TypeName.ToLowerInvariant() #>;
         }
         <# } #>
-        <# if (property.Name == "FontSize") { #>
-        public static T <#= property.Name #><T>(this T <#= TypeName.ToLowerInvariant() #>, NamedSize size) where T : IRx<#= TypeName #>
-        {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = Device.GetNamedSize(size, typeof(<#= TypeName #>));
-            return <#= TypeName.ToLowerInvariant() #>;
-        }
-        <# } #>
+
 
         <# if (property.PropertyType.Name == "ImageSource") { 
                var propertyName = property.Name.Length <= 6 ? property.Name : property.Name.Substring(0, property.Name.Length - 6); #>

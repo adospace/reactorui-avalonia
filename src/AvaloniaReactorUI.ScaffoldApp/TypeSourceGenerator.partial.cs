@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls.Templates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace AvaloniaReactorUI.ScaffoldApp
 
             var propertiesMap = _typeToScaffold.GetProperties()
                 .Where(_ => !_.PropertyType.IsGenericType)
+                .Where(_ => _.PropertyType != typeof(IControlTemplate))
                 .Distinct(new PropertyInfoEqualityComparer())
                 .ToDictionary(_ => _.Name, _ => _);
 
@@ -31,12 +33,14 @@ namespace AvaloniaReactorUI.ScaffoldApp
                 .Where(_ => (_.GetSetMethod()?.IsPublic).GetValueOrDefault())
                 .ToArray();
 
-
+            
         }
 
         public string TypeName => _typeToScaffold.Name;
 
-        public string BaseTypeName => _typeToScaffold.BaseType.Name;
+        public string BaseTypeName => _typeToScaffold.BaseType.Name == "AvaloniaObject" ? "VisualNode" : $"Rx{_typeToScaffold.BaseType.Name}";
+
+        public bool IsTypeNotAbstractWithEmptyConstructur => !_typeToScaffold.IsAbstract && _typeToScaffold.GetConstructor(new Type[] { }) != null;
 
         public PropertyInfo[] Properties { get; }
 

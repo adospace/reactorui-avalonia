@@ -15,15 +15,14 @@ namespace AvaloniaReactorUI.ScaffoldApp
         public MainWindowViewModel(MainWindow view)
         {
             _view = view;
-            _types = (
-                from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
+            _types = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
                     // alternative: from domainAssembly in domainAssembly.GetExportedTypes()
                 from assemblyType in domainAssembly.GetTypes()
                 where typeof(Animatable).IsAssignableFrom(assemblyType)
                 // alternative: where assemblyType.IsSubclassOf(typeof(B))
                 // alternative: && ! assemblyType.IsAbstract
                 select assemblyType)
-                    .OrderBy(_ => _.Name)
+                    .OrderBy(_ => _.FullName)
                     .ToList();
         }
 
