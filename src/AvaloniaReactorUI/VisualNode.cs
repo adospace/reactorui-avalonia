@@ -352,6 +352,8 @@ namespace AvaloniaReactorUI
 
         protected virtual void OnMigrated(VisualNode newNode)
         {
+            OnDetachNativeEvents();
+
             foreach (var newAnimatableProperty in newNode._animatables)
             {
                 if (_animatables.TryGetValue(newAnimatableProperty.Key, out var oldAnimatableProperty))
@@ -377,6 +379,8 @@ namespace AvaloniaReactorUI
 
         protected virtual void OnUnmount()
         {
+            OnDetachNativeEvents();
+
             _isMounted = false;
             Parent = null;
         }
@@ -384,6 +388,18 @@ namespace AvaloniaReactorUI
         protected virtual void OnUpdate()
         {
             _stateChanged = false;
+
+            OnAttachNativeEvents();
+        }
+
+        protected virtual void OnAttachNativeEvents()
+        { 
+        
+        }
+
+        protected virtual void OnDetachNativeEvents()
+        { 
+        
         }
 
         protected virtual IEnumerable<VisualNode> RenderChildren()

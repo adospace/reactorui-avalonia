@@ -16,6 +16,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Input;
+
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -36,6 +38,11 @@ namespace AvaloniaReactorUI
     <# foreach (var property in Properties) { #>
         <#= property.PropertyType.Name.ToResevedWordTypeName() #> <#= property.Name #> { get; set; }
     <# } #>
+
+    <# foreach (var ev in Events) { #>
+        Action <#= ev.Name #>Action { get; set; }
+        Action<<#= ev.EventHandlerType.GetGenericArguments()[0].Name #>> <#= ev.Name #>ActionWithArgs { get; set; }
+    <# } #>
     }
     
     public partial class Rx<#= TypeName #><T> : <#= BaseTypeName #><T>, IRx<#= TypeName #> where T : <#= TypeName #>, new()
@@ -55,6 +62,11 @@ namespace AvaloniaReactorUI
         public <#= property.PropertyType.Name.ToResevedWordTypeName() #> <#= property.Name #> { get; set; } = (<#= property.PropertyType.Name.ToResevedWordTypeName() #>)<#= TypeName #>.<#= property.Name #>Property.GetDefaultValue<T>();
         <# } #>
 
+        <# foreach (var ev in Events) { #>
+        public Action <#= ev.Name #>Action { get; set; }
+        public Action<<#= ev.EventHandlerType.GetGenericArguments()[0].Name #>> <#= ev.Name #>ActionWithArgs { get; set; }
+        <# } #>
+
         protected override void OnUpdate()
         {
             <# foreach (var property in Properties) { #>
@@ -62,6 +74,35 @@ namespace AvaloniaReactorUI
             <# } #>
 
             base.OnUpdate();
+        }
+
+        protected override void OnAttachNativeEvents()
+        {
+            <# foreach (var ev in Events) { #>
+            if (<#= ev.Name #>Action != null || <#= ev.Name #>ActionWithArgs != null)
+            {
+                NativeControl.<#= ev.Name #> += NativeControl_<#= ev.Name #>;
+            }
+            <# } #>
+
+            base.OnAttachNativeEvents();
+        }
+
+        private void NativeControl_Click(object sender, RoutedEventArgs e)
+        {
+            <# foreach (var ev in Events) { #>
+            <#= ev.Name #>Action?.Invoke();
+            <#= ev.Name #>ActionWithArgs?.Invoke(e);
+            <# } #>
+        }
+
+        protected override void OnDetachNativeEvents()
+        {
+            <# foreach (var ev in Events) { #>
+            NativeControl.<#= ev.Name #> -= NativeControl_<#= ev.Name #>;
+            <# } #>
+
+            base.OnDetachNativeEvents();
         }
 
     }
@@ -143,6 +184,20 @@ namespace AvaloniaReactorUI
         <# } #>
 
 
+        <# } #>
+
+        <# foreach (var ev in Events) { #>
+        public static T On<#= ev.Name #><T>(this T <#= TypeName.ToLowerInvariant() #>, Action <#= ev.Name.ToLowerInvariant() #>Action) where T : IRx<#= TypeName #>
+        {
+            <#= TypeName.ToLowerInvariant() #>.<#= ev.Name #>Action = <#= ev.Name.ToLowerInvariant() #>Action;
+            return <#= TypeName.ToLowerInvariant() #>;
+        }
+
+        public static T On<#= ev.Name #><T>(this T <#= TypeName.ToLowerInvariant() #>, Action<<#= ev.EventHandlerType.GetGenericArguments()[0].Name #>> <#= ev.Name.ToLowerInvariant() #>ActionWithArgs) where T : IRx<#= TypeName #>
+        {
+            <#= TypeName.ToLowerInvariant() #>.<#= ev.Name #>ActionWithArgs = <#= ev.Name.ToLowerInvariant() #>ActionWithArgs;
+            return <#= TypeName.ToLowerInvariant() #>;
+        }
         <# } #>
     }
 }

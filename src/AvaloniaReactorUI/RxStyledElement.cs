@@ -22,7 +22,7 @@ namespace AvaloniaReactorUI
     public interface IRxStyledElement : IRxAnimatable
     {
         object DataContext { get; set; }
-        string Name { get; set; }
+        //string Name { get; set; }
     }
 
     public class RxStyledElement<T> : RxAnimatable<T>, IRxStyledElement where T : StyledElement, new()
@@ -39,12 +39,12 @@ namespace AvaloniaReactorUI
         }
 
         public object DataContext { get; set; } = (object)StyledElement.DataContextProperty.GetDefaultValue<T>();
-        public string Name { get; set; } = (string)StyledElement.NameProperty.GetDefaultValue<T>();
+        //public string Name { get; set; } = (string)StyledElement.NameProperty.GetDefaultValue<T>();
 
         protected override void OnUpdate()
         {
             NativeControl.DataContext = DataContext;
-            NativeControl.Name = Name;
+            //NativeControl.Name = Name;
 
             base.OnUpdate();
         }
@@ -75,11 +75,11 @@ namespace AvaloniaReactorUI
 
 
 
-        public static T Name<T>(this T styledelement, string name) where T : IRxStyledElement
-        {
-            styledelement.Name = name;
-            return styledelement;
-        }
+        //public static T Name<T>(this T styledelement, string name) where T : IRxStyledElement
+        //{
+        //    styledelement.Name = name;
+        //    return styledelement;
+        //}
 
 
 

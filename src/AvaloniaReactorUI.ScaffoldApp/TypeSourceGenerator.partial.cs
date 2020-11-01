@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls.Templates;
+using Avalonia.Interactivity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,12 @@ namespace AvaloniaReactorUI.ScaffoldApp
             _typeToScaffold = typeToScaffold;
 
             var propertiesMap = _typeToScaffold.GetProperties()
+                //generic types not supported
                 .Where(_ => !_.PropertyType.IsGenericType)
+                //excluding common properties not relevant to ReactorUI framework
                 .Where(_ => _.PropertyType != typeof(IControlTemplate))
+                .Where(_ => !(_typeToScaffold == typeof(StyledElement) && _.Name == "Name"))
+
                 .Distinct(new PropertyInfoEqualityComparer())
                 .ToDictionary(_ => _.Name, _ => _);
 
@@ -33,7 +38,18 @@ namespace AvaloniaReactorUI.ScaffoldApp
                 .Where(_ => (_.GetSetMethod()?.IsPublic).GetValueOrDefault())
                 .ToArray();
 
-            
+            var eventsMap = _typeToScaffold.GetEvents()
+                .Distinct(new EventInfoEqualityComparer())
+                .ToDictionary(_ => _.Name, _ => _);
+
+            Events = _typeToScaffold.GetFields(BindingFlags.Public | BindingFlags.Static)
+                .Where(_ => typeof(RoutedEvent).IsAssignableFrom(_.FieldType))
+                .Where(_ => _.GetCustomAttribute<ObsoleteAttribute>() == null)
+                .Select(_ => _.Name.Substring(0, _.Name.Length - "Event".Length))
+                .Where(_ => eventsMap.ContainsKey(_))
+                .Select(_ => eventsMap[_])
+                .Where(_ => _.GetCustomAttribute<ObsoleteAttribute>() == null)
+                .ToArray();
         }
 
         public string TypeName => _typeToScaffold.Name;
@@ -43,7 +59,7 @@ namespace AvaloniaReactorUI.ScaffoldApp
         public bool IsTypeNotAbstractWithEmptyConstructur => !_typeToScaffold.IsAbstract && _typeToScaffold.GetConstructor(new Type[] { }) != null;
 
         public PropertyInfo[] Properties { get; }
-
+        public EventInfo[] Events { get; }
     }
 
     internal class PropertyInfoEqualityComparer : IEqualityComparer<PropertyInfo>
@@ -54,6 +70,19 @@ namespace AvaloniaReactorUI.ScaffoldApp
         }
 
         public int GetHashCode(PropertyInfo obj)
+        {
+            return obj.Name.GetHashCode();
+        }
+    }
+
+    internal class EventInfoEqualityComparer : IEqualityComparer<EventInfo>
+    {
+        public bool Equals(EventInfo x, EventInfo y)
+        {
+            return x.Name == y.Name;
+        }
+
+        public int GetHashCode(EventInfo obj)
         {
             return obj.Name.GetHashCode();
         }
