@@ -71,12 +71,12 @@ namespace AvaloniaReactorUI.Internals
         {
             try
             {
-                connectedClient.ReceiveTimeout = 5000;
+                connectedClient.ReceiveTimeout = 50000;
                 using var sr = new StreamReader(connectedClient.GetStream());
-                var command = sr.ReadLine().Split('|');
-                if (command[0] == "RELOAD")
+                var command = sr.ReadLine();
+                if (command == "RELOAD")
                 {
-                    HotReloadCommandIssued?.Invoke(this, command.Skip(1).ToArray());
+                    HotReloadCommandIssued?.Invoke(this, EventArgs.Empty);
                 }
             }
             catch (Exception)
@@ -98,7 +98,7 @@ namespace AvaloniaReactorUI.Internals
             _serverSocket?.Stop();
         }
 
-        public event EventHandler<string[]> HotReloadCommandIssued;
+        public event EventHandler HotReloadCommandIssued;
     }
 
 }

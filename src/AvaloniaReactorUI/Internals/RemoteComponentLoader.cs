@@ -11,61 +11,62 @@ using System.Threading.Tasks;
 
 namespace AvaloniaReactorUI.Internals
 {
-    internal class RemoteComponentLoader : IComponentLoader
-    {
-        private Assembly[] _latestAssemblies;
-        private readonly HotReloadServer _hotReloadServer;
+    //internal class RemoteComponentLoader : IComponentLoader
+    //{
+    //    private Assembly[] _latestAssemblies;
+    //    private readonly HotReloadServer _hotReloadServer;
 
-        public static IComponentLoader Instance { get; set; } = new RemoteComponentLoader();
+    //    public static IComponentLoader Instance { get; set; } = new RemoteComponentLoader();
 
-        public RemoteComponentLoader(int serverPort = 45821)
-        {
-            if (Instance != null)
-            {
-                throw new InvalidOperationException("Only one instance of RxApplication is permitted");
-            }
+    //    public RemoteComponentLoader(int serverPort = 45821)
+    //    {
+    //        if (Instance != null)
+    //        {
+    //            throw new InvalidOperationException("Only one instance of RxApplication is permitted");
+    //        }
 
-            Instance = this;
-            _hotReloadServer = new HotReloadServer(serverPort);
-        }
+    //        Instance = this;
 
-        private void OnHotReloadCommandIssued(object sender, string[] assemblies)
-        {
-            _latestAssemblies = assemblies.Select(_ => Assembly.LoadFrom(_)).ToArray();
-            ComponentAssemblyChanged?.Invoke(this, EventArgs.Empty);
-        }
+    //        _hotReloadServer = new HotReloadServer(serverPort);
+    //    }
 
-        public void Run()
-        {
-            _hotReloadServer.HotReloadCommandIssued += OnHotReloadCommandIssued;
-            _hotReloadServer.Start();
-        }
+    //    private void OnHotReloadCommandIssued(object sender, EventArgs e)
+    //    {
+    //        _latestAssemblies = new [] { Assembly.LoadFrom(_));
+    //        ComponentAssemblyChanged?.Invoke(this, EventArgs.Empty);
+    //    }
 
-        public void Stop()
-        {
-            _hotReloadServer.HotReloadCommandIssued -= OnHotReloadCommandIssued;
-            _hotReloadServer.Stop();
-        }
+    //    public void Run()
+    //    {
+    //        _hotReloadServer.HotReloadCommandIssued += OnHotReloadCommandIssued;
+    //        _hotReloadServer.Start();
+    //    }
 
-        public event EventHandler ComponentAssemblyChanged;
+    //    public void Stop()
+    //    {
+    //        _hotReloadServer.HotReloadCommandIssued -= OnHotReloadCommandIssued;
+    //        _hotReloadServer.Stop();
+    //    }
 
-        public RxComponent LoadComponent<T>() where T : RxComponent, new()
-        {
-            if (_latestAssemblies == null)
-                return new T();
+    //    public event EventHandler ComponentAssemblyChanged;
 
-            foreach (var assembly in _latestAssemblies)
-            {
-                var type = assembly.GetType(typeof(T).FullName);
+    //    public RxComponent LoadComponent<T>() where T : RxComponent, new()
+    //    {
+    //        if (_latestAssemblies == null)
+    //            return new T();
 
-                if (type != null)
-                {
-                    return (RxComponent)Activator.CreateInstance(type);
-                }
-            }
+    //        foreach (var assembly in _latestAssemblies)
+    //        {
+    //            var type = assembly.GetType(typeof(T).FullName);
 
-            return null;
-        }
-    }
+    //            if (type != null)
+    //            {
+    //                return (RxComponent)Activator.CreateInstance(type);
+    //            }
+    //        }
+
+    //        return null;
+    //    }
+    //}
 
 }

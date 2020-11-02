@@ -1,6 +1,10 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Formatting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +26,9 @@ namespace AvaloniaReactorUI.ScaffoldApp
                 .Where(_ => !_.PropertyType.IsGenericType)
                 //excluding common properties not relevant to ReactorUI framework
                 .Where(_ => _.PropertyType != typeof(IControlTemplate))
+                .Where(_ => _.PropertyType != typeof(IDataTemplate))
                 .Where(_ => !(_typeToScaffold == typeof(StyledElement) && _.Name == "Name"))
+                .Where(_ => !(_typeToScaffold == typeof(ContentControl) && _.Name == "Content"))
 
                 .Distinct(new PropertyInfoEqualityComparer())
                 .ToDictionary(_ => _.Name, _ => _);
@@ -59,7 +65,22 @@ namespace AvaloniaReactorUI.ScaffoldApp
         public bool IsTypeNotAbstractWithEmptyConstructur => !_typeToScaffold.IsAbstract && _typeToScaffold.GetConstructor(new Type[] { }) != null;
 
         public PropertyInfo[] Properties { get; }
+
         public EventInfo[] Events { get; }
+
+        public string TransformAndPrettify()
+        {
+            var tree = CSharpSyntaxTree.ParseText(TransformText());
+
+            var workSpace = new AdhocWorkspace();
+            workSpace.AddSolution(
+                      SolutionInfo.Create(SolutionId.CreateNewId("formatter"),
+                      VersionStamp.Default)
+            );
+
+            var formatter = Formatter.Format(tree.GetCompilationUnitRoot(), workSpace);
+            return formatter.ToString();
+        }
     }
 
     internal class PropertyInfoEqualityComparer : IEqualityComparer<PropertyInfo>

@@ -80,7 +80,7 @@ namespace AvaloniaReactorUI.ScaffoldApp
             }
 
             var generator = new TypeSourceGenerator(SelectedType);
-            SourceCode = generator.TransformText();
+            SourceCode = generator.TransformAndPrettify();
         }
 
         public async void BrowseAssemblyPath()

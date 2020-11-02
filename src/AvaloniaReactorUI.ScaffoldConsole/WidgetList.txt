@@ -1,0 +1,16 @@
+﻿Avalonia.Animation.Animatable
+Avalonia.Controls.Button
+Avalonia.Controls.ContentControl
+Avalonia.Controls.Control
+Avalonia.Input.InputElement
+Avalonia.Interactivity.Interactive
+Avalonia.Layout.Layoutable
+Avalonia.Controls.Panel
+Avalonia.Controls.StackPanel
+Avalonia.StyledElement
+Avalonia.Controls.Primitives.TemplatedControl
+Avalonia.Controls.TextBlock
+Avalonia.Controls.TopLevel
+Avalonia.Visual
+Avalonia.Controls.Window
+Avalonia.Controls.WindowBase

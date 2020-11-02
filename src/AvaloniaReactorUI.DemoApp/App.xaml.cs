@@ -18,8 +18,7 @@ namespace AvaloniaReactorUI.DemoApp
             //    desktop.MainWindow = new MainWindow();
             //}
 
-            RxApplication.Create<MainComponent>(this)
-                .WithHotReload()
+            RxApplication.CreateWithHotReload<TimerComponent>(this)
                 .Run();
 
             base.OnFrameworkInitializationCompleted();

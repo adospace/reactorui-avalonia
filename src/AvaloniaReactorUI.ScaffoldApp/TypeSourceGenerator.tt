@@ -33,10 +33,10 @@ using AvaloniaReactorUI.Internals;
 
 namespace AvaloniaReactorUI
 {
-    public interface IRx<#= TypeName #> : I<#= BaseTypeName #>
+    public partial interface IRx<#= TypeName #> : I<#= BaseTypeName #>
     {
     <# foreach (var property in Properties) { #>
-        <#= property.PropertyType.Name.ToResevedWordTypeName() #> <#= property.Name #> { get; set; }
+        PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>> <#= property.Name #> { get; set; }
     <# } #>
 
     <# foreach (var ev in Events) { #>
@@ -59,27 +59,36 @@ namespace AvaloniaReactorUI
         }
 
         <# foreach (var property in Properties) { #>
-        public <#= property.PropertyType.Name.ToResevedWordTypeName() #> <#= property.Name #> { get; set; } = (<#= property.PropertyType.Name.ToResevedWordTypeName() #>)<#= TypeName #>.<#= property.Name #>Property.GetDefaultValue<T>();
+        PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>> IRx<#= TypeName #>.<#= property.Name #> { get; set; }
         <# } #>
 
         <# foreach (var ev in Events) { #>
-        public Action <#= ev.Name #>Action { get; set; }
-        public Action<<#= ev.EventHandlerType.GetGenericArguments()[0].Name #>> <#= ev.Name #>ActionWithArgs { get; set; }
+        Action IRx<#= TypeName #>.<#= ev.Name #>Action { get; set; }
+        Action<<#= ev.EventHandlerType.GetGenericArguments()[0].Name #>> IRx<#= TypeName #>.<#= ev.Name #>ActionWithArgs { get; set; }
         <# } #>
 
         protected override void OnUpdate()
         {
+            OnBeginUpdate();
+
+            var thisAsIRx<#= TypeName #> = (IRx<#= TypeName #>)this;
             <# foreach (var property in Properties) { #>
-            NativeControl.<#= property.Name #> = <#= property.Name #>;
+            NativeControl.Set(<#= TypeName #>.<#= property.Name #>Property, thisAsIRx<#= TypeName #>.<#= property.Name #>);
             <# } #>
 
             base.OnUpdate();
+
+            OnEndUpdate();
         }
+
+        partial void OnBeginUpdate();
+        partial void OnEndUpdate();
 
         protected override void OnAttachNativeEvents()
         {
+            var thisAsIRx<#= TypeName #> = (IRx<#= TypeName #>)this;
             <# foreach (var ev in Events) { #>
-            if (<#= ev.Name #>Action != null || <#= ev.Name #>ActionWithArgs != null)
+            if (thisAsIRx<#= TypeName #>.<#= ev.Name #>Action != null || thisAsIRx<#= TypeName #>.<#= ev.Name #>ActionWithArgs != null)
             {
                 NativeControl.<#= ev.Name #> += NativeControl_<#= ev.Name #>;
             }
@@ -88,19 +97,23 @@ namespace AvaloniaReactorUI
             base.OnAttachNativeEvents();
         }
 
-        private void NativeControl_Click(object sender, RoutedEventArgs e)
+        <# foreach (var ev in Events) { #>
+        private void NativeControl_<#= ev.Name #>(object sender, <#= ev.EventHandlerType.GetGenericArguments()[0].Name #> e)
         {
-            <# foreach (var ev in Events) { #>
-            <#= ev.Name #>Action?.Invoke();
-            <#= ev.Name #>ActionWithArgs?.Invoke(e);
-            <# } #>
+            var thisAsIRx<#= TypeName #> = (IRx<#= TypeName #>)this;
+            thisAsIRx<#= TypeName #>.<#= ev.Name #>Action?.Invoke();
+            thisAsIRx<#= TypeName #>.<#= ev.Name #>ActionWithArgs?.Invoke(e);
         }
+        <# } #>
 
         protected override void OnDetachNativeEvents()
         {
+            if (NativeControl != null)
+            {
             <# foreach (var ev in Events) { #>
             NativeControl.<#= ev.Name #> -= NativeControl_<#= ev.Name #>;
             <# } #>
+            }
 
             base.OnDetachNativeEvents();
         }
@@ -126,66 +139,56 @@ namespace AvaloniaReactorUI
         <# foreach (var property in Properties) { #>
         public static T <#= property.Name #><T>(this T <#= TypeName.ToLowerInvariant() #>, <#= property.PropertyType.Name.ToResevedWordTypeName() #> <#= property.Name.CamelCase() #>) where T : IRx<#= TypeName #>
         {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = <#= property.Name.CamelCase() #>;
+            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>>(<#= property.Name.CamelCase() #>);
             return <#= TypeName.ToLowerInvariant() #>;
         }
         <# if (property.PropertyType.Name == "Thickness") { #>
         public static T <#= property.Name #><T>(this T <#= TypeName.ToLowerInvariant() #>, double leftRight, double topBottom) where T : IRx<#= TypeName #>
         {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new Thickness(leftRight, topBottom);
+            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>>(new Thickness(leftRight, topBottom));
             return <#= TypeName.ToLowerInvariant() #>;
         }
         public static T <#= property.Name #><T>(this T <#= TypeName.ToLowerInvariant() #>, double uniformSize) where T : IRx<#= TypeName #>
         {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new Thickness(uniformSize);
+            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>>(new Thickness(uniformSize));
             return <#= TypeName.ToLowerInvariant() #>;
         }
         <# } #>
-
-
-        <# if (property.PropertyType.Name == "ImageSource") { 
+            <# if (property.PropertyType.Name == "ImageSource") { 
                var propertyName = property.Name.Length <= 6 ? property.Name : property.Name.Substring(0, property.Name.Length - 6); #>
 
         public static T <#= propertyName #><T>(this T <#= TypeName.ToLowerInvariant() #>, string file) where T : IRx<#= TypeName #>
         {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = ImageSource.FromFile(file);
-            return <#= TypeName.ToLowerInvariant() #>;
-        }
-        public static T <#= propertyName #><T>(this T <#= TypeName.ToLowerInvariant() #>, string fileAndroid, string fileiOS) where T : IRx<#= TypeName #>
-        {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = Device.RuntimePlatform == Device.Android ? ImageSource.FromFile(fileAndroid) : ImageSource.FromFile(fileiOS);
+            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>>(ImageSource.FromFile(file));
             return <#= TypeName.ToLowerInvariant() #>;
         }
         public static T <#= propertyName #><T>(this T <#= TypeName.ToLowerInvariant() #>, string resourceName, Assembly sourceAssembly) where T : IRx<#= TypeName #>
         {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = ImageSource.FromResource(resourceName, sourceAssembly);
+            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>>(ImageSource.FromResource(resourceName, sourceAssembly));
             return <#= TypeName.ToLowerInvariant() #>;
         }
         public static T <#= propertyName #><T>(this T <#= TypeName.ToLowerInvariant() #>, Uri imageUri) where T : IRx<#= TypeName #>
         {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = ImageSource.FromUri(imageUri);
+            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>>(ImageSource.FromUri(imageUri));
             return <#= TypeName.ToLowerInvariant() #>;
         }
         public static T <#= propertyName #><T>(this T <#= TypeName.ToLowerInvariant() #>, Uri imageUri, bool cachingEnabled, TimeSpan cacheValidity) where T : IRx<#= TypeName #>
         {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new UriImageSource
+            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>>(new UriImageSource
             {
                 Uri = imageUri,
                 CachingEnabled = cachingEnabled,
                 CacheValidity = cacheValidity
-            };
+            });
             return <#= TypeName.ToLowerInvariant() #>;
         }
         public static T <#= propertyName #><T>(this T <#= TypeName.ToLowerInvariant() #>, Func<Stream> imageStream) where T : IRx<#= TypeName #>
         {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = ImageSource.FromStream(imageStream);
+            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>>(ImageSource.FromStream(imageStream));
             return <#= TypeName.ToLowerInvariant() #>;
         }
+            <# } #>
         <# } #>
-
-
-        <# } #>
-
         <# foreach (var ev in Events) { #>
         public static T On<#= ev.Name #><T>(this T <#= TypeName.ToLowerInvariant() #>, Action <#= ev.Name.ToLowerInvariant() #>Action) where T : IRx<#= TypeName #>
         {

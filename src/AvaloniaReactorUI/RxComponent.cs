@@ -207,7 +207,7 @@ namespace AvaloniaReactorUI
             action(State);
 
             if (!Dispatcher.UIThread.CheckAccess())
-                Dispatcher.UIThread.InvokeAsync(Invalidate);
+                Dispatcher.UIThread.Post(Invalidate);
             else
                 Invalidate();
         }

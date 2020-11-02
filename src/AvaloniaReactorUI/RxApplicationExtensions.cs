@@ -5,12 +5,12 @@ using System.Text;
 
 namespace AvaloniaReactorUI
 {
-    public static class RxApplicationExtensions
-    {
-        public static RxApplication WithHotReload(this RxApplication application)
-        {
-            application.ComponentLoader = RemoteComponentLoader.Instance;
-            return application;
-        }
-    }
+    //public static class RxApplicationExtensions
+    //{
+    //    public static RxApplication WithHotReload(this RxApplication application)
+    //    {
+    //        application.ComponentLoader = RemoteComponentLoader.Instance;
+    //        return application;
+    //    }
+    //}
 }

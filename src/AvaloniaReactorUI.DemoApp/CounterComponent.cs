@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Threading;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,7 +18,9 @@ namespace AvaloniaReactorUI.DemoApp
                 new RxStackPanel()
                 {
                     new RxTextBlock()
-                        .Text(State.Count.ToString()),
+                        .Text(State.Count.ToString())
+                        .FontSize(24)
+                        .HCenter(),
                     new RxButton()
                         .Content("Click to increase counter")
                         .OnClick(() => SetState(_=> _.Count++))

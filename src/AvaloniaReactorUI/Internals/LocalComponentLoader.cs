@@ -2,20 +2,20 @@
 
 namespace AvaloniaReactorUI.Internals
 {
-    internal class LocalComponentLoader : IComponentLoader
-    {
-        public event EventHandler ComponentAssemblyChanged;
+    //internal class LocalComponentLoader : IComponentLoader
+    //{
+    //    public event EventHandler ComponentAssemblyChanged;
 
-        public RxComponent LoadComponent<T>() where T : RxComponent, new() => new T();
+    //    public RxComponent LoadComponent<T>() where T : RxComponent, new() => new T();
 
-        public void Run()
-        {
+    //    public void Run()
+    //    {
 
-        }
+    //    }
 
-        public void Stop()
-        {
+    //    public void Stop()
+    //    {
 
-        }
-    }
+    //    }
+    //}
 }

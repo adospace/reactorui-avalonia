@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using AvaloniaReactorUI.Internals;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace AvaloniaReactorUI
 {
@@ -13,7 +14,7 @@ namespace AvaloniaReactorUI
         public static RxApplication Instance { get; private set; }
         protected readonly Application _application;
 
-        internal IComponentLoader ComponentLoader { get; set; } = new LocalComponentLoader();
+        //internal IComponentLoader ComponentLoader { get; set; } = new LocalComponentLoader();
 
         protected RxApplication(Application application)
         {
@@ -41,6 +42,9 @@ namespace AvaloniaReactorUI
 
         public static RxApplication Create<T>(Application application) where T : RxComponent, new()
             => new RxApplication<T>(application);
+
+        public static RxApplication CreateWithHotReload<T>(Application application) where T : RxComponent, new()
+            => new RxHotReloadApplication<T>(application);
 
         public RxApplication WithContext(string key, object value)
         {
@@ -73,7 +77,7 @@ namespace AvaloniaReactorUI
 
     public class RxApplication<T> : RxApplication where T : RxComponent, new()
     {
-        private RxComponent _rootComponent;
+        protected RxComponent _rootComponent;
         private bool _sleeping = true;
 
 
@@ -105,44 +109,19 @@ namespace AvaloniaReactorUI
         {
             if (_sleeping)
             {
-                _rootComponent ??= ComponentLoader.LoadComponent<T>();
-                ComponentLoader.ComponentAssemblyChanged += OnComponentAssemblyChanged;
+                _rootComponent ??= new T();
                 _sleeping = false;
                 OnLayout();
-                ComponentLoader.Run();
             }
 
             return this;
-        }
-
-        private void OnComponentAssemblyChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                var newComponent = ComponentLoader.LoadComponent<T>();
-                if (newComponent != null)
-                {
-                    _rootComponent = newComponent;
-                    Invalidate();
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine($"Unable to hot relead component {typeof(T).FullName}: type not found in received assembly");
-                }
-            }
-            catch (Exception ex)
-            {
-                FireUnhandledExpectionEvent(ex);
-            }
         }
 
         public override void Stop()
         {
             if (!_sleeping)
             {
-                ComponentLoader.ComponentAssemblyChanged -= OnComponentAssemblyChanged;
                 _sleeping = true;
-                ComponentLoader.Stop();
             }
         }
 
@@ -151,7 +130,8 @@ namespace AvaloniaReactorUI
             if (!_sleeping)
             {
                 //Device.BeginInvokeOnMainThread(OnLayout);
-                Dispatcher.UIThread.InvokeAsync(OnLayout);
+                //Dispatcher.UIThread.Post(OnLayout);
+                OnLayout();
             }
 
             base.OnLayoutCycleRequested();
@@ -186,6 +166,56 @@ namespace AvaloniaReactorUI
                 }, TimeSpan.FromMilliseconds(16));
             }
         }
+    }
 
+    public class RxHotReloadApplication<T> : RxApplication<T> where T : RxComponent, new()
+    {
+        private string _assemblyPath;
+        private readonly HotReloadServer _hotReloadServer;
+
+
+        internal RxHotReloadApplication(Application application, int serverPort = 45821) : base(application)
+        {
+            _assemblyPath = application.GetType().Assembly.Location;
+            _hotReloadServer = new HotReloadServer(serverPort);
+        }
+
+        public override IRxHostElement Run()
+        {
+            _hotReloadServer.HotReloadCommandIssued += OnHotReloadServer_HotReloadCommandIssued;
+            _hotReloadServer.Start();
+
+            return base.Run();
+        }
+
+        private void OnHotReloadServer_HotReloadCommandIssued(object sender, EventArgs e)
+        {
+            try
+            {
+                var type = Assembly.LoadFrom(_assemblyPath).GetType(typeof(T).FullName);
+                var newComponent = (RxComponent)Activator.CreateInstance(type);
+
+                if (newComponent != null)
+                {
+                    _rootComponent = newComponent;
+                    Invalidate();
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to hot relead component {typeof(T).FullName}: type not found in received assembly");
+                }
+            }
+            catch (Exception ex)
+            {
+                FireUnhandledExpectionEvent(ex);
+            }
+        }
+
+        public override void Stop()
+        {
+            _hotReloadServer.Stop();
+
+            base.Stop();
+        }
     }
 }
