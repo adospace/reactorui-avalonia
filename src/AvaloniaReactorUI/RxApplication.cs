@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using AvaloniaReactorUI.Internals;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 namespace AvaloniaReactorUI
@@ -170,13 +171,11 @@ namespace AvaloniaReactorUI
 
     public class RxHotReloadApplication<T> : RxApplication<T> where T : RxComponent, new()
     {
-        private string _assemblyPath;
         private readonly HotReloadServer _hotReloadServer;
 
 
         internal RxHotReloadApplication(Application application, int serverPort = 45821) : base(application)
         {
-            _assemblyPath = application.GetType().Assembly.Location;
             _hotReloadServer = new HotReloadServer(serverPort);
         }
 
@@ -188,11 +187,19 @@ namespace AvaloniaReactorUI
             return base.Run();
         }
 
-        private void OnHotReloadServer_HotReloadCommandIssued(object sender, EventArgs e)
+        private void OnHotReloadServer_HotReloadCommandIssued(object sender, AssemblyToReloadEventArgs e)
         {
             try
             {
-                var type = Assembly.LoadFrom(_assemblyPath).GetType(typeof(T).FullName);
+                var assemblyPath = e.Path;
+                var assemblyPdbPath = Path.Combine(Path.GetDirectoryName(assemblyPath), Path.GetFileNameWithoutExtension(assemblyPath) + ".pdb");
+
+                var assembly = File.Exists(assemblyPdbPath) ?
+                    Assembly.Load(File.ReadAllBytes(assemblyPath))
+                    :
+                    Assembly.Load(File.ReadAllBytes(assemblyPath), File.ReadAllBytes(assemblyPdbPath));
+
+                var type = assembly.GetType(typeof(T).FullName);
                 var newComponent = (RxComponent)Activator.CreateInstance(type);
 
                 if (newComponent != null)

@@ -13,11 +13,6 @@ namespace AvaloniaReactorUI.DemoApp
         
         public override void OnFrameworkInitializationCompleted()
         {
-            //if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            //{
-            //    desktop.MainWindow = new MainWindow();
-            //}
-
             RxApplication.CreateWithHotReload<TimerComponent>(this)
                 .Run();
 

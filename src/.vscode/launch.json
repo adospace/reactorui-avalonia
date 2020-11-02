@@ -10,8 +10,8 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/AvaloniaReactorUI.DemoApp/bin/Debug/netcoreapp3.0/AvaloniaReactorUI.DemoApp.dll",
-            "args": [],
+            "program": "${workspaceFolder}/AvaloniaReactorUI.Host/bin/Debug/netcoreapp3.1/AvaloniaReactorUI.Host.dll",
+            "args": ["${workspaceFolder}/AvaloniaReactorUI.DemoApp/bin/Debug/netcoreapp3.1/AvaloniaReactorUI.DemoApp.dll"],
             "cwd": "${workspaceFolder}/AvaloniaReactorUI.DemoApp",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",

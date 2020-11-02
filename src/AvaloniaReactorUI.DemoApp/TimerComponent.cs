@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Media;
+using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,23 +10,33 @@ namespace AvaloniaReactorUI.DemoApp
     { 
         public int Timer { get; set; }
         public bool IsRunning { get; set; }
+        public IDisposable SystemTimer { get; set;}
     }
 
     public class TimerComponent : RxComponent<TimerState>
     {
-        protected override void OnMounted()
-        {
-            DispatcherTimer.Run(() =>
+        private IDisposable SetupTimer() =>
+         DispatcherTimer.Run(() =>
             {
                 if (State.IsRunning)
                 {
                     SetState(_ => _.Timer++);
-                }                
+                }
 
                 return true;
             }, TimeSpan.FromSeconds(1));
 
+        protected override void OnMounted()
+        {
+            State.SystemTimer = SetupTimer();
             base.OnMounted();
+        }
+
+        protected override void OnUpdated()
+        {
+            State.SystemTimer?.Dispose();
+            State.SystemTimer = SetupTimer();
+            base.OnUpdated();
         }
 
         public override VisualNode Render()
@@ -37,6 +48,7 @@ namespace AvaloniaReactorUI.DemoApp
                     new RxTextBlock()
                         .Text(State.Timer.ToString())
                         .FontSize(24)
+                        .Foreground(Brushes.Ivory)
                         .HCenter(),
 
                     new RxStackPanel()
@@ -58,7 +70,10 @@ namespace AvaloniaReactorUI.DemoApp
                 .Orientation(Avalonia.Layout.Orientation.Vertical)
                 .HCenter()
                 .VCenter()
-            };
+                
+            }
+            .Background(Brushes.Green)
+            .Title("Timer Demo App");
         }
     }
 }

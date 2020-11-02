@@ -29,6 +29,7 @@ namespace AvaloniaReactorUI.DemoApp
                 .Orientation(Avalonia.Layout.Orientation.Vertical)
                 .VCenter()
                 .HCenter()
-            };
+            }
+            .Title("Counter Demo");
     }
 }

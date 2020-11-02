@@ -91,7 +91,7 @@ namespace AvaloniaReactorUI
             if (newNode.GetType().FullName == GetType().FullName)
             {
                 ((RxComponent)newNode)._isMounted = true;
-                ((RxComponent)newNode).OnPropsChanged();
+                ((RxComponent)newNode).OnUpdated();
                 base.MergeWith(newNode);
             }
             else
@@ -129,7 +129,7 @@ namespace AvaloniaReactorUI
         {
         }
 
-        protected virtual void OnPropsChanged()
+        protected virtual void OnUpdated()
         { }
 
         //public INavigation Navigation
