@@ -9,8 +9,15 @@ namespace AvaloniaReactorUI.ScaffoldConsole
 {
     class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
+            if (args == null ||
+                args.Length == 0)
+            {
+                Console.WriteLine("AvaloniaReactorUI folder not specified");
+                return;
+            }
+
             var animatable = new Animatable();
             var button = new Button();
             var types = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
@@ -25,7 +32,7 @@ namespace AvaloniaReactorUI.ScaffoldConsole
             foreach (var classNameToGenerate in File.ReadAllLines("WidgetList.txt"))
             {
                 var typeToGenerate = types[classNameToGenerate];
-                var targetPath = $@"..\..\..\..\AvaloniaReactorUI\Rx{typeToGenerate.Name}.cs";
+                var targetPath = Path.Combine(args[0], $"Rx{typeToGenerate.Name}.cs");
                 Console.WriteLine($"Generating {typeToGenerate.FullName} to {targetPath}...");
 
                 var generator = new TypeSourceGenerator(typeToGenerate);

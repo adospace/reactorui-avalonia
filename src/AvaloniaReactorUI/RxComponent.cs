@@ -154,6 +154,8 @@ namespace AvaloniaReactorUI
         object State { get; }
 
         PropertyInfo[] StateProperties { get; }
+
+        void ForwardState(object stateFromOldComponent);
     }
 
     internal interface IRxComponentWithProps
@@ -185,6 +187,8 @@ namespace AvaloniaReactorUI
 
     public abstract class RxComponent<S, P> : RxComponentWithProps<P>, IRxComponentWithState where S : class, IState, new() where P : class, IProps, new()
     {
+        private IRxComponentWithState _newComponent;
+        
         protected RxComponent(S state = null, P props = null)
             : base(props)
         {
@@ -197,6 +201,16 @@ namespace AvaloniaReactorUI
 
         object IRxComponentWithState.State => State;
 
+        void IRxComponentWithState.ForwardState(object stateFromOldComponent)
+        {
+            stateFromOldComponent.CopyPropertiesTo(State, StateProperties);
+
+            if (!Dispatcher.UIThread.CheckAccess())
+                Dispatcher.UIThread.Post(Invalidate);
+            else
+                Invalidate();
+        }
+
         protected virtual void SetState(Action<S> action)
         {
             if (action is null)
@@ -205,6 +219,12 @@ namespace AvaloniaReactorUI
             }
 
             action(State);
+
+            if (_newComponent != null)
+            {
+                _newComponent.ForwardState(State);
+                return;
+            }
 
             if (!Dispatcher.UIThread.CheckAccess())
                 Dispatcher.UIThread.Post(Invalidate);
@@ -216,6 +236,8 @@ namespace AvaloniaReactorUI
         {
             if (newNode is IRxComponentWithState newComponentWithState)
             {
+                _newComponent = newComponentWithState;
+
                 State.CopyPropertiesTo(newComponentWithState.State, newComponentWithState.StateProperties);
             }
 

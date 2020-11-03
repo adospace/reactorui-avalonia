@@ -14,3 +14,4 @@ Avalonia.Controls.TopLevel
 Avalonia.Visual
 Avalonia.Controls.Window
 Avalonia.Controls.WindowBase
+Avalonia.Controls.ItemsControl
