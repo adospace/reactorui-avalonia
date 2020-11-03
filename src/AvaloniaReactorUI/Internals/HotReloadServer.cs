@@ -10,95 +10,95 @@ using System.Threading.Tasks;
 
 namespace AvaloniaReactorUI.Internals
 {
-    internal class HotReloadServer
-    {
-        private readonly int _listenPort;
-        private CancellationTokenSource _cancellationTokenSource;
-        private TcpListener _serverSocket;
+//     internal class HotReloadServer
+//     {
+//         private readonly int _listenPort;
+//         private CancellationTokenSource _cancellationTokenSource;
+//         private TcpListener _serverSocket;
 
-        public HotReloadServer(int listenPort)
-        {
-            _listenPort = listenPort;
-        }
+//         public HotReloadServer(int listenPort)
+//         {
+//             _listenPort = listenPort;
+//         }
 
-        public async void Start()
-        {
-            lock (this)
-            {
-                if (_cancellationTokenSource != null)
-                    return;
+//         public async void Start()
+//         {
+//             lock (this)
+//             {
+//                 if (_cancellationTokenSource != null)
+//                     return;
 
-                _cancellationTokenSource = new CancellationTokenSource();
-            }
+//                 _cancellationTokenSource = new CancellationTokenSource();
+//             }
 
-            var cancellationToken = _cancellationTokenSource.Token;
-            _serverSocket = new TcpListener(IPAddress.Loopback, _listenPort);
+//             var cancellationToken = _cancellationTokenSource.Token;
+//             _serverSocket = new TcpListener(IPAddress.Loopback, _listenPort);
 
-            try
-            {
-                _serverSocket.Start(1);
+//             try
+//             {
+//                 _serverSocket.Start(1);
 
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    var connectedClient = await _serverSocket.AcceptTcpClientAsync();
+//                 while (!cancellationToken.IsCancellationRequested)
+//                 {
+//                     var connectedClient = await _serverSocket.AcceptTcpClientAsync();
 
-                    HandleClientConnect(connectedClient);
-                }
-            }
-            catch (TaskCanceledException)
-            {
-                //stop called
-            }
-            catch (ObjectDisposedException)
-            {
-                //stop called
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine(ex);
-            }
-            finally
-            {
-                _serverSocket.Stop();
-                _serverSocket = null;
+//                     HandleClientConnect(connectedClient);
+//                 }
+//             }
+//             catch (TaskCanceledException)
+//             {
+//                 //stop called
+//             }
+//             catch (ObjectDisposedException)
+//             {
+//                 //stop called
+//             }
+//             catch (Exception ex)
+//             {
+//                 System.Diagnostics.Trace.WriteLine(ex);
+//             }
+//             finally
+//             {
+//                 _serverSocket.Stop();
+//                 _serverSocket = null;
 
-                lock (this)
-                    _cancellationTokenSource = null;
-            }
-        }
+//                 lock (this)
+//                     _cancellationTokenSource = null;
+//             }
+//         }
 
-        private void HandleClientConnect(TcpClient connectedClient)
-        {
-            try
-            {
-                connectedClient.ReceiveTimeout = 50000;
-                using var sr = new StreamReader(connectedClient.GetStream());
-                var command = sr.ReadLine().Split('|');
-                if (command[0] == "RELOAD")
-                {
-                    HotReloadCommandIssued?.Invoke(this, new AssemblyToReloadEventArgs(command[1]));
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
+//         private void HandleClientConnect(TcpClient connectedClient)
+//         {
+//             try
+//             {
+//                 connectedClient.ReceiveTimeout = 50000;
+//                 using var sr = new StreamReader(connectedClient.GetStream());
+//                 var command = sr.ReadLine().Split('|');
+//                 if (command[0] == "RELOAD")
+//                 {
+//                     HotReloadCommandIssued?.Invoke(this, new AssemblyToReloadEventArgs(command[1]));
+//                 }
+//             }
+//             catch (Exception)
+//             {
+//             }
+//         }
 
-        public void Stop()
-        {
-            lock (this)
-            {
-                if (_cancellationTokenSource == null)
-                    return;
+//         public void Stop()
+//         {
+//             lock (this)
+//             {
+//                 if (_cancellationTokenSource == null)
+//                     return;
 
-                if (!_cancellationTokenSource.IsCancellationRequested)
-                    _cancellationTokenSource.Cancel();
-            }
+//                 if (!_cancellationTokenSource.IsCancellationRequested)
+//                     _cancellationTokenSource.Cancel();
+//             }
 
-            _serverSocket?.Stop();
-        }
+//             _serverSocket?.Stop();
+//         }
 
-        public event EventHandler<AssemblyToReloadEventArgs> HotReloadCommandIssued;
-    }
+//         public event EventHandler<AssemblyToReloadEventArgs> HotReloadCommandIssued;
+//     }
 
 }
