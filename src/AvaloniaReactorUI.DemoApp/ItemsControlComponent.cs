@@ -5,32 +5,26 @@ using System.Text;
 
 namespace AvaloniaReactorUI.DemoApp
 {
-    public enum Page
+    public class Item
     {
-        Home,
-        Counter,
-        Timer,
-        Items,
+        public Item(string name)
+        {
+            Name = name;
+        }
+        public string Name { get; }
     }
-
-    public class MainComponentState : IState
-    {
-        public Page CurrentPage { get; set; }
-    }
-
-    public class MainComponent : RxComponent<MainComponentState>
+    public class ItemsControlComponent : RxComponent
     {
         public override VisualNode Render() =>
             new RxWindow()
             {
-                new RxTextBlock()
-                    .Text("Avalonia + ReactorUI = Love!")
+                new RxListBox()
+                    .Items(new [] { new Item("Item1"), new Item("Item2"), new Item("Item3")})
+                    .OnRenderItem<RxListBox, Item>(_ => new RxTextBlock().Text(_.Name))
                     .FontSize(24)
                     .VCenter()
                     .HCenter()
             }
             .Title("AvaloniaReactorUI Demo App");
     }
-
-
 }

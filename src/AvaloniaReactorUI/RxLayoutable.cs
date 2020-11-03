@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
+using System.Collections;
 
 using Avalonia;
 using Avalonia.Animation;
@@ -13,6 +14,7 @@ using Avalonia.Input;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Platform;
+using Avalonia.Controls.Selection;
 
 using AvaloniaReactorUI.Internals;
 

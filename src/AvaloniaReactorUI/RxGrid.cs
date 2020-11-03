@@ -20,34 +20,34 @@ using AvaloniaReactorUI.Internals;
 
 namespace AvaloniaReactorUI
 {
-    public partial interface IRxStyledElement : IRxAnimatable
+    public partial interface IRxGrid : IRxPanel
     {
-        PropertyValue<object> DataContext { get; set; }
+        PropertyValue<bool> ShowGridLines { get; set; }
 
     }
 
-    public partial class RxStyledElement<T> : RxAnimatable<T>, IRxStyledElement where T : StyledElement, new()
+    public partial class RxGrid<T> : RxPanel<T>, IRxGrid where T : Grid, new()
     {
-        public RxStyledElement()
+        public RxGrid()
         {
 
         }
 
-        public RxStyledElement(Action<T> componentRefAction)
+        public RxGrid(Action<T> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<object> IRxStyledElement.DataContext { get; set; }
+        PropertyValue<bool> IRxGrid.ShowGridLines { get; set; }
 
 
         protected override void OnUpdate()
         {
             OnBeginUpdate();
 
-            var thisAsIRxStyledElement = (IRxStyledElement)this;
-            NativeControl.Set(StyledElement.DataContextProperty, thisAsIRxStyledElement.DataContext);
+            var thisAsIRxGrid = (IRxGrid)this;
+            NativeControl.Set(Grid.ShowGridLinesProperty, thisAsIRxGrid.ShowGridLines);
 
             base.OnUpdate();
 
@@ -59,7 +59,7 @@ namespace AvaloniaReactorUI
 
         protected override void OnAttachNativeEvents()
         {
-            var thisAsIRxStyledElement = (IRxStyledElement)this;
+            var thisAsIRxGrid = (IRxGrid)this;
 
             base.OnAttachNativeEvents();
         }
@@ -75,25 +75,25 @@ namespace AvaloniaReactorUI
         }
 
     }
-    public partial class RxStyledElement : RxStyledElement<StyledElement>
+    public partial class RxGrid : RxGrid<Grid>
     {
-        public RxStyledElement()
+        public RxGrid()
         {
 
         }
 
-        public RxStyledElement(Action<StyledElement> componentRefAction)
+        public RxGrid(Action<Grid> componentRefAction)
             : base(componentRefAction)
         {
 
         }
     }
-    public static partial class RxStyledElementExtensions
+    public static partial class RxGridExtensions
     {
-        public static T DataContext<T>(this T styledelement, object dataContext) where T : IRxStyledElement
+        public static T ShowGridLines<T>(this T grid, bool showGridLines) where T : IRxGrid
         {
-            styledelement.DataContext = new PropertyValue<object>(dataContext);
-            return styledelement;
+            grid.ShowGridLines = new PropertyValue<bool>(showGridLines);
+            return grid;
         }
     }
 }
