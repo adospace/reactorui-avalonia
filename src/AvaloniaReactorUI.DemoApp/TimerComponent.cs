@@ -8,7 +8,8 @@ namespace AvaloniaReactorUI.DemoApp
 {
     public class TimerState : IState
     { 
-        public int Timer { get; set; }
+        public DateTime StartTime {get; set;}
+        public TimeSpan TimeElapsed { get; set; }
         public bool IsRunning { get; set; }
         public IDisposable SystemTimer { get; set;}
     }
@@ -20,11 +21,11 @@ namespace AvaloniaReactorUI.DemoApp
             {
                 if (State.IsRunning)
                 {
-                    SetState(_ => _.Timer++);
+                    SetState(_ => _.TimeElapsed = (DateTime.Now - _.StartTime));
                 }
 
                 return true;
-            }, TimeSpan.FromSeconds(1));
+            }, TimeSpan.FromMilliseconds(100));
 
         protected override void OnMounted()
         {
@@ -46,7 +47,7 @@ namespace AvaloniaReactorUI.DemoApp
                 new RxStackPanel()
                 {
                     new RxTextBlock()
-                        .Text(State.Timer.ToString())
+                        .Text(State.TimeElapsed.ToString())
                         .FontSize(24)
                         .Foreground(Brushes.Ivory)
                         .HCenter(),
@@ -55,15 +56,20 @@ namespace AvaloniaReactorUI.DemoApp
                     {
                         new RxButton()
                             .Content(State.IsRunning ? "Stop" : "Start")
-                            .OnClick(() => SetState(s=> s.IsRunning = !s.IsRunning)),
-                        !State.IsRunning && State.Timer > 0 ? 
+                            .OnClick(() => SetState(s => 
+                            {
+                                s.IsRunning = !s.IsRunning;
+                                s.StartTime = DateTime.Now;
+                            })),
+                        !State.IsRunning && State.TimeElapsed.Ticks > 0 ? 
                         new RxButton()
                             .Content("Reset")
-                            .OnClick(() => SetState(s=> s.Timer = 0))
+                            .OnClick(() => SetState(s=> s.TimeElapsed = TimeSpan.FromMilliseconds(0)))
                         :
                         null
                     }
                     .Orientation(Avalonia.Layout.Orientation.Horizontal)
+                    .HCenter()
                     .Spacing(10)
                 }
                 .Spacing(20)
