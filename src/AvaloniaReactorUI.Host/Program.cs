@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AvaloniaReactorUI.Internals;
 
 namespace AvaloniaReactorUI.Host
 {
@@ -43,6 +44,8 @@ namespace AvaloniaReactorUI.Host
                 Assembly.Load(File.ReadAllBytes(assemblyPath)) 
                 :
                 Assembly.Load(File.ReadAllBytes(assemblyPath), File.ReadAllBytes(assemblyPdbPath));
+
+            ComponentLoader.Instance = new AssemblyFileComponentLoader(assemblyPath);
 
             assembly
                 .GetTypes()

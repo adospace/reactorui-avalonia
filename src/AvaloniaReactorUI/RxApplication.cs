@@ -44,8 +44,8 @@ namespace AvaloniaReactorUI
         public static RxApplication Create<T>(Application application) where T : RxComponent, new()
             => new RxApplication<T>(application);
 
-        public static RxApplication CreateWithHotReload<T>(Application application) where T : RxComponent, new()
-            => new RxHotReloadApplication<T>(application);
+        // public static RxApplication CreateWithHotReload<T>(Application application) where T : RxComponent, new()
+        //     => new RxHotReloadApplication<T>(application);
 
         public RxApplication WithContext(string key, object value)
         {
@@ -115,7 +115,31 @@ namespace AvaloniaReactorUI
                 OnLayout();
             }
 
+            if (ComponentLoader.Instance != null)
+            {
+                ComponentLoader.Instance.ComponentAssemblyChanged += OnComponentAssemblyChanged;
+                ComponentLoader.Instance.Run();
+            }
+
             return this;
+        }
+
+        private void OnComponentAssemblyChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                var newComponent = ComponentLoader.Instance.LoadComponent<T>();
+
+                if (newComponent != null)
+                {
+                    _rootComponent = newComponent;
+                    Invalidate();
+                }
+            }
+            catch (Exception ex)
+            {
+                FireUnhandledExpectionEvent(ex);
+            }            
         }
 
         public override void Stop()
@@ -123,6 +147,12 @@ namespace AvaloniaReactorUI
             if (!_sleeping)
             {
                 _sleeping = true;
+            }
+
+            if (ComponentLoader.Instance != null)
+            {
+                ComponentLoader.Instance.ComponentAssemblyChanged -= OnComponentAssemblyChanged;
+                ComponentLoader.Instance.Stop();
             }
         }
 
@@ -169,60 +199,60 @@ namespace AvaloniaReactorUI
         }
     }
 
-    public class RxHotReloadApplication<T> : RxApplication<T> where T : RxComponent, new()
-    {
-        private readonly HotReloadServer _hotReloadServer;
+    // public class RxHotReloadApplication<T> : RxApplication<T> where T : RxComponent, new()
+    // {
+    //     private readonly HotReloadServer _hotReloadServer;
 
 
-        internal RxHotReloadApplication(Application application, int serverPort = 45821) : base(application)
-        {
-            _hotReloadServer = new HotReloadServer(serverPort);
-        }
+    //     internal RxHotReloadApplication(Application application, int serverPort = 45821) : base(application)
+    //     {
+    //         _hotReloadServer = new HotReloadServer(serverPort);
+    //     }
 
-        public override IRxHostElement Run()
-        {
-            _hotReloadServer.HotReloadCommandIssued += OnHotReloadServer_HotReloadCommandIssued;
-            _hotReloadServer.Start();
+    //     public override IRxHostElement Run()
+    //     {
+    //         _hotReloadServer.HotReloadCommandIssued += OnHotReloadServer_HotReloadCommandIssued;
+    //         _hotReloadServer.Start();
 
-            return base.Run();
-        }
+    //         return base.Run();
+    //     }
 
-        private void OnHotReloadServer_HotReloadCommandIssued(object sender, AssemblyToReloadEventArgs e)
-        {
-            try
-            {
-                var assemblyPath = e.Path;
-                var assemblyPdbPath = Path.Combine(Path.GetDirectoryName(assemblyPath), Path.GetFileNameWithoutExtension(assemblyPath) + ".pdb");
+    //     private void OnHotReloadServer_HotReloadCommandIssued(object sender, AssemblyToReloadEventArgs e)
+    //     {
+    //         try
+    //         {
+    //             var assemblyPath = e.Path;
+    //             var assemblyPdbPath = Path.Combine(Path.GetDirectoryName(assemblyPath), Path.GetFileNameWithoutExtension(assemblyPath) + ".pdb");
 
-                var assembly = File.Exists(assemblyPdbPath) ?
-                    Assembly.Load(File.ReadAllBytes(assemblyPath))
-                    :
-                    Assembly.Load(File.ReadAllBytes(assemblyPath), File.ReadAllBytes(assemblyPdbPath));
+    //             var assembly = File.Exists(assemblyPdbPath) ?
+    //                 Assembly.Load(File.ReadAllBytes(assemblyPath))
+    //                 :
+    //                 Assembly.Load(File.ReadAllBytes(assemblyPath), File.ReadAllBytes(assemblyPdbPath));
 
-                var type = assembly.GetType(typeof(T).FullName);
-                var newComponent = (RxComponent)Activator.CreateInstance(type);
+    //             var type = assembly.GetType(typeof(T).FullName);
 
-                if (newComponent != null)
-                {
-                    _rootComponent = newComponent;
-                    Invalidate();
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine($"Unable to hot relead component {typeof(T).FullName}: type not found in received assembly");
-                }
-            }
-            catch (Exception ex)
-            {
-                FireUnhandledExpectionEvent(ex);
-            }
-        }
+    //             if (type == null)
+    //                 return;
 
-        public override void Stop()
-        {
-            _hotReloadServer.Stop();
+    //             var newComponent = (RxComponent)Activator.CreateInstance(type);
 
-            base.Stop();
-        }
-    }
+    //             if (newComponent != null)
+    //             {
+    //                 _rootComponent = newComponent;
+    //                 Invalidate();
+    //             }
+    //         }
+    //         catch (Exception ex)
+    //         {
+    //             FireUnhandledExpectionEvent(ex);
+    //         }
+    //     }
+
+    //     public override void Stop()
+    //     {
+    //         _hotReloadServer.Stop();
+
+    //         base.Stop();
+    //     }
+    // }
 }
