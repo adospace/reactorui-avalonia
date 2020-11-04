@@ -19,12 +19,12 @@ namespace AvaloniaReactorUI.DemoApp
             new RxWindow()
             {
                 new RxListBox()
-                    .Items(new [] { new Item("Item1"), new Item("Item2"), new Item("Item3")})
-                    .OnRenderItem<RxListBox, Item>(_ => new RxTextBlock().Text(_.Name))
-                    .FontSize(24)
+                    .Items(new [] { new Item("Item1"), new Item("Item2"), new Item("Item3"), new Item("Item4")})
+                    .FontSize(36)
                     .VCenter()
                     .HCenter()
             }
+            .OnRenderType<RxWindow, Item>(_ => new RxTextBlock().Text(_.Name).Foreground(Brushes.Red))
             .Title("AvaloniaReactorUI Demo App");
     }
 }

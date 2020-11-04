@@ -32,6 +32,9 @@ namespace AvaloniaReactorUI
         {
             var thisAsIRxLayoutable = (IRxItemsControl)this;
             NativeControl.Set(ItemsControl.ItemTemplateProperty, thisAsIRxLayoutable.DataTemplate);
+            //WARNING: changing ItemTemplate after the first time (i.e. when the listbox ItemContainerGenerator is already created)
+            //doesn't re-create the item containers (see Avalonia source ItemsControl.cs:452)
+            //Somenthing that will be fixed in coming releases
         }
     }
 

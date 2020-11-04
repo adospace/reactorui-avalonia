@@ -161,8 +161,8 @@ namespace AvaloniaReactorUI
             if (!_sleeping)
             {
                 //Device.BeginInvokeOnMainThread(OnLayout);
-                //Dispatcher.UIThread.Post(OnLayout);
-                OnLayout();
+                Dispatcher.UIThread.Post(OnLayout);
+                //OnLayout();
             }
 
             base.OnLayoutCycleRequested();
