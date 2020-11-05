@@ -40,46 +40,37 @@ namespace AvaloniaReactorUI.DemoApp
             base.OnUpdated();
         }
 
-        public override VisualNode Render()
-        {
-            return new RxWindow()
+        public override VisualNode Render() => 
+            new RxStackPanel()
             {
+                new RxTextBlock()
+                    .Text(State.TimeElapsed.ToString())
+                    .FontSize(24)
+                    .HCenter(),
+
                 new RxStackPanel()
                 {
-                    new RxTextBlock()
-                        .Text(State.TimeElapsed.ToString())
-                        .FontSize(24)
-                        .Foreground(Brushes.Ivory)
-                        .HCenter(),
-
-                    new RxStackPanel()
-                    {
-                        new RxButton()
-                            .Content(State.IsRunning ? "Stop" : "Start")
-                            .OnClick(() => SetState(s => 
-                            {
-                                s.IsRunning = !s.IsRunning;
-                                s.StartTime = DateTime.Now;
-                            })),
-                        !State.IsRunning && State.TimeElapsed.Ticks > 0 ? 
-                        new RxButton()
-                            .Content("Reset")
-                            .OnClick(() => SetState(s=> s.TimeElapsed = TimeSpan.FromMilliseconds(0)))
-                        :
-                        null
-                    }
-                    .Orientation(Avalonia.Layout.Orientation.Horizontal)
-                    .HCenter()
-                    .Spacing(10)
+                    new RxButton()
+                        .Content(State.IsRunning ? "Stop" : "Start")
+                        .OnClick(() => SetState(s =>
+                        {
+                            s.IsRunning = !s.IsRunning;
+                            s.StartTime = DateTime.Now;
+                        })),
+                    !State.IsRunning && State.TimeElapsed.Ticks > 0 ?
+                    new RxButton()
+                        .Content("Reset")
+                        .OnClick(() => SetState(s=> s.TimeElapsed = TimeSpan.FromMilliseconds(0)))
+                    :
+                    null
                 }
-                .Spacing(20)
-                .Orientation(Avalonia.Layout.Orientation.Vertical)
+                .Orientation(Avalonia.Layout.Orientation.Horizontal)
                 .HCenter()
-                .VCenter()
-                
+                .Spacing(10)
             }
-            .Background(Brushes.Green)
-            .Title("Timer Demo App");
-        }
+            .Spacing(20)
+            .Orientation(Avalonia.Layout.Orientation.Vertical)
+            .HCenter()
+            .VCenter();
     }
 }

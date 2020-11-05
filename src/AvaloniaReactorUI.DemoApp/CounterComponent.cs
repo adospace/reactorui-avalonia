@@ -13,9 +13,7 @@ namespace AvaloniaReactorUI.DemoApp
     public class CounterComponent : RxComponent<CounterState>
     {
         public override VisualNode Render()
-            => new RxWindow()
-            {
-                new RxStackPanel()
+            => new RxStackPanel()
                 {
                     new RxTextBlock()
                         .Text(State.Count.ToString())
@@ -28,8 +26,6 @@ namespace AvaloniaReactorUI.DemoApp
                 .Spacing(10)
                 .Orientation(Avalonia.Layout.Orientation.Vertical)
                 .VCenter()
-                .HCenter()
-            }
-            .Title("Counter Demo");
+                .HCenter();
     }
 }

@@ -13,7 +13,7 @@ namespace AvaloniaReactorUI.DemoApp
         
         public override void OnFrameworkInitializationCompleted()
         {
-            RxApplication.Create<ItemsControlComponent>(this)
+            RxApplication.Create<MainComponent>(this)
                 .Run();
 
             base.OnFrameworkInitializationCompleted();

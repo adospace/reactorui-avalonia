@@ -61,7 +61,7 @@ namespace AvaloniaReactorUI
         {
             var thisAsIRxGrid = (IRxGrid)this;
             NativeControl.RowDefinitions = thisAsIRxGrid.Rows;
-            NativeControl.ColumnDefinitions = thisAsIRxGrid.Columns;            
+            NativeControl.ColumnDefinitions = thisAsIRxGrid.Columns;
         }
     }
 
@@ -69,6 +69,7 @@ namespace AvaloniaReactorUI
     {
 
     }
+    
     public static partial class RxGridExtensions
     {
         public static T Rows<T>(this T grid, string rows) where T : IRxGrid
@@ -81,6 +82,90 @@ namespace AvaloniaReactorUI
         {
             grid.Columns = new ColumnDefinitions(columns);
             return grid;
+        }
+
+        public static T ColumnDefinition<T>(this T grid) where T : IRxGrid
+        {
+            grid.Columns.Add(new ColumnDefinition());
+            return grid;
+        }
+
+        public static T ColumnDefinition<T>(this T grid, double width) where T : IRxGrid
+        {
+            grid.Columns.Add(new ColumnDefinition() { Width = new GridLength(width) });
+            return grid;
+        }
+
+        public static T ColumnDefinitionAuto<T>(this T grid) where T : IRxGrid
+        {
+            grid.Columns.Add(new ColumnDefinition() { Width = GridLength.Auto });
+            return grid;
+        }
+
+        public static T ColumnDefinitionStar<T>(this T grid, double starValue) where T : IRxGrid
+        {
+            grid.Columns.Add(new ColumnDefinition() { Width = new GridLength(starValue, GridUnitType.Star) });
+            return grid;
+        }
+
+        public static T ColumnDefinition<T>(this T grid, GridLength width) where T : IRxGrid
+        {
+            grid.Columns.Add(new ColumnDefinition() { Width = width });
+            return grid;
+        }
+
+        public static T RowDefinition<T>(this T grid) where T : IRxGrid
+        {
+            grid.Rows.Add(new RowDefinition());
+            return grid;
+        }
+
+        public static T RowDefinition<T>(this T grid, double height) where T : IRxGrid
+        {
+            grid.Rows.Add(new RowDefinition() { Height = new GridLength(height) });
+            return grid;
+        }
+
+        public static T RowDefinitionAuto<T>(this T grid) where T : IRxGrid
+        {
+            grid.Rows.Add(new RowDefinition() { Height = GridLength.Auto });
+            return grid;
+        }
+
+        public static T RowDefinitionStar<T>(this T grid, double starValue) where T : IRxGrid
+        {
+            grid.Rows.Add(new RowDefinition() { Height = new GridLength(starValue, GridUnitType.Star) });
+            return grid;
+        }
+
+        public static T RowDefinition<T>(this T grid, GridLength width) where T : IRxGrid
+        {
+            grid.Rows.Add(new RowDefinition() { Height = width });
+            return grid;
+        }
+
+        public static T GridRow<T>(this T element, int rowIndex) where T : VisualNode
+        {
+            element.SetAttachedProperty(Grid.RowProperty, rowIndex);
+            return element;            
+        }
+
+        public static T GridRowSpan<T>(this T element, int rowSpan) where T : VisualNode
+        {
+            element.SetAttachedProperty(Grid.RowSpanProperty, rowSpan);
+            return element;
+        }
+
+        public static T GridColumn<T>(this T element, int columnIndex) where T : VisualNode
+        {
+            element.SetAttachedProperty(Grid.ColumnProperty, columnIndex);
+            return element;
+        }
+
+        public static T GridColumnSpan<T>(this T element, int columnSpan) where T : VisualNode
+        {
+            element.SetAttachedProperty(Grid.ColumnSpanProperty, columnSpan);
+            return element;
         }
     }
 }

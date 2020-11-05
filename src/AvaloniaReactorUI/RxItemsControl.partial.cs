@@ -21,17 +21,17 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxItemsControl
     {
-        PropertyValue<IDataTemplate> DataTemplate { get; set; }
+        PropertyValue<IDataTemplate> ItemTemplate { get; set; }
     }
 
     public partial class RxItemsControl<T>
     {
-        PropertyValue<IDataTemplate> IRxItemsControl.DataTemplate { get; set; }
+        PropertyValue<IDataTemplate> IRxItemsControl.ItemTemplate { get; set; }
 
         partial void OnBeginUpdate()
         {
             var thisAsIRxLayoutable = (IRxItemsControl)this;
-            NativeControl.Set(ItemsControl.ItemTemplateProperty, thisAsIRxLayoutable.DataTemplate);
+            NativeControl.Set(ItemsControl.ItemTemplateProperty, thisAsIRxLayoutable.ItemTemplate);
             //WARNING: changing ItemTemplate after the first time (i.e. when the listbox ItemContainerGenerator is already created)
             //doesn't re-create the item containers (see Avalonia source ItemsControl.cs:452)
             //Somenthing that will be fixed in coming releases
@@ -97,7 +97,7 @@ namespace AvaloniaReactorUI
     {
         public static T OnRenderItem<T, I>(this T itemscontrol, Func<I, VisualNode> renderFunc) where T : IRxItemsControl
         {
-            itemscontrol.DataTemplate = new PropertyValue<IDataTemplate>(
+            itemscontrol.ItemTemplate = new PropertyValue<IDataTemplate>(
                 new FuncDataTemplate<I>((item, ns) =>
                 {
                     VisualNode newRoot = renderFunc(item);

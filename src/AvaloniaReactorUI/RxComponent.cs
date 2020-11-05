@@ -29,7 +29,7 @@ namespace AvaloniaReactorUI
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
+        }   
 
         public void Add(params VisualNode[] nodes)
         {
@@ -63,12 +63,29 @@ namespace AvaloniaReactorUI
 
         protected sealed override void OnAddChild(VisualNode widget, AvaloniaObject nativeControl)
         {
+            foreach (var attachedProperty in _attachedProperties)
+            {
+                nativeControl.SetValue(attachedProperty.Key, attachedProperty.Value);
+            }
+
             Parent.AddChild(this, nativeControl);
         }
 
         protected sealed override void OnRemoveChild(VisualNode widget, AvaloniaObject nativeControl)
         {
             Parent.RemoveChild(this, nativeControl);
+            
+            foreach (var attachedProperty in _attachedProperties)
+            {
+                if (attachedProperty.Key.GetMetadata(nativeControl.GetType()) is IDirectPropertyMetadata directPropertyMetadata)
+                {
+                    nativeControl.SetValue(attachedProperty.Key, directPropertyMetadata.UnsetValue);
+                }
+                else if (attachedProperty.Key.GetMetadata(nativeControl.GetType()) is IStyledPropertyMetadata styledPropertyMetadata)
+                {
+                    nativeControl.SetValue(attachedProperty.Key, styledPropertyMetadata.DefaultValue);
+                }
+            }           
         }
 
         protected sealed override IEnumerable<VisualNode> RenderChildren()

@@ -100,6 +100,10 @@ namespace AvaloniaReactorUI
         public object Key { get; set; }
         public Action<object, PropertyChangedEventArgs> PropertyChangedAction { get; set; }
         public Action<object, System.ComponentModel.PropertyChangingEventArgs> PropertyChangingAction { get; set; }
+        protected readonly Dictionary<AvaloniaProperty, object> _attachedProperties = new Dictionary<AvaloniaProperty, object>();
+  
+        public void SetAttachedProperty(AvaloniaProperty property, object value)
+            => _attachedProperties[property] = value;
 
         //internal event EventHandler LayoutCycleRequest;
         internal IReadOnlyList<VisualNode> Children
@@ -237,7 +241,6 @@ namespace AvaloniaReactorUI
 
             if (_invalidated)
             {
-                //System.Diagnostics.Debug.WriteLine($"{this}->Layout(Invalidated)");
                 var oldChildren = Children;
                 _children = null;
                 MergeChildrenFrom(oldChildren);
@@ -440,15 +443,17 @@ namespace AvaloniaReactorUI
     internal interface IVisualNodeWithNativeControl
     {
         TResult GetNativeControl<TResult>() where TResult : AvaloniaObject;
-    
-        void SetAttachedProperty(AvaloniaProperty property, object value);
     }
+
+    // public interface IVisualNodeWithAttachedProperties
+    // {
+    //     void SetAttachedProperty(AvaloniaProperty property, object value);
+    // }
 
     public abstract class VisualNode<T> : VisualNode, IVisualNodeWithNativeControl where T : AvaloniaObject, new()
     {
         protected AvaloniaObject _nativeControl;
 
-        private readonly Dictionary<AvaloniaProperty, object> _attachedProperties = new Dictionary<AvaloniaProperty, object>();
         private readonly Action<T> _componentRefAction;
 
         protected VisualNode()
@@ -460,9 +465,6 @@ namespace AvaloniaReactorUI
         }
 
         protected T NativeControl { get => (T)_nativeControl; }
-
-        public void SetAttachedProperty(AvaloniaProperty property, object value)
-            => _attachedProperties[property] = value;
 
         internal override void MergeWith(VisualNode newNode)
         {
@@ -493,6 +495,10 @@ namespace AvaloniaReactorUI
                     if (attachedProperty.Key.GetMetadata<T>() is IDirectPropertyMetadata directPropertyMetadata)
                     {
                         NativeControl.SetValue(attachedProperty.Key, directPropertyMetadata.UnsetValue);
+                    }
+                    else if (attachedProperty.Key.GetMetadata<T>() is IStyledPropertyMetadata styledPropertyMetadata)
+                    {
+                        NativeControl.SetValue(attachedProperty.Key, styledPropertyMetadata.DefaultValue);
                     }
                 }
             }
