@@ -15,6 +15,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Platform;
 using Avalonia.Controls.Selection;
+using Avalonia.Input.TextInput;
 
 using AvaloniaReactorUI.Internals;
 

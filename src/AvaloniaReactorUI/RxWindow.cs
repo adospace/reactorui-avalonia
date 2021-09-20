@@ -15,6 +15,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Platform;
 using Avalonia.Controls.Selection;
+using Avalonia.Input.TextInput;
 
 using AvaloniaReactorUI.Internals;
 
@@ -27,6 +28,7 @@ namespace AvaloniaReactorUI
         PropertyValue<ExtendClientAreaChromeHints> ExtendClientAreaChromeHints { get; set; }
         PropertyValue<double> ExtendClientAreaTitleBarHeightHint { get; set; }
         PropertyValue<SystemDecorations> SystemDecorations { get; set; }
+        PropertyValue<bool> ShowActivated { get; set; }
         PropertyValue<bool> ShowInTaskbar { get; set; }
         PropertyValue<WindowState> WindowState { get; set; }
         PropertyValue<string> Title { get; set; }
@@ -54,6 +56,7 @@ namespace AvaloniaReactorUI
         PropertyValue<ExtendClientAreaChromeHints> IRxWindow.ExtendClientAreaChromeHints { get; set; }
         PropertyValue<double> IRxWindow.ExtendClientAreaTitleBarHeightHint { get; set; }
         PropertyValue<SystemDecorations> IRxWindow.SystemDecorations { get; set; }
+        PropertyValue<bool> IRxWindow.ShowActivated { get; set; }
         PropertyValue<bool> IRxWindow.ShowInTaskbar { get; set; }
         PropertyValue<WindowState> IRxWindow.WindowState { get; set; }
         PropertyValue<string> IRxWindow.Title { get; set; }
@@ -72,6 +75,7 @@ namespace AvaloniaReactorUI
             NativeControl.Set(Window.ExtendClientAreaChromeHintsProperty, thisAsIRxWindow.ExtendClientAreaChromeHints);
             NativeControl.Set(Window.ExtendClientAreaTitleBarHeightHintProperty, thisAsIRxWindow.ExtendClientAreaTitleBarHeightHint);
             NativeControl.Set(Window.SystemDecorationsProperty, thisAsIRxWindow.SystemDecorations);
+            NativeControl.Set(Window.ShowActivatedProperty, thisAsIRxWindow.ShowActivated);
             NativeControl.Set(Window.ShowInTaskbarProperty, thisAsIRxWindow.ShowInTaskbar);
             NativeControl.Set(Window.WindowStateProperty, thisAsIRxWindow.WindowState);
             NativeControl.Set(Window.TitleProperty, thisAsIRxWindow.Title);
@@ -143,6 +147,11 @@ namespace AvaloniaReactorUI
         public static T SystemDecorations<T>(this T window, SystemDecorations systemDecorations) where T : IRxWindow
         {
             window.SystemDecorations = new PropertyValue<SystemDecorations>(systemDecorations);
+            return window;
+        }
+        public static T ShowActivated<T>(this T window, bool showActivated) where T : IRxWindow
+        {
+            window.ShowActivated = new PropertyValue<bool>(showActivated);
             return window;
         }
         public static T ShowInTaskbar<T>(this T window, bool showInTaskbar) where T : IRxWindow

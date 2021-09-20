@@ -15,6 +15,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Platform;
 using Avalonia.Controls.Selection;
+using Avalonia.Input.TextInput;
 
 using AvaloniaReactorUI.Internals;
 
@@ -25,6 +26,7 @@ namespace AvaloniaReactorUI
         PropertyValue<IBrush> Background { get; set; }
         PropertyValue<IBrush> BorderBrush { get; set; }
         PropertyValue<Thickness> BorderThickness { get; set; }
+        PropertyValue<CornerRadius> CornerRadius { get; set; }
         PropertyValue<FontFamily> FontFamily { get; set; }
         PropertyValue<double> FontSize { get; set; }
         PropertyValue<FontStyle> FontStyle { get; set; }
@@ -52,6 +54,7 @@ namespace AvaloniaReactorUI
         PropertyValue<IBrush> IRxTemplatedControl.Background { get; set; }
         PropertyValue<IBrush> IRxTemplatedControl.BorderBrush { get; set; }
         PropertyValue<Thickness> IRxTemplatedControl.BorderThickness { get; set; }
+        PropertyValue<CornerRadius> IRxTemplatedControl.CornerRadius { get; set; }
         PropertyValue<FontFamily> IRxTemplatedControl.FontFamily { get; set; }
         PropertyValue<double> IRxTemplatedControl.FontSize { get; set; }
         PropertyValue<FontStyle> IRxTemplatedControl.FontStyle { get; set; }
@@ -70,6 +73,7 @@ namespace AvaloniaReactorUI
             NativeControl.Set(TemplatedControl.BackgroundProperty, thisAsIRxTemplatedControl.Background);
             NativeControl.Set(TemplatedControl.BorderBrushProperty, thisAsIRxTemplatedControl.BorderBrush);
             NativeControl.Set(TemplatedControl.BorderThicknessProperty, thisAsIRxTemplatedControl.BorderThickness);
+            NativeControl.Set(TemplatedControl.CornerRadiusProperty, thisAsIRxTemplatedControl.CornerRadius);
             NativeControl.Set(TemplatedControl.FontFamilyProperty, thisAsIRxTemplatedControl.FontFamily);
             NativeControl.Set(TemplatedControl.FontSizeProperty, thisAsIRxTemplatedControl.FontSize);
             NativeControl.Set(TemplatedControl.FontStyleProperty, thisAsIRxTemplatedControl.FontStyle);
@@ -152,6 +156,11 @@ namespace AvaloniaReactorUI
         public static T BorderThickness<T>(this T templatedcontrol, double uniformSize) where T : IRxTemplatedControl
         {
             templatedcontrol.BorderThickness = new PropertyValue<Thickness>(new Thickness(uniformSize));
+            return templatedcontrol;
+        }
+        public static T CornerRadius<T>(this T templatedcontrol, CornerRadius cornerRadius) where T : IRxTemplatedControl
+        {
+            templatedcontrol.CornerRadius = new PropertyValue<CornerRadius>(cornerRadius);
             return templatedcontrol;
         }
         public static T FontFamily<T>(this T templatedcontrol, FontFamily fontFamily) where T : IRxTemplatedControl

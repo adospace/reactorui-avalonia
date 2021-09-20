@@ -15,6 +15,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Platform;
 using Avalonia.Controls.Selection;
+using Avalonia.Input.TextInput;
 
 using AvaloniaReactorUI.Internals;
 
@@ -26,6 +27,8 @@ namespace AvaloniaReactorUI
         PropertyValue<bool> IsEnabled { get; set; }
         PropertyValue<Cursor> Cursor { get; set; }
         PropertyValue<bool> IsHitTestVisible { get; set; }
+        PropertyValue<bool> IsTabStop { get; set; }
+        PropertyValue<int> TabIndex { get; set; }
 
         Action GotFocusAction { get; set; }
         Action<GotFocusEventArgs> GotFocusActionWithArgs { get; set; }
@@ -37,6 +40,10 @@ namespace AvaloniaReactorUI
         Action<KeyEventArgs> KeyUpActionWithArgs { get; set; }
         Action TextInputAction { get; set; }
         Action<TextInputEventArgs> TextInputActionWithArgs { get; set; }
+        Action TextInputMethodClientRequestedAction { get; set; }
+        Action<TextInputMethodClientRequestedEventArgs> TextInputMethodClientRequestedActionWithArgs { get; set; }
+        Action TextInputOptionsQueryAction { get; set; }
+        Action<TextInputOptionsQueryEventArgs> TextInputOptionsQueryActionWithArgs { get; set; }
         Action PointerEnterAction { get; set; }
         Action<PointerEventArgs> PointerEnterActionWithArgs { get; set; }
         Action PointerLeaveAction { get; set; }
@@ -74,6 +81,8 @@ namespace AvaloniaReactorUI
         PropertyValue<bool> IRxInputElement.IsEnabled { get; set; }
         PropertyValue<Cursor> IRxInputElement.Cursor { get; set; }
         PropertyValue<bool> IRxInputElement.IsHitTestVisible { get; set; }
+        PropertyValue<bool> IRxInputElement.IsTabStop { get; set; }
+        PropertyValue<int> IRxInputElement.TabIndex { get; set; }
 
         Action IRxInputElement.GotFocusAction { get; set; }
         Action<GotFocusEventArgs> IRxInputElement.GotFocusActionWithArgs { get; set; }
@@ -85,6 +94,10 @@ namespace AvaloniaReactorUI
         Action<KeyEventArgs> IRxInputElement.KeyUpActionWithArgs { get; set; }
         Action IRxInputElement.TextInputAction { get; set; }
         Action<TextInputEventArgs> IRxInputElement.TextInputActionWithArgs { get; set; }
+        Action IRxInputElement.TextInputMethodClientRequestedAction { get; set; }
+        Action<TextInputMethodClientRequestedEventArgs> IRxInputElement.TextInputMethodClientRequestedActionWithArgs { get; set; }
+        Action IRxInputElement.TextInputOptionsQueryAction { get; set; }
+        Action<TextInputOptionsQueryEventArgs> IRxInputElement.TextInputOptionsQueryActionWithArgs { get; set; }
         Action IRxInputElement.PointerEnterAction { get; set; }
         Action<PointerEventArgs> IRxInputElement.PointerEnterActionWithArgs { get; set; }
         Action IRxInputElement.PointerLeaveAction { get; set; }
@@ -113,6 +126,8 @@ namespace AvaloniaReactorUI
             NativeControl.Set(InputElement.IsEnabledProperty, thisAsIRxInputElement.IsEnabled);
             NativeControl.Set(InputElement.CursorProperty, thisAsIRxInputElement.Cursor);
             NativeControl.Set(InputElement.IsHitTestVisibleProperty, thisAsIRxInputElement.IsHitTestVisible);
+            NativeControl.Set(InputElement.IsTabStopProperty, thisAsIRxInputElement.IsTabStop);
+            NativeControl.Set(InputElement.TabIndexProperty, thisAsIRxInputElement.TabIndex);
 
             base.OnUpdate();
 
@@ -144,6 +159,14 @@ namespace AvaloniaReactorUI
             if (thisAsIRxInputElement.TextInputAction != null || thisAsIRxInputElement.TextInputActionWithArgs != null)
             {
                 NativeControl.TextInput += NativeControl_TextInput;
+            }
+            if (thisAsIRxInputElement.TextInputMethodClientRequestedAction != null || thisAsIRxInputElement.TextInputMethodClientRequestedActionWithArgs != null)
+            {
+                NativeControl.TextInputMethodClientRequested += NativeControl_TextInputMethodClientRequested;
+            }
+            if (thisAsIRxInputElement.TextInputOptionsQueryAction != null || thisAsIRxInputElement.TextInputOptionsQueryActionWithArgs != null)
+            {
+                NativeControl.TextInputOptionsQuery += NativeControl_TextInputOptionsQuery;
             }
             if (thisAsIRxInputElement.PointerEnterAction != null || thisAsIRxInputElement.PointerEnterActionWithArgs != null)
             {
@@ -215,6 +238,18 @@ namespace AvaloniaReactorUI
             thisAsIRxInputElement.TextInputAction?.Invoke();
             thisAsIRxInputElement.TextInputActionWithArgs?.Invoke(e);
         }
+        private void NativeControl_TextInputMethodClientRequested(object sender, TextInputMethodClientRequestedEventArgs e)
+        {
+            var thisAsIRxInputElement = (IRxInputElement)this;
+            thisAsIRxInputElement.TextInputMethodClientRequestedAction?.Invoke();
+            thisAsIRxInputElement.TextInputMethodClientRequestedActionWithArgs?.Invoke(e);
+        }
+        private void NativeControl_TextInputOptionsQuery(object sender, TextInputOptionsQueryEventArgs e)
+        {
+            var thisAsIRxInputElement = (IRxInputElement)this;
+            thisAsIRxInputElement.TextInputOptionsQueryAction?.Invoke();
+            thisAsIRxInputElement.TextInputOptionsQueryActionWithArgs?.Invoke(e);
+        }
         private void NativeControl_PointerEnter(object sender, PointerEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
@@ -279,6 +314,8 @@ namespace AvaloniaReactorUI
                 NativeControl.KeyDown -= NativeControl_KeyDown;
                 NativeControl.KeyUp -= NativeControl_KeyUp;
                 NativeControl.TextInput -= NativeControl_TextInput;
+                NativeControl.TextInputMethodClientRequested -= NativeControl_TextInputMethodClientRequested;
+                NativeControl.TextInputOptionsQuery -= NativeControl_TextInputOptionsQuery;
                 NativeControl.PointerEnter -= NativeControl_PointerEnter;
                 NativeControl.PointerLeave -= NativeControl_PointerLeave;
                 NativeControl.PointerMoved -= NativeControl_PointerMoved;
@@ -327,6 +364,16 @@ namespace AvaloniaReactorUI
         public static T IsHitTestVisible<T>(this T inputelement, bool isHitTestVisible) where T : IRxInputElement
         {
             inputelement.IsHitTestVisible = new PropertyValue<bool>(isHitTestVisible);
+            return inputelement;
+        }
+        public static T IsTabStop<T>(this T inputelement, bool isTabStop) where T : IRxInputElement
+        {
+            inputelement.IsTabStop = new PropertyValue<bool>(isTabStop);
+            return inputelement;
+        }
+        public static T TabIndex<T>(this T inputelement, int tabIndex) where T : IRxInputElement
+        {
+            inputelement.TabIndex = new PropertyValue<int>(tabIndex);
             return inputelement;
         }
         public static T OnGotFocus<T>(this T inputelement, Action gotfocusAction) where T : IRxInputElement
@@ -382,6 +429,28 @@ namespace AvaloniaReactorUI
         public static T OnTextInput<T>(this T inputelement, Action<TextInputEventArgs> textinputActionWithArgs) where T : IRxInputElement
         {
             inputelement.TextInputActionWithArgs = textinputActionWithArgs;
+            return inputelement;
+        }
+        public static T OnTextInputMethodClientRequested<T>(this T inputelement, Action textinputmethodclientrequestedAction) where T : IRxInputElement
+        {
+            inputelement.TextInputMethodClientRequestedAction = textinputmethodclientrequestedAction;
+            return inputelement;
+        }
+
+        public static T OnTextInputMethodClientRequested<T>(this T inputelement, Action<TextInputMethodClientRequestedEventArgs> textinputmethodclientrequestedActionWithArgs) where T : IRxInputElement
+        {
+            inputelement.TextInputMethodClientRequestedActionWithArgs = textinputmethodclientrequestedActionWithArgs;
+            return inputelement;
+        }
+        public static T OnTextInputOptionsQuery<T>(this T inputelement, Action textinputoptionsqueryAction) where T : IRxInputElement
+        {
+            inputelement.TextInputOptionsQueryAction = textinputoptionsqueryAction;
+            return inputelement;
+        }
+
+        public static T OnTextInputOptionsQuery<T>(this T inputelement, Action<TextInputOptionsQueryEventArgs> textinputoptionsqueryActionWithArgs) where T : IRxInputElement
+        {
+            inputelement.TextInputOptionsQueryActionWithArgs = textinputoptionsqueryActionWithArgs;
             return inputelement;
         }
         public static T OnPointerEnter<T>(this T inputelement, Action pointerenterAction) where T : IRxInputElement

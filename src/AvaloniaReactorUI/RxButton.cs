@@ -15,6 +15,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Platform;
 using Avalonia.Controls.Selection;
+using Avalonia.Input.TextInput;
 
 using AvaloniaReactorUI.Internals;
 
@@ -28,6 +29,7 @@ namespace AvaloniaReactorUI
         PropertyValue<object> CommandParameter { get; set; }
         PropertyValue<bool> IsDefault { get; set; }
         PropertyValue<bool> IsCancel { get; set; }
+        PropertyValue<FlyoutBase> Flyout { get; set; }
 
         Action ClickAction { get; set; }
         Action<RoutedEventArgs> ClickActionWithArgs { get; set; }
@@ -52,6 +54,7 @@ namespace AvaloniaReactorUI
         PropertyValue<object> IRxButton.CommandParameter { get; set; }
         PropertyValue<bool> IRxButton.IsDefault { get; set; }
         PropertyValue<bool> IRxButton.IsCancel { get; set; }
+        PropertyValue<FlyoutBase> IRxButton.Flyout { get; set; }
 
         Action IRxButton.ClickAction { get; set; }
         Action<RoutedEventArgs> IRxButton.ClickActionWithArgs { get; set; }
@@ -67,6 +70,7 @@ namespace AvaloniaReactorUI
             NativeControl.Set(Button.CommandParameterProperty, thisAsIRxButton.CommandParameter);
             NativeControl.Set(Button.IsDefaultProperty, thisAsIRxButton.IsDefault);
             NativeControl.Set(Button.IsCancelProperty, thisAsIRxButton.IsCancel);
+            NativeControl.Set(Button.FlyoutProperty, thisAsIRxButton.Flyout);
 
             base.OnUpdate();
 
@@ -148,6 +152,11 @@ namespace AvaloniaReactorUI
         public static T IsCancel<T>(this T button, bool isCancel) where T : IRxButton
         {
             button.IsCancel = new PropertyValue<bool>(isCancel);
+            return button;
+        }
+        public static T Flyout<T>(this T button, FlyoutBase flyout) where T : IRxButton
+        {
+            button.Flyout = new PropertyValue<FlyoutBase>(flyout);
             return button;
         }
         public static T OnClick<T>(this T button, Action clickAction) where T : IRxButton

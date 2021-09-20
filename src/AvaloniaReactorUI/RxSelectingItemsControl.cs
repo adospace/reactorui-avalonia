@@ -15,6 +15,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Platform;
 using Avalonia.Controls.Selection;
+using Avalonia.Input.TextInput;
 
 using AvaloniaReactorUI.Internals;
 
@@ -25,6 +26,7 @@ namespace AvaloniaReactorUI
         PropertyValue<bool> AutoScrollToSelectedItem { get; set; }
         PropertyValue<int> SelectedIndex { get; set; }
         PropertyValue<object> SelectedItem { get; set; }
+        PropertyValue<bool> IsTextSearchEnabled { get; set; }
 
         Action SelectionChangedAction { get; set; }
         Action<SelectionChangedEventArgs> SelectionChangedActionWithArgs { get; set; }
@@ -46,6 +48,7 @@ namespace AvaloniaReactorUI
         PropertyValue<bool> IRxSelectingItemsControl.AutoScrollToSelectedItem { get; set; }
         PropertyValue<int> IRxSelectingItemsControl.SelectedIndex { get; set; }
         PropertyValue<object> IRxSelectingItemsControl.SelectedItem { get; set; }
+        PropertyValue<bool> IRxSelectingItemsControl.IsTextSearchEnabled { get; set; }
 
         Action IRxSelectingItemsControl.SelectionChangedAction { get; set; }
         Action<SelectionChangedEventArgs> IRxSelectingItemsControl.SelectionChangedActionWithArgs { get; set; }
@@ -58,6 +61,7 @@ namespace AvaloniaReactorUI
             NativeControl.Set(SelectingItemsControl.AutoScrollToSelectedItemProperty, thisAsIRxSelectingItemsControl.AutoScrollToSelectedItem);
             NativeControl.Set(SelectingItemsControl.SelectedIndexProperty, thisAsIRxSelectingItemsControl.SelectedIndex);
             NativeControl.Set(SelectingItemsControl.SelectedItemProperty, thisAsIRxSelectingItemsControl.SelectedItem);
+            NativeControl.Set(SelectingItemsControl.IsTextSearchEnabledProperty, thisAsIRxSelectingItemsControl.IsTextSearchEnabled);
 
             base.OnUpdate();
 
@@ -124,6 +128,11 @@ namespace AvaloniaReactorUI
         public static T SelectedItem<T>(this T selectingitemscontrol, object selectedItem) where T : IRxSelectingItemsControl
         {
             selectingitemscontrol.SelectedItem = new PropertyValue<object>(selectedItem);
+            return selectingitemscontrol;
+        }
+        public static T IsTextSearchEnabled<T>(this T selectingitemscontrol, bool isTextSearchEnabled) where T : IRxSelectingItemsControl
+        {
+            selectingitemscontrol.IsTextSearchEnabled = new PropertyValue<bool>(isTextSearchEnabled);
             return selectingitemscontrol;
         }
         public static T OnSelectionChanged<T>(this T selectingitemscontrol, Action selectionchangedAction) where T : IRxSelectingItemsControl
