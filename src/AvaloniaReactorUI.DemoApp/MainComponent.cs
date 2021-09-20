@@ -20,15 +20,14 @@ namespace AvaloniaReactorUI.DemoApp
 
     public class MainComponent : RxComponent<MainComponentState>
     {
+        private static readonly Page[] Pages = new[] { Page.Home, Page.Counter, Page.Timer, Page.Items };
+
         private VisualNode Menu()=> 
             new RxListBox()
-                .Items(Enum.GetValues(typeof(Page)))
+                .Items(Pages)
                 .OnRenderItem<RxListBox, Page>(
                     _ => new RxTextBlock()
-                            .Text(_.ToString())
-                            .Height(35)
-                            .VCenter()
-                            .HCenter())
+                            .Text(_.ToString()))
                 .FontSize(20)
                 .SelectedItem(State.CurrentPage)
                 .OnSelectionChanged(args =>
