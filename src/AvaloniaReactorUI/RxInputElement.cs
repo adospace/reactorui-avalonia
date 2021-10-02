@@ -23,45 +23,45 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxInputElement : IRxInteractive
     {
-        PropertyValue<bool> Focusable { get; set; }
-        PropertyValue<bool> IsEnabled { get; set; }
-        PropertyValue<Cursor> Cursor { get; set; }
-        PropertyValue<bool> IsHitTestVisible { get; set; }
-        PropertyValue<bool> IsTabStop { get; set; }
-        PropertyValue<int> TabIndex { get; set; }
+        PropertyValue<bool>? Focusable { get; set; }
+        PropertyValue<bool>? IsEnabled { get; set; }
+        PropertyValue<Cursor?>? Cursor { get; set; }
+        PropertyValue<bool>? IsHitTestVisible { get; set; }
+        PropertyValue<bool>? IsTabStop { get; set; }
+        PropertyValue<int>? TabIndex { get; set; }
 
-        Action GotFocusAction { get; set; }
-        Action<GotFocusEventArgs> GotFocusActionWithArgs { get; set; }
-        Action LostFocusAction { get; set; }
-        Action<RoutedEventArgs> LostFocusActionWithArgs { get; set; }
-        Action KeyDownAction { get; set; }
-        Action<KeyEventArgs> KeyDownActionWithArgs { get; set; }
-        Action KeyUpAction { get; set; }
-        Action<KeyEventArgs> KeyUpActionWithArgs { get; set; }
-        Action TextInputAction { get; set; }
-        Action<TextInputEventArgs> TextInputActionWithArgs { get; set; }
-        Action TextInputMethodClientRequestedAction { get; set; }
-        Action<TextInputMethodClientRequestedEventArgs> TextInputMethodClientRequestedActionWithArgs { get; set; }
-        Action TextInputOptionsQueryAction { get; set; }
-        Action<TextInputOptionsQueryEventArgs> TextInputOptionsQueryActionWithArgs { get; set; }
-        Action PointerEnterAction { get; set; }
-        Action<PointerEventArgs> PointerEnterActionWithArgs { get; set; }
-        Action PointerLeaveAction { get; set; }
-        Action<PointerEventArgs> PointerLeaveActionWithArgs { get; set; }
-        Action PointerMovedAction { get; set; }
-        Action<PointerEventArgs> PointerMovedActionWithArgs { get; set; }
-        Action PointerPressedAction { get; set; }
-        Action<PointerPressedEventArgs> PointerPressedActionWithArgs { get; set; }
-        Action PointerReleasedAction { get; set; }
-        Action<PointerReleasedEventArgs> PointerReleasedActionWithArgs { get; set; }
-        Action PointerCaptureLostAction { get; set; }
-        Action<PointerCaptureLostEventArgs> PointerCaptureLostActionWithArgs { get; set; }
-        Action PointerWheelChangedAction { get; set; }
-        Action<PointerWheelEventArgs> PointerWheelChangedActionWithArgs { get; set; }
-        Action TappedAction { get; set; }
-        Action<RoutedEventArgs> TappedActionWithArgs { get; set; }
-        Action DoubleTappedAction { get; set; }
-        Action<RoutedEventArgs> DoubleTappedActionWithArgs { get; set; }
+        Action? GotFocusAction { get; set; }
+        Action<GotFocusEventArgs>? GotFocusActionWithArgs { get; set; }
+        Action? LostFocusAction { get; set; }
+        Action<RoutedEventArgs>? LostFocusActionWithArgs { get; set; }
+        Action? KeyDownAction { get; set; }
+        Action<KeyEventArgs>? KeyDownActionWithArgs { get; set; }
+        Action? KeyUpAction { get; set; }
+        Action<KeyEventArgs>? KeyUpActionWithArgs { get; set; }
+        Action? TextInputAction { get; set; }
+        Action<TextInputEventArgs>? TextInputActionWithArgs { get; set; }
+        Action? TextInputMethodClientRequestedAction { get; set; }
+        Action<TextInputMethodClientRequestedEventArgs>? TextInputMethodClientRequestedActionWithArgs { get; set; }
+        Action? TextInputOptionsQueryAction { get; set; }
+        Action<TextInputOptionsQueryEventArgs>? TextInputOptionsQueryActionWithArgs { get; set; }
+        Action? PointerEnterAction { get; set; }
+        Action<PointerEventArgs>? PointerEnterActionWithArgs { get; set; }
+        Action? PointerLeaveAction { get; set; }
+        Action<PointerEventArgs>? PointerLeaveActionWithArgs { get; set; }
+        Action? PointerMovedAction { get; set; }
+        Action<PointerEventArgs>? PointerMovedActionWithArgs { get; set; }
+        Action? PointerPressedAction { get; set; }
+        Action<PointerPressedEventArgs>? PointerPressedActionWithArgs { get; set; }
+        Action? PointerReleasedAction { get; set; }
+        Action<PointerReleasedEventArgs>? PointerReleasedActionWithArgs { get; set; }
+        Action? PointerCaptureLostAction { get; set; }
+        Action<PointerCaptureLostEventArgs>? PointerCaptureLostActionWithArgs { get; set; }
+        Action? PointerWheelChangedAction { get; set; }
+        Action<PointerWheelEventArgs>? PointerWheelChangedActionWithArgs { get; set; }
+        Action? TappedAction { get; set; }
+        Action<RoutedEventArgs>? TappedActionWithArgs { get; set; }
+        Action? DoubleTappedAction { get; set; }
+        Action<RoutedEventArgs>? DoubleTappedActionWithArgs { get; set; }
     }
 
     public partial class RxInputElement<T> : RxInteractive<T>, IRxInputElement where T : InputElement, new()
@@ -71,60 +71,62 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxInputElement(Action<T> componentRefAction)
+        public RxInputElement(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<bool> IRxInputElement.Focusable { get; set; }
-        PropertyValue<bool> IRxInputElement.IsEnabled { get; set; }
-        PropertyValue<Cursor> IRxInputElement.Cursor { get; set; }
-        PropertyValue<bool> IRxInputElement.IsHitTestVisible { get; set; }
-        PropertyValue<bool> IRxInputElement.IsTabStop { get; set; }
-        PropertyValue<int> IRxInputElement.TabIndex { get; set; }
+        PropertyValue<bool>? IRxInputElement.Focusable { get; set; }
+        PropertyValue<bool>? IRxInputElement.IsEnabled { get; set; }
+        PropertyValue<Cursor?>? IRxInputElement.Cursor { get; set; }
+        PropertyValue<bool>? IRxInputElement.IsHitTestVisible { get; set; }
+        PropertyValue<bool>? IRxInputElement.IsTabStop { get; set; }
+        PropertyValue<int>? IRxInputElement.TabIndex { get; set; }
 
-        Action IRxInputElement.GotFocusAction { get; set; }
-        Action<GotFocusEventArgs> IRxInputElement.GotFocusActionWithArgs { get; set; }
-        Action IRxInputElement.LostFocusAction { get; set; }
-        Action<RoutedEventArgs> IRxInputElement.LostFocusActionWithArgs { get; set; }
-        Action IRxInputElement.KeyDownAction { get; set; }
-        Action<KeyEventArgs> IRxInputElement.KeyDownActionWithArgs { get; set; }
-        Action IRxInputElement.KeyUpAction { get; set; }
-        Action<KeyEventArgs> IRxInputElement.KeyUpActionWithArgs { get; set; }
-        Action IRxInputElement.TextInputAction { get; set; }
-        Action<TextInputEventArgs> IRxInputElement.TextInputActionWithArgs { get; set; }
-        Action IRxInputElement.TextInputMethodClientRequestedAction { get; set; }
-        Action<TextInputMethodClientRequestedEventArgs> IRxInputElement.TextInputMethodClientRequestedActionWithArgs { get; set; }
-        Action IRxInputElement.TextInputOptionsQueryAction { get; set; }
-        Action<TextInputOptionsQueryEventArgs> IRxInputElement.TextInputOptionsQueryActionWithArgs { get; set; }
-        Action IRxInputElement.PointerEnterAction { get; set; }
-        Action<PointerEventArgs> IRxInputElement.PointerEnterActionWithArgs { get; set; }
-        Action IRxInputElement.PointerLeaveAction { get; set; }
-        Action<PointerEventArgs> IRxInputElement.PointerLeaveActionWithArgs { get; set; }
-        Action IRxInputElement.PointerMovedAction { get; set; }
-        Action<PointerEventArgs> IRxInputElement.PointerMovedActionWithArgs { get; set; }
-        Action IRxInputElement.PointerPressedAction { get; set; }
-        Action<PointerPressedEventArgs> IRxInputElement.PointerPressedActionWithArgs { get; set; }
-        Action IRxInputElement.PointerReleasedAction { get; set; }
-        Action<PointerReleasedEventArgs> IRxInputElement.PointerReleasedActionWithArgs { get; set; }
-        Action IRxInputElement.PointerCaptureLostAction { get; set; }
-        Action<PointerCaptureLostEventArgs> IRxInputElement.PointerCaptureLostActionWithArgs { get; set; }
-        Action IRxInputElement.PointerWheelChangedAction { get; set; }
-        Action<PointerWheelEventArgs> IRxInputElement.PointerWheelChangedActionWithArgs { get; set; }
-        Action IRxInputElement.TappedAction { get; set; }
-        Action<RoutedEventArgs> IRxInputElement.TappedActionWithArgs { get; set; }
-        Action IRxInputElement.DoubleTappedAction { get; set; }
-        Action<RoutedEventArgs> IRxInputElement.DoubleTappedActionWithArgs { get; set; }
+        Action? IRxInputElement.GotFocusAction { get; set; }
+        Action<GotFocusEventArgs>? IRxInputElement.GotFocusActionWithArgs { get; set; }
+        Action? IRxInputElement.LostFocusAction { get; set; }
+        Action<RoutedEventArgs>? IRxInputElement.LostFocusActionWithArgs { get; set; }
+        Action? IRxInputElement.KeyDownAction { get; set; }
+        Action<KeyEventArgs>? IRxInputElement.KeyDownActionWithArgs { get; set; }
+        Action? IRxInputElement.KeyUpAction { get; set; }
+        Action<KeyEventArgs>? IRxInputElement.KeyUpActionWithArgs { get; set; }
+        Action? IRxInputElement.TextInputAction { get; set; }
+        Action<TextInputEventArgs>? IRxInputElement.TextInputActionWithArgs { get; set; }
+        Action? IRxInputElement.TextInputMethodClientRequestedAction { get; set; }
+        Action<TextInputMethodClientRequestedEventArgs>? IRxInputElement.TextInputMethodClientRequestedActionWithArgs { get; set; }
+        Action? IRxInputElement.TextInputOptionsQueryAction { get; set; }
+        Action<TextInputOptionsQueryEventArgs>? IRxInputElement.TextInputOptionsQueryActionWithArgs { get; set; }
+        Action? IRxInputElement.PointerEnterAction { get; set; }
+        Action<PointerEventArgs>? IRxInputElement.PointerEnterActionWithArgs { get; set; }
+        Action? IRxInputElement.PointerLeaveAction { get; set; }
+        Action<PointerEventArgs>? IRxInputElement.PointerLeaveActionWithArgs { get; set; }
+        Action? IRxInputElement.PointerMovedAction { get; set; }
+        Action<PointerEventArgs>? IRxInputElement.PointerMovedActionWithArgs { get; set; }
+        Action? IRxInputElement.PointerPressedAction { get; set; }
+        Action<PointerPressedEventArgs>? IRxInputElement.PointerPressedActionWithArgs { get; set; }
+        Action? IRxInputElement.PointerReleasedAction { get; set; }
+        Action<PointerReleasedEventArgs>? IRxInputElement.PointerReleasedActionWithArgs { get; set; }
+        Action? IRxInputElement.PointerCaptureLostAction { get; set; }
+        Action<PointerCaptureLostEventArgs>? IRxInputElement.PointerCaptureLostActionWithArgs { get; set; }
+        Action? IRxInputElement.PointerWheelChangedAction { get; set; }
+        Action<PointerWheelEventArgs>? IRxInputElement.PointerWheelChangedActionWithArgs { get; set; }
+        Action? IRxInputElement.TappedAction { get; set; }
+        Action<RoutedEventArgs>? IRxInputElement.TappedActionWithArgs { get; set; }
+        Action? IRxInputElement.DoubleTappedAction { get; set; }
+        Action<RoutedEventArgs>? IRxInputElement.DoubleTappedActionWithArgs { get; set; }
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxInputElement = (IRxInputElement)this;
             NativeControl.Set(InputElement.FocusableProperty, thisAsIRxInputElement.Focusable);
             NativeControl.Set(InputElement.IsEnabledProperty, thisAsIRxInputElement.IsEnabled);
-            NativeControl.Set(InputElement.CursorProperty, thisAsIRxInputElement.Cursor);
+            NativeControl.SetNullable(InputElement.CursorProperty, thisAsIRxInputElement.Cursor);
             NativeControl.Set(InputElement.IsHitTestVisibleProperty, thisAsIRxInputElement.IsHitTestVisible);
             NativeControl.Set(InputElement.IsTabStopProperty, thisAsIRxInputElement.IsTabStop);
             NativeControl.Set(InputElement.TabIndexProperty, thisAsIRxInputElement.TabIndex);
@@ -139,6 +141,8 @@ namespace AvaloniaReactorUI
 
         protected override void OnAttachNativeEvents()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             var thisAsIRxInputElement = (IRxInputElement)this;
             if (thisAsIRxInputElement.GotFocusAction != null || thisAsIRxInputElement.GotFocusActionWithArgs != null)
             {
@@ -208,97 +212,97 @@ namespace AvaloniaReactorUI
             base.OnAttachNativeEvents();
         }
 
-        private void NativeControl_GotFocus(object sender, GotFocusEventArgs e)
+        private void NativeControl_GotFocus(object? sender, GotFocusEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.GotFocusAction?.Invoke();
             thisAsIRxInputElement.GotFocusActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_LostFocus(object sender, RoutedEventArgs e)
+        private void NativeControl_LostFocus(object? sender, RoutedEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.LostFocusAction?.Invoke();
             thisAsIRxInputElement.LostFocusActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_KeyDown(object sender, KeyEventArgs e)
+        private void NativeControl_KeyDown(object? sender, KeyEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.KeyDownAction?.Invoke();
             thisAsIRxInputElement.KeyDownActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_KeyUp(object sender, KeyEventArgs e)
+        private void NativeControl_KeyUp(object? sender, KeyEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.KeyUpAction?.Invoke();
             thisAsIRxInputElement.KeyUpActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_TextInput(object sender, TextInputEventArgs e)
+        private void NativeControl_TextInput(object? sender, TextInputEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.TextInputAction?.Invoke();
             thisAsIRxInputElement.TextInputActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_TextInputMethodClientRequested(object sender, TextInputMethodClientRequestedEventArgs e)
+        private void NativeControl_TextInputMethodClientRequested(object? sender, TextInputMethodClientRequestedEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.TextInputMethodClientRequestedAction?.Invoke();
             thisAsIRxInputElement.TextInputMethodClientRequestedActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_TextInputOptionsQuery(object sender, TextInputOptionsQueryEventArgs e)
+        private void NativeControl_TextInputOptionsQuery(object? sender, TextInputOptionsQueryEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.TextInputOptionsQueryAction?.Invoke();
             thisAsIRxInputElement.TextInputOptionsQueryActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_PointerEnter(object sender, PointerEventArgs e)
+        private void NativeControl_PointerEnter(object? sender, PointerEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.PointerEnterAction?.Invoke();
             thisAsIRxInputElement.PointerEnterActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_PointerLeave(object sender, PointerEventArgs e)
+        private void NativeControl_PointerLeave(object? sender, PointerEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.PointerLeaveAction?.Invoke();
             thisAsIRxInputElement.PointerLeaveActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_PointerMoved(object sender, PointerEventArgs e)
+        private void NativeControl_PointerMoved(object? sender, PointerEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.PointerMovedAction?.Invoke();
             thisAsIRxInputElement.PointerMovedActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_PointerPressed(object sender, PointerPressedEventArgs e)
+        private void NativeControl_PointerPressed(object? sender, PointerPressedEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.PointerPressedAction?.Invoke();
             thisAsIRxInputElement.PointerPressedActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_PointerReleased(object sender, PointerReleasedEventArgs e)
+        private void NativeControl_PointerReleased(object? sender, PointerReleasedEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.PointerReleasedAction?.Invoke();
             thisAsIRxInputElement.PointerReleasedActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_PointerCaptureLost(object sender, PointerCaptureLostEventArgs e)
+        private void NativeControl_PointerCaptureLost(object? sender, PointerCaptureLostEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.PointerCaptureLostAction?.Invoke();
             thisAsIRxInputElement.PointerCaptureLostActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_PointerWheelChanged(object sender, PointerWheelEventArgs e)
+        private void NativeControl_PointerWheelChanged(object? sender, PointerWheelEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.PointerWheelChangedAction?.Invoke();
             thisAsIRxInputElement.PointerWheelChangedActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_Tapped(object sender, RoutedEventArgs e)
+        private void NativeControl_Tapped(object? sender, RoutedEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.TappedAction?.Invoke();
             thisAsIRxInputElement.TappedActionWithArgs?.Invoke(e);
         }
-        private void NativeControl_DoubleTapped(object sender, RoutedEventArgs e)
+        private void NativeControl_DoubleTapped(object? sender, RoutedEventArgs e)
         {
             var thisAsIRxInputElement = (IRxInputElement)this;
             thisAsIRxInputElement.DoubleTappedAction?.Invoke();
@@ -329,7 +333,6 @@ namespace AvaloniaReactorUI
 
             base.OnDetachNativeEvents();
         }
-
     }
     public partial class RxInputElement : RxInputElement<InputElement>
     {
@@ -338,7 +341,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxInputElement(Action<InputElement> componentRefAction)
+        public RxInputElement(Action<InputElement?> componentRefAction)
             : base(componentRefAction)
         {
 
@@ -356,9 +359,9 @@ namespace AvaloniaReactorUI
             inputelement.IsEnabled = new PropertyValue<bool>(isEnabled);
             return inputelement;
         }
-        public static T Cursor<T>(this T inputelement, Cursor cursor) where T : IRxInputElement
+        public static T Cursor<T>(this T inputelement, Cursor? cursor) where T : IRxInputElement
         {
-            inputelement.Cursor = new PropertyValue<Cursor>(cursor);
+            inputelement.Cursor = new PropertyValue<Cursor?>(cursor);
             return inputelement;
         }
         public static T IsHitTestVisible<T>(this T inputelement, bool isHitTestVisible) where T : IRxInputElement

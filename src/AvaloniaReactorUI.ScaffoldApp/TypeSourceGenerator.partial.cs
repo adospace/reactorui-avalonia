@@ -60,9 +60,9 @@ namespace AvaloniaReactorUI.ScaffoldApp
 
         public string TypeName => _typeToScaffold.Name;
 
-        public string BaseTypeName => _typeToScaffold.BaseType.Name == "AvaloniaObject" ? "VisualNode" : $"Rx{_typeToScaffold.BaseType.Name}";
+        public string BaseTypeName => (_typeToScaffold.BaseType ?? throw new InvalidOperationException()).Name == "AvaloniaObject" ? "VisualNode" : $"Rx{_typeToScaffold.BaseType.Name}";
 
-        public bool IsTypeNotAbstractWithEmptyConstructur => !_typeToScaffold.IsAbstract && _typeToScaffold.GetConstructor(new Type[] { }) != null;
+        public bool IsTypeNotAbstractWithEmptyConstructur => !_typeToScaffold.IsAbstract && _typeToScaffold.GetConstructor(Array.Empty<Type>()) != null;
 
         public PropertyInfo[] Properties { get; }
 
@@ -85,9 +85,9 @@ namespace AvaloniaReactorUI.ScaffoldApp
 
     internal class PropertyInfoEqualityComparer : IEqualityComparer<PropertyInfo>
     {
-        public bool Equals(PropertyInfo x, PropertyInfo y)
+        public bool Equals(PropertyInfo? x, PropertyInfo? y)
         {
-            return x.Name == y.Name;
+            return x?.Name == y?.Name;
         }
 
         public int GetHashCode(PropertyInfo obj)
@@ -98,9 +98,9 @@ namespace AvaloniaReactorUI.ScaffoldApp
 
     internal class EventInfoEqualityComparer : IEqualityComparer<EventInfo>
     {
-        public bool Equals(EventInfo x, EventInfo y)
+        public bool Equals(EventInfo? x, EventInfo? y)
         {
-            return x.Name == y.Name;
+            return x?.Name == y?.Name;
         }
 
         public int GetHashCode(EventInfo obj)
@@ -115,7 +115,7 @@ namespace AvaloniaReactorUI.ScaffoldApp
         {
             if (string.IsNullOrWhiteSpace(s))
                 return s;
-            return Char.ToLowerInvariant(s[0]) + s.Substring(1, s.Length - 1);
+            return char.ToLowerInvariant(s[0]) + s[1..];
         }
 
         public static string ToResevedWordTypeName(this string typename)

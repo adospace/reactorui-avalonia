@@ -11,7 +11,7 @@ namespace AvaloniaReactorUI.DemoApp
         public DateTime StartTime {get; set;}
         public TimeSpan TimeElapsed { get; set; }
         public bool IsRunning { get; set; }
-        public IDisposable SystemTimer { get; set;}
+        public IDisposable? SystemTimer { get; set;}
     }
 
     public class TimerComponent : RxComponent<TimerState>

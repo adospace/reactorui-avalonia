@@ -39,12 +39,12 @@ namespace AvaloniaReactorUI
     public partial interface IRx<#= TypeName #> : I<#= BaseTypeName #>
     {
     <# foreach (var property in Properties) { #>
-        PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>> <#= property.Name #> { get; set; }
+        PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #><#= NullableTypeHelper.IsNullable(property) ? "?" : string.Empty #>>? <#= property.Name #> { get; set; }
     <# } #>
 
     <# foreach (var ev in Events) { #>
-        Action <#= ev.Name #>Action { get; set; }
-        Action<<#= ev.EventHandlerType.GetGenericArguments()[0].Name #>> <#= ev.Name #>ActionWithArgs { get; set; }
+        Action? <#= ev.Name #>Action { get; set; }
+        Action<<#= ev.EventHandlerType.GetGenericArguments()[0].Name #>>? <#= ev.Name #>ActionWithArgs { get; set; }
     <# } #>
     }
     
@@ -55,40 +55,47 @@ namespace AvaloniaReactorUI
         
         }
 
-        public Rx<#= TypeName #>(Action<T> componentRefAction)
+        public Rx<#= TypeName #>(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
         <# foreach (var property in Properties) { #>
-        PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>> IRx<#= TypeName #>.<#= property.Name #> { get; set; }
+        PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #><#= NullableTypeHelper.IsNullable(property) ? "?" : string.Empty #>>? IRx<#= TypeName #>.<#= property.Name #> { get; set; }
         <# } #>
 
         <# foreach (var ev in Events) { #>
-        Action IRx<#= TypeName #>.<#= ev.Name #>Action { get; set; }
-        Action<<#= ev.EventHandlerType.GetGenericArguments()[0].Name #>> IRx<#= TypeName #>.<#= ev.Name #>ActionWithArgs { get; set; }
+        Action? IRx<#= TypeName #>.<#= ev.Name #>Action { get; set; }
+        Action<<#= ev.EventHandlerType.GetGenericArguments()[0].Name #>>? IRx<#= TypeName #>.<#= ev.Name #>ActionWithArgs { get; set; }
         <# } #>
 
+        <# if (Properties.Any()) { #>
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRx<#= TypeName #> = (IRx<#= TypeName #>)this;
             <# foreach (var property in Properties) { #>
-            NativeControl.Set(<#= TypeName #>.<#= property.Name #>Property, thisAsIRx<#= TypeName #>.<#= property.Name #>);
+            NativeControl.Set<#= NullableTypeHelper.IsNullable(property) ? "Nullable" : string.Empty #>(<#= TypeName #>.<#= property.Name #>Property, thisAsIRx<#= TypeName #>.<#= property.Name #>);
             <# } #>
 
             base.OnUpdate();
 
             OnEndUpdate();
         }
+        <# } #>
 
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
+        <# if (Events.Any()) { #>
         protected override void OnAttachNativeEvents()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             var thisAsIRx<#= TypeName #> = (IRx<#= TypeName #>)this;
             <# foreach (var ev in Events) { #>
             if (thisAsIRx<#= TypeName #>.<#= ev.Name #>Action != null || thisAsIRx<#= TypeName #>.<#= ev.Name #>ActionWithArgs != null)
@@ -101,7 +108,7 @@ namespace AvaloniaReactorUI
         }
 
         <# foreach (var ev in Events) { #>
-        private void NativeControl_<#= ev.Name #>(object sender, <#= ev.EventHandlerType.GetGenericArguments()[0].Name #> e)
+        private void NativeControl_<#= ev.Name #>(object? sender, <#= ev.EventHandlerType.GetGenericArguments()[0].Name #> e)
         {
             var thisAsIRx<#= TypeName #> = (IRx<#= TypeName #>)this;
             thisAsIRx<#= TypeName #>.<#= ev.Name #>Action?.Invoke();
@@ -120,7 +127,7 @@ namespace AvaloniaReactorUI
 
             base.OnDetachNativeEvents();
         }
-
+        <# } #>
     }
     <# if (IsTypeNotAbstractWithEmptyConstructur) { #>
     public partial class Rx<#= TypeName #> : Rx<#= TypeName #><<#= TypeName #>>
@@ -130,7 +137,7 @@ namespace AvaloniaReactorUI
         
         }
 
-        public Rx<#= TypeName #>(Action<<#= TypeName #>> componentRefAction)
+        public Rx<#= TypeName #>(Action<<#= TypeName #>?> componentRefAction)
             : base(componentRefAction)
         {
 
@@ -140,9 +147,9 @@ namespace AvaloniaReactorUI
     public static partial class Rx<#= TypeName #>Extensions
     {
         <# foreach (var property in Properties) { #>
-        public static T <#= property.Name #><T>(this T <#= TypeName.ToLowerInvariant() #>, <#= property.PropertyType.Name.ToResevedWordTypeName() #> <#= property.Name.CamelCase() #>) where T : IRx<#= TypeName #>
+        public static T <#= property.Name #><T>(this T <#= TypeName.ToLowerInvariant() #>, <#= property.PropertyType.Name.ToResevedWordTypeName() #><#= NullableTypeHelper.IsNullable(property) ? "?" : string.Empty #> <#= property.Name.CamelCase() #>) where T : IRx<#= TypeName #>
         {
-            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #>>(<#= property.Name.CamelCase() #>);
+            <#= TypeName.ToLowerInvariant() #>.<#= property.Name #> = new PropertyValue<<#= property.PropertyType.Name.ToResevedWordTypeName() #><#= NullableTypeHelper.IsNullable(property) ? "?" : string.Empty #>>(<#= property.Name.CamelCase() #>);
             return <#= TypeName.ToLowerInvariant() #>;
         }
         <# if (property.PropertyType.Name == "Thickness") { #>

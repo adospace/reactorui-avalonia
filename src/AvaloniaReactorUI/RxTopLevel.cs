@@ -23,8 +23,8 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxTopLevel : IRxContentControl
     {
-        PropertyValue<WindowTransparencyLevel> TransparencyLevelHint { get; set; }
-        PropertyValue<IBrush> TransparencyBackgroundFallback { get; set; }
+        PropertyValue<WindowTransparencyLevel>? TransparencyLevelHint { get; set; }
+        PropertyValue<IBrush>? TransparencyBackgroundFallback { get; set; }
 
     }
 
@@ -35,18 +35,20 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxTopLevel(Action<T> componentRefAction)
+        public RxTopLevel(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<WindowTransparencyLevel> IRxTopLevel.TransparencyLevelHint { get; set; }
-        PropertyValue<IBrush> IRxTopLevel.TransparencyBackgroundFallback { get; set; }
+        PropertyValue<WindowTransparencyLevel>? IRxTopLevel.TransparencyLevelHint { get; set; }
+        PropertyValue<IBrush>? IRxTopLevel.TransparencyBackgroundFallback { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxTopLevel = (IRxTopLevel)this;
@@ -60,23 +62,6 @@ namespace AvaloniaReactorUI
 
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
-
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxTopLevel = (IRxTopLevel)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
 
     }
     public static partial class RxTopLevelExtensions

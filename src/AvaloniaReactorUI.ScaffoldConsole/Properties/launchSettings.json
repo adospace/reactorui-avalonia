@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AvaloniaReactorUI.ScaffoldConsole": {
+      "commandName": "Project",
+      "commandLineArgs": "..\\..\\..\\..\\AvaloniaReactorUI"
+    }
+  }
+}

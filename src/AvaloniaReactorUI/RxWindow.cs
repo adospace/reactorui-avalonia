@@ -23,18 +23,18 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxWindow : IRxWindowBase
     {
-        PropertyValue<SizeToContent> SizeToContent { get; set; }
-        PropertyValue<bool> ExtendClientAreaToDecorationsHint { get; set; }
-        PropertyValue<ExtendClientAreaChromeHints> ExtendClientAreaChromeHints { get; set; }
-        PropertyValue<double> ExtendClientAreaTitleBarHeightHint { get; set; }
-        PropertyValue<SystemDecorations> SystemDecorations { get; set; }
-        PropertyValue<bool> ShowActivated { get; set; }
-        PropertyValue<bool> ShowInTaskbar { get; set; }
-        PropertyValue<WindowState> WindowState { get; set; }
-        PropertyValue<string> Title { get; set; }
-        PropertyValue<WindowIcon> Icon { get; set; }
-        PropertyValue<WindowStartupLocation> WindowStartupLocation { get; set; }
-        PropertyValue<bool> CanResize { get; set; }
+        PropertyValue<SizeToContent>? SizeToContent { get; set; }
+        PropertyValue<bool>? ExtendClientAreaToDecorationsHint { get; set; }
+        PropertyValue<ExtendClientAreaChromeHints>? ExtendClientAreaChromeHints { get; set; }
+        PropertyValue<double>? ExtendClientAreaTitleBarHeightHint { get; set; }
+        PropertyValue<SystemDecorations>? SystemDecorations { get; set; }
+        PropertyValue<bool>? ShowActivated { get; set; }
+        PropertyValue<bool>? ShowInTaskbar { get; set; }
+        PropertyValue<WindowState>? WindowState { get; set; }
+        PropertyValue<string>? Title { get; set; }
+        PropertyValue<WindowIcon>? Icon { get; set; }
+        PropertyValue<WindowStartupLocation>? WindowStartupLocation { get; set; }
+        PropertyValue<bool>? CanResize { get; set; }
 
     }
 
@@ -45,28 +45,30 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxWindow(Action<T> componentRefAction)
+        public RxWindow(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<SizeToContent> IRxWindow.SizeToContent { get; set; }
-        PropertyValue<bool> IRxWindow.ExtendClientAreaToDecorationsHint { get; set; }
-        PropertyValue<ExtendClientAreaChromeHints> IRxWindow.ExtendClientAreaChromeHints { get; set; }
-        PropertyValue<double> IRxWindow.ExtendClientAreaTitleBarHeightHint { get; set; }
-        PropertyValue<SystemDecorations> IRxWindow.SystemDecorations { get; set; }
-        PropertyValue<bool> IRxWindow.ShowActivated { get; set; }
-        PropertyValue<bool> IRxWindow.ShowInTaskbar { get; set; }
-        PropertyValue<WindowState> IRxWindow.WindowState { get; set; }
-        PropertyValue<string> IRxWindow.Title { get; set; }
-        PropertyValue<WindowIcon> IRxWindow.Icon { get; set; }
-        PropertyValue<WindowStartupLocation> IRxWindow.WindowStartupLocation { get; set; }
-        PropertyValue<bool> IRxWindow.CanResize { get; set; }
+        PropertyValue<SizeToContent>? IRxWindow.SizeToContent { get; set; }
+        PropertyValue<bool>? IRxWindow.ExtendClientAreaToDecorationsHint { get; set; }
+        PropertyValue<ExtendClientAreaChromeHints>? IRxWindow.ExtendClientAreaChromeHints { get; set; }
+        PropertyValue<double>? IRxWindow.ExtendClientAreaTitleBarHeightHint { get; set; }
+        PropertyValue<SystemDecorations>? IRxWindow.SystemDecorations { get; set; }
+        PropertyValue<bool>? IRxWindow.ShowActivated { get; set; }
+        PropertyValue<bool>? IRxWindow.ShowInTaskbar { get; set; }
+        PropertyValue<WindowState>? IRxWindow.WindowState { get; set; }
+        PropertyValue<string>? IRxWindow.Title { get; set; }
+        PropertyValue<WindowIcon>? IRxWindow.Icon { get; set; }
+        PropertyValue<WindowStartupLocation>? IRxWindow.WindowStartupLocation { get; set; }
+        PropertyValue<bool>? IRxWindow.CanResize { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxWindow = (IRxWindow)this;
@@ -91,23 +93,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxWindow = (IRxWindow)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxWindow : RxWindow<Window>
     {
@@ -116,7 +101,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxWindow(Action<Window> componentRefAction)
+        public RxWindow(Action<Window?> componentRefAction)
             : base(componentRefAction)
         {
 

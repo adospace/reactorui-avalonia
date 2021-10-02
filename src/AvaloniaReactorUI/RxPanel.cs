@@ -23,7 +23,7 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxPanel : IRxControl
     {
-        PropertyValue<IBrush> Background { get; set; }
+        PropertyValue<IBrush>? Background { get; set; }
 
     }
 
@@ -34,17 +34,19 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxPanel(Action<T> componentRefAction)
+        public RxPanel(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<IBrush> IRxPanel.Background { get; set; }
+        PropertyValue<IBrush>? IRxPanel.Background { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxPanel = (IRxPanel)this;
@@ -58,23 +60,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxPanel = (IRxPanel)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxPanel : RxPanel<Panel>
     {
@@ -83,7 +68,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxPanel(Action<Panel> componentRefAction)
+        public RxPanel(Action<Panel?> componentRefAction)
             : base(componentRefAction)
         {
 

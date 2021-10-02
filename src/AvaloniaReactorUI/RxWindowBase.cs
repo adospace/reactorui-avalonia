@@ -23,7 +23,7 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxWindowBase : IRxTopLevel
     {
-        PropertyValue<bool> Topmost { get; set; }
+        PropertyValue<bool>? Topmost { get; set; }
 
     }
 
@@ -34,17 +34,19 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxWindowBase(Action<T> componentRefAction)
+        public RxWindowBase(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<bool> IRxWindowBase.Topmost { get; set; }
+        PropertyValue<bool>? IRxWindowBase.Topmost { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxWindowBase = (IRxWindowBase)this;
@@ -57,23 +59,6 @@ namespace AvaloniaReactorUI
 
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
-
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxWindowBase = (IRxWindowBase)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
 
     }
     public static partial class RxWindowBaseExtensions

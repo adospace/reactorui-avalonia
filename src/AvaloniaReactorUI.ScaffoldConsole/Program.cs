@@ -27,7 +27,7 @@ namespace AvaloniaReactorUI.ScaffoldConsole
                          // alternative: where assemblyType.IsSubclassOf(typeof(B))
                          // alternative: && ! assemblyType.IsAbstract
                          select assemblyType)
-                .ToDictionary(_ => _.FullName, _ => _);
+                .ToDictionary(_ => _.FullName ?? throw new InvalidOperationException(), _ => _);
 
             foreach (var classNameToGenerate in File.ReadAllLines("WidgetList.txt"))
             {

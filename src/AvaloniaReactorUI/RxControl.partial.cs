@@ -32,6 +32,8 @@ namespace AvaloniaReactorUI
 
         partial void OnBeginUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             var thisAsIRxContentControl = (IRxControl)this;
             //TODO: somenthing smarter than replace all
             NativeControl.DataTemplates.Clear();

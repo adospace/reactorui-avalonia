@@ -23,19 +23,19 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxTemplatedControl : IRxControl
     {
-        PropertyValue<IBrush> Background { get; set; }
-        PropertyValue<IBrush> BorderBrush { get; set; }
-        PropertyValue<Thickness> BorderThickness { get; set; }
-        PropertyValue<CornerRadius> CornerRadius { get; set; }
-        PropertyValue<FontFamily> FontFamily { get; set; }
-        PropertyValue<double> FontSize { get; set; }
-        PropertyValue<FontStyle> FontStyle { get; set; }
-        PropertyValue<FontWeight> FontWeight { get; set; }
-        PropertyValue<IBrush> Foreground { get; set; }
-        PropertyValue<Thickness> Padding { get; set; }
+        PropertyValue<IBrush?>? Background { get; set; }
+        PropertyValue<IBrush?>? BorderBrush { get; set; }
+        PropertyValue<Thickness>? BorderThickness { get; set; }
+        PropertyValue<CornerRadius>? CornerRadius { get; set; }
+        PropertyValue<FontFamily>? FontFamily { get; set; }
+        PropertyValue<double>? FontSize { get; set; }
+        PropertyValue<FontStyle>? FontStyle { get; set; }
+        PropertyValue<FontWeight>? FontWeight { get; set; }
+        PropertyValue<IBrush?>? Foreground { get; set; }
+        PropertyValue<Thickness>? Padding { get; set; }
 
-        Action TemplateAppliedAction { get; set; }
-        Action<TemplateAppliedEventArgs> TemplateAppliedActionWithArgs { get; set; }
+        Action? TemplateAppliedAction { get; set; }
+        Action<TemplateAppliedEventArgs>? TemplateAppliedActionWithArgs { get; set; }
     }
 
     public partial class RxTemplatedControl<T> : RxControl<T>, IRxTemplatedControl where T : TemplatedControl, new()
@@ -45,40 +45,42 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxTemplatedControl(Action<T> componentRefAction)
+        public RxTemplatedControl(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<IBrush> IRxTemplatedControl.Background { get; set; }
-        PropertyValue<IBrush> IRxTemplatedControl.BorderBrush { get; set; }
-        PropertyValue<Thickness> IRxTemplatedControl.BorderThickness { get; set; }
-        PropertyValue<CornerRadius> IRxTemplatedControl.CornerRadius { get; set; }
-        PropertyValue<FontFamily> IRxTemplatedControl.FontFamily { get; set; }
-        PropertyValue<double> IRxTemplatedControl.FontSize { get; set; }
-        PropertyValue<FontStyle> IRxTemplatedControl.FontStyle { get; set; }
-        PropertyValue<FontWeight> IRxTemplatedControl.FontWeight { get; set; }
-        PropertyValue<IBrush> IRxTemplatedControl.Foreground { get; set; }
-        PropertyValue<Thickness> IRxTemplatedControl.Padding { get; set; }
+        PropertyValue<IBrush?>? IRxTemplatedControl.Background { get; set; }
+        PropertyValue<IBrush?>? IRxTemplatedControl.BorderBrush { get; set; }
+        PropertyValue<Thickness>? IRxTemplatedControl.BorderThickness { get; set; }
+        PropertyValue<CornerRadius>? IRxTemplatedControl.CornerRadius { get; set; }
+        PropertyValue<FontFamily>? IRxTemplatedControl.FontFamily { get; set; }
+        PropertyValue<double>? IRxTemplatedControl.FontSize { get; set; }
+        PropertyValue<FontStyle>? IRxTemplatedControl.FontStyle { get; set; }
+        PropertyValue<FontWeight>? IRxTemplatedControl.FontWeight { get; set; }
+        PropertyValue<IBrush?>? IRxTemplatedControl.Foreground { get; set; }
+        PropertyValue<Thickness>? IRxTemplatedControl.Padding { get; set; }
 
-        Action IRxTemplatedControl.TemplateAppliedAction { get; set; }
-        Action<TemplateAppliedEventArgs> IRxTemplatedControl.TemplateAppliedActionWithArgs { get; set; }
+        Action? IRxTemplatedControl.TemplateAppliedAction { get; set; }
+        Action<TemplateAppliedEventArgs>? IRxTemplatedControl.TemplateAppliedActionWithArgs { get; set; }
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxTemplatedControl = (IRxTemplatedControl)this;
-            NativeControl.Set(TemplatedControl.BackgroundProperty, thisAsIRxTemplatedControl.Background);
-            NativeControl.Set(TemplatedControl.BorderBrushProperty, thisAsIRxTemplatedControl.BorderBrush);
+            NativeControl.SetNullable(TemplatedControl.BackgroundProperty, thisAsIRxTemplatedControl.Background);
+            NativeControl.SetNullable(TemplatedControl.BorderBrushProperty, thisAsIRxTemplatedControl.BorderBrush);
             NativeControl.Set(TemplatedControl.BorderThicknessProperty, thisAsIRxTemplatedControl.BorderThickness);
             NativeControl.Set(TemplatedControl.CornerRadiusProperty, thisAsIRxTemplatedControl.CornerRadius);
             NativeControl.Set(TemplatedControl.FontFamilyProperty, thisAsIRxTemplatedControl.FontFamily);
             NativeControl.Set(TemplatedControl.FontSizeProperty, thisAsIRxTemplatedControl.FontSize);
             NativeControl.Set(TemplatedControl.FontStyleProperty, thisAsIRxTemplatedControl.FontStyle);
             NativeControl.Set(TemplatedControl.FontWeightProperty, thisAsIRxTemplatedControl.FontWeight);
-            NativeControl.Set(TemplatedControl.ForegroundProperty, thisAsIRxTemplatedControl.Foreground);
+            NativeControl.SetNullable(TemplatedControl.ForegroundProperty, thisAsIRxTemplatedControl.Foreground);
             NativeControl.Set(TemplatedControl.PaddingProperty, thisAsIRxTemplatedControl.Padding);
 
             base.OnUpdate();
@@ -91,6 +93,8 @@ namespace AvaloniaReactorUI
 
         protected override void OnAttachNativeEvents()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             var thisAsIRxTemplatedControl = (IRxTemplatedControl)this;
             if (thisAsIRxTemplatedControl.TemplateAppliedAction != null || thisAsIRxTemplatedControl.TemplateAppliedActionWithArgs != null)
             {
@@ -100,7 +104,7 @@ namespace AvaloniaReactorUI
             base.OnAttachNativeEvents();
         }
 
-        private void NativeControl_TemplateApplied(object sender, TemplateAppliedEventArgs e)
+        private void NativeControl_TemplateApplied(object? sender, TemplateAppliedEventArgs e)
         {
             var thisAsIRxTemplatedControl = (IRxTemplatedControl)this;
             thisAsIRxTemplatedControl.TemplateAppliedAction?.Invoke();
@@ -116,7 +120,6 @@ namespace AvaloniaReactorUI
 
             base.OnDetachNativeEvents();
         }
-
     }
     public partial class RxTemplatedControl : RxTemplatedControl<TemplatedControl>
     {
@@ -125,7 +128,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxTemplatedControl(Action<TemplatedControl> componentRefAction)
+        public RxTemplatedControl(Action<TemplatedControl?> componentRefAction)
             : base(componentRefAction)
         {
 
@@ -133,14 +136,14 @@ namespace AvaloniaReactorUI
     }
     public static partial class RxTemplatedControlExtensions
     {
-        public static T Background<T>(this T templatedcontrol, IBrush background) where T : IRxTemplatedControl
+        public static T Background<T>(this T templatedcontrol, IBrush? background) where T : IRxTemplatedControl
         {
-            templatedcontrol.Background = new PropertyValue<IBrush>(background);
+            templatedcontrol.Background = new PropertyValue<IBrush?>(background);
             return templatedcontrol;
         }
-        public static T BorderBrush<T>(this T templatedcontrol, IBrush borderBrush) where T : IRxTemplatedControl
+        public static T BorderBrush<T>(this T templatedcontrol, IBrush? borderBrush) where T : IRxTemplatedControl
         {
-            templatedcontrol.BorderBrush = new PropertyValue<IBrush>(borderBrush);
+            templatedcontrol.BorderBrush = new PropertyValue<IBrush?>(borderBrush);
             return templatedcontrol;
         }
         public static T BorderThickness<T>(this T templatedcontrol, Thickness borderThickness) where T : IRxTemplatedControl
@@ -183,9 +186,9 @@ namespace AvaloniaReactorUI
             templatedcontrol.FontWeight = new PropertyValue<FontWeight>(fontWeight);
             return templatedcontrol;
         }
-        public static T Foreground<T>(this T templatedcontrol, IBrush foreground) where T : IRxTemplatedControl
+        public static T Foreground<T>(this T templatedcontrol, IBrush? foreground) where T : IRxTemplatedControl
         {
-            templatedcontrol.Foreground = new PropertyValue<IBrush>(foreground);
+            templatedcontrol.Foreground = new PropertyValue<IBrush?>(foreground);
             return templatedcontrol;
         }
         public static T Padding<T>(this T templatedcontrol, Thickness padding) where T : IRxTemplatedControl

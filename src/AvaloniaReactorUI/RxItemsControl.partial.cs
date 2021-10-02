@@ -21,15 +21,17 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxItemsControl
     {
-        PropertyValue<IDataTemplate> ItemTemplate { get; set; }
+        PropertyValue<IDataTemplate>? ItemTemplate { get; set; }
     }
 
     public partial class RxItemsControl<T>
     {
-        PropertyValue<IDataTemplate> IRxItemsControl.ItemTemplate { get; set; }
+        PropertyValue<IDataTemplate>? IRxItemsControl.ItemTemplate { get; set; }
 
         partial void OnBeginUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             var thisAsIRxLayoutable = (IRxItemsControl)this;
             NativeControl.Set(ItemsControl.ItemTemplateProperty, thisAsIRxLayoutable.ItemTemplate);
             //WARNING: changing ItemTemplate after the first time (i.e. when the listbox ItemContainerGenerator is already created)
@@ -50,9 +52,9 @@ namespace AvaloniaReactorUI
             Root = root;
         }
 
-        private VisualNode _root;
+        private VisualNode? _root;
 
-        public VisualNode Root
+        public VisualNode? Root
         {
             get => _root;
             set
@@ -65,7 +67,7 @@ namespace AvaloniaReactorUI
             }
         }
 
-        public IControl RootControl {get; private set;}
+        public IControl? RootControl {get; private set;}
 
         protected sealed override void OnAddChild(VisualNode widget, AvaloniaObject nativeControl)
         {
@@ -81,7 +83,7 @@ namespace AvaloniaReactorUI
         {
         }
 
-        protected override IEnumerable<VisualNode> RenderChildren()
+        protected override IEnumerable<VisualNode?> RenderChildren()
         {
             yield return Root;
         }

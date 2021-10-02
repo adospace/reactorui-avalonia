@@ -23,7 +23,7 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxStyledElement : IRxAnimatable
     {
-        PropertyValue<object> DataContext { get; set; }
+        PropertyValue<object?>? DataContext { get; set; }
 
     }
 
@@ -34,21 +34,23 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxStyledElement(Action<T> componentRefAction)
+        public RxStyledElement(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<object> IRxStyledElement.DataContext { get; set; }
+        PropertyValue<object?>? IRxStyledElement.DataContext { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxStyledElement = (IRxStyledElement)this;
-            NativeControl.Set(StyledElement.DataContextProperty, thisAsIRxStyledElement.DataContext);
+            NativeControl.SetNullable(StyledElement.DataContextProperty, thisAsIRxStyledElement.DataContext);
 
             base.OnUpdate();
 
@@ -58,23 +60,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxStyledElement = (IRxStyledElement)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxStyledElement : RxStyledElement<StyledElement>
     {
@@ -83,7 +68,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxStyledElement(Action<StyledElement> componentRefAction)
+        public RxStyledElement(Action<StyledElement?> componentRefAction)
             : base(componentRefAction)
         {
 
@@ -91,9 +76,9 @@ namespace AvaloniaReactorUI
     }
     public static partial class RxStyledElementExtensions
     {
-        public static T DataContext<T>(this T styledelement, object dataContext) where T : IRxStyledElement
+        public static T DataContext<T>(this T styledelement, object? dataContext) where T : IRxStyledElement
         {
-            styledelement.DataContext = new PropertyValue<object>(dataContext);
+            styledelement.DataContext = new PropertyValue<object?>(dataContext);
             return styledelement;
         }
     }

@@ -33,7 +33,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxInteractive(Action<T> componentRefAction)
+        public RxInteractive(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
@@ -41,36 +41,9 @@ namespace AvaloniaReactorUI
 
 
 
-        protected override void OnUpdate()
-        {
-            OnBeginUpdate();
-
-            var thisAsIRxInteractive = (IRxInteractive)this;
-
-            base.OnUpdate();
-
-            OnEndUpdate();
-        }
 
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
-
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxInteractive = (IRxInteractive)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
 
     }
     public partial class RxInteractive : RxInteractive<Interactive>
@@ -80,7 +53,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxInteractive(Action<Interactive> componentRefAction)
+        public RxInteractive(Action<Interactive?> componentRefAction)
             : base(componentRefAction)
         {
 

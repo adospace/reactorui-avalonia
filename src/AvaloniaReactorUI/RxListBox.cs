@@ -23,10 +23,10 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxListBox : IRxSelectingItemsControl
     {
-        PropertyValue<IList> SelectedItems { get; set; }
-        PropertyValue<ISelectionModel> Selection { get; set; }
-        PropertyValue<SelectionMode> SelectionMode { get; set; }
-        PropertyValue<ItemVirtualizationMode> VirtualizationMode { get; set; }
+        PropertyValue<IList>? SelectedItems { get; set; }
+        PropertyValue<ISelectionModel>? Selection { get; set; }
+        PropertyValue<SelectionMode>? SelectionMode { get; set; }
+        PropertyValue<ItemVirtualizationMode>? VirtualizationMode { get; set; }
 
     }
 
@@ -37,20 +37,22 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxListBox(Action<T> componentRefAction)
+        public RxListBox(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<IList> IRxListBox.SelectedItems { get; set; }
-        PropertyValue<ISelectionModel> IRxListBox.Selection { get; set; }
-        PropertyValue<SelectionMode> IRxListBox.SelectionMode { get; set; }
-        PropertyValue<ItemVirtualizationMode> IRxListBox.VirtualizationMode { get; set; }
+        PropertyValue<IList>? IRxListBox.SelectedItems { get; set; }
+        PropertyValue<ISelectionModel>? IRxListBox.Selection { get; set; }
+        PropertyValue<SelectionMode>? IRxListBox.SelectionMode { get; set; }
+        PropertyValue<ItemVirtualizationMode>? IRxListBox.VirtualizationMode { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxListBox = (IRxListBox)this;
@@ -67,23 +69,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxListBox = (IRxListBox)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxListBox : RxListBox<ListBox>
     {
@@ -92,7 +77,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxListBox(Action<ListBox> componentRefAction)
+        public RxListBox(Action<ListBox?> componentRefAction)
             : base(componentRefAction)
         {
 

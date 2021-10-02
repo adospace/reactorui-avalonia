@@ -23,14 +23,14 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxVisual : IRxStyledElement
     {
-        PropertyValue<bool> ClipToBounds { get; set; }
-        PropertyValue<Geometry> Clip { get; set; }
-        PropertyValue<bool> IsVisible { get; set; }
-        PropertyValue<double> Opacity { get; set; }
-        PropertyValue<IBrush> OpacityMask { get; set; }
-        PropertyValue<ITransform> RenderTransform { get; set; }
-        PropertyValue<RelativePoint> RenderTransformOrigin { get; set; }
-        PropertyValue<int> ZIndex { get; set; }
+        PropertyValue<bool>? ClipToBounds { get; set; }
+        PropertyValue<Geometry?>? Clip { get; set; }
+        PropertyValue<bool>? IsVisible { get; set; }
+        PropertyValue<double>? Opacity { get; set; }
+        PropertyValue<IBrush?>? OpacityMask { get; set; }
+        PropertyValue<ITransform?>? RenderTransform { get; set; }
+        PropertyValue<RelativePoint>? RenderTransformOrigin { get; set; }
+        PropertyValue<int>? ZIndex { get; set; }
 
     }
 
@@ -41,33 +41,35 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxVisual(Action<T> componentRefAction)
+        public RxVisual(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<bool> IRxVisual.ClipToBounds { get; set; }
-        PropertyValue<Geometry> IRxVisual.Clip { get; set; }
-        PropertyValue<bool> IRxVisual.IsVisible { get; set; }
-        PropertyValue<double> IRxVisual.Opacity { get; set; }
-        PropertyValue<IBrush> IRxVisual.OpacityMask { get; set; }
-        PropertyValue<ITransform> IRxVisual.RenderTransform { get; set; }
-        PropertyValue<RelativePoint> IRxVisual.RenderTransformOrigin { get; set; }
-        PropertyValue<int> IRxVisual.ZIndex { get; set; }
+        PropertyValue<bool>? IRxVisual.ClipToBounds { get; set; }
+        PropertyValue<Geometry?>? IRxVisual.Clip { get; set; }
+        PropertyValue<bool>? IRxVisual.IsVisible { get; set; }
+        PropertyValue<double>? IRxVisual.Opacity { get; set; }
+        PropertyValue<IBrush?>? IRxVisual.OpacityMask { get; set; }
+        PropertyValue<ITransform?>? IRxVisual.RenderTransform { get; set; }
+        PropertyValue<RelativePoint>? IRxVisual.RenderTransformOrigin { get; set; }
+        PropertyValue<int>? IRxVisual.ZIndex { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxVisual = (IRxVisual)this;
             NativeControl.Set(Visual.ClipToBoundsProperty, thisAsIRxVisual.ClipToBounds);
-            NativeControl.Set(Visual.ClipProperty, thisAsIRxVisual.Clip);
+            NativeControl.SetNullable(Visual.ClipProperty, thisAsIRxVisual.Clip);
             NativeControl.Set(Visual.IsVisibleProperty, thisAsIRxVisual.IsVisible);
             NativeControl.Set(Visual.OpacityProperty, thisAsIRxVisual.Opacity);
-            NativeControl.Set(Visual.OpacityMaskProperty, thisAsIRxVisual.OpacityMask);
-            NativeControl.Set(Visual.RenderTransformProperty, thisAsIRxVisual.RenderTransform);
+            NativeControl.SetNullable(Visual.OpacityMaskProperty, thisAsIRxVisual.OpacityMask);
+            NativeControl.SetNullable(Visual.RenderTransformProperty, thisAsIRxVisual.RenderTransform);
             NativeControl.Set(Visual.RenderTransformOriginProperty, thisAsIRxVisual.RenderTransformOrigin);
             NativeControl.Set(Visual.ZIndexProperty, thisAsIRxVisual.ZIndex);
 
@@ -79,23 +81,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxVisual = (IRxVisual)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxVisual : RxVisual<Visual>
     {
@@ -104,7 +89,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxVisual(Action<Visual> componentRefAction)
+        public RxVisual(Action<Visual?> componentRefAction)
             : base(componentRefAction)
         {
 
@@ -117,9 +102,9 @@ namespace AvaloniaReactorUI
             visual.ClipToBounds = new PropertyValue<bool>(clipToBounds);
             return visual;
         }
-        public static T Clip<T>(this T visual, Geometry clip) where T : IRxVisual
+        public static T Clip<T>(this T visual, Geometry? clip) where T : IRxVisual
         {
-            visual.Clip = new PropertyValue<Geometry>(clip);
+            visual.Clip = new PropertyValue<Geometry?>(clip);
             return visual;
         }
         public static T IsVisible<T>(this T visual, bool isVisible) where T : IRxVisual
@@ -132,14 +117,14 @@ namespace AvaloniaReactorUI
             visual.Opacity = new PropertyValue<double>(opacity);
             return visual;
         }
-        public static T OpacityMask<T>(this T visual, IBrush opacityMask) where T : IRxVisual
+        public static T OpacityMask<T>(this T visual, IBrush? opacityMask) where T : IRxVisual
         {
-            visual.OpacityMask = new PropertyValue<IBrush>(opacityMask);
+            visual.OpacityMask = new PropertyValue<IBrush?>(opacityMask);
             return visual;
         }
-        public static T RenderTransform<T>(this T visual, ITransform renderTransform) where T : IRxVisual
+        public static T RenderTransform<T>(this T visual, ITransform? renderTransform) where T : IRxVisual
         {
-            visual.RenderTransform = new PropertyValue<ITransform>(renderTransform);
+            visual.RenderTransform = new PropertyValue<ITransform?>(renderTransform);
             return visual;
         }
         public static T RenderTransformOrigin<T>(this T visual, RelativePoint renderTransformOrigin) where T : IRxVisual

@@ -23,12 +23,12 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxControl : IRxInputElement
     {
-        PropertyValue<object> Tag { get; set; }
-        PropertyValue<ContextMenu> ContextMenu { get; set; }
-        PropertyValue<FlyoutBase> ContextFlyout { get; set; }
+        PropertyValue<object?>? Tag { get; set; }
+        PropertyValue<ContextMenu?>? ContextMenu { get; set; }
+        PropertyValue<FlyoutBase?>? ContextFlyout { get; set; }
 
-        Action ContextRequestedAction { get; set; }
-        Action<ContextRequestedEventArgs> ContextRequestedActionWithArgs { get; set; }
+        Action? ContextRequestedAction { get; set; }
+        Action<ContextRequestedEventArgs>? ContextRequestedActionWithArgs { get; set; }
     }
 
     public partial class RxControl<T> : RxInputElement<T>, IRxControl where T : Control, new()
@@ -38,27 +38,29 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxControl(Action<T> componentRefAction)
+        public RxControl(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<object> IRxControl.Tag { get; set; }
-        PropertyValue<ContextMenu> IRxControl.ContextMenu { get; set; }
-        PropertyValue<FlyoutBase> IRxControl.ContextFlyout { get; set; }
+        PropertyValue<object?>? IRxControl.Tag { get; set; }
+        PropertyValue<ContextMenu?>? IRxControl.ContextMenu { get; set; }
+        PropertyValue<FlyoutBase?>? IRxControl.ContextFlyout { get; set; }
 
-        Action IRxControl.ContextRequestedAction { get; set; }
-        Action<ContextRequestedEventArgs> IRxControl.ContextRequestedActionWithArgs { get; set; }
+        Action? IRxControl.ContextRequestedAction { get; set; }
+        Action<ContextRequestedEventArgs>? IRxControl.ContextRequestedActionWithArgs { get; set; }
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxControl = (IRxControl)this;
-            NativeControl.Set(Control.TagProperty, thisAsIRxControl.Tag);
-            NativeControl.Set(Control.ContextMenuProperty, thisAsIRxControl.ContextMenu);
-            NativeControl.Set(Control.ContextFlyoutProperty, thisAsIRxControl.ContextFlyout);
+            NativeControl.SetNullable(Control.TagProperty, thisAsIRxControl.Tag);
+            NativeControl.SetNullable(Control.ContextMenuProperty, thisAsIRxControl.ContextMenu);
+            NativeControl.SetNullable(Control.ContextFlyoutProperty, thisAsIRxControl.ContextFlyout);
 
             base.OnUpdate();
 
@@ -70,6 +72,8 @@ namespace AvaloniaReactorUI
 
         protected override void OnAttachNativeEvents()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             var thisAsIRxControl = (IRxControl)this;
             if (thisAsIRxControl.ContextRequestedAction != null || thisAsIRxControl.ContextRequestedActionWithArgs != null)
             {
@@ -79,7 +83,7 @@ namespace AvaloniaReactorUI
             base.OnAttachNativeEvents();
         }
 
-        private void NativeControl_ContextRequested(object sender, ContextRequestedEventArgs e)
+        private void NativeControl_ContextRequested(object? sender, ContextRequestedEventArgs e)
         {
             var thisAsIRxControl = (IRxControl)this;
             thisAsIRxControl.ContextRequestedAction?.Invoke();
@@ -95,7 +99,6 @@ namespace AvaloniaReactorUI
 
             base.OnDetachNativeEvents();
         }
-
     }
     public partial class RxControl : RxControl<Control>
     {
@@ -104,7 +107,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxControl(Action<Control> componentRefAction)
+        public RxControl(Action<Control?> componentRefAction)
             : base(componentRefAction)
         {
 
@@ -112,19 +115,19 @@ namespace AvaloniaReactorUI
     }
     public static partial class RxControlExtensions
     {
-        public static T Tag<T>(this T control, object tag) where T : IRxControl
+        public static T Tag<T>(this T control, object? tag) where T : IRxControl
         {
-            control.Tag = new PropertyValue<object>(tag);
+            control.Tag = new PropertyValue<object?>(tag);
             return control;
         }
-        public static T ContextMenu<T>(this T control, ContextMenu contextMenu) where T : IRxControl
+        public static T ContextMenu<T>(this T control, ContextMenu? contextMenu) where T : IRxControl
         {
-            control.ContextMenu = new PropertyValue<ContextMenu>(contextMenu);
+            control.ContextMenu = new PropertyValue<ContextMenu?>(contextMenu);
             return control;
         }
-        public static T ContextFlyout<T>(this T control, FlyoutBase contextFlyout) where T : IRxControl
+        public static T ContextFlyout<T>(this T control, FlyoutBase? contextFlyout) where T : IRxControl
         {
-            control.ContextFlyout = new PropertyValue<FlyoutBase>(contextFlyout);
+            control.ContextFlyout = new PropertyValue<FlyoutBase?>(contextFlyout);
             return control;
         }
         public static T OnContextRequested<T>(this T control, Action contextrequestedAction) where T : IRxControl

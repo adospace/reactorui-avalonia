@@ -20,11 +20,11 @@ namespace AvaloniaReactorUI.DemoApp
 
     public class MainComponent : RxComponent<MainComponentState>
     {
-        private static readonly Page[] Pages = new[] { Page.Home, Page.Counter, Page.Timer, Page.Items };
+        private static readonly Page[] _pages = new[] { Page.Home, Page.Counter, Page.Timer, Page.Items };
 
         private VisualNode Menu()=> 
             new RxListBox()
-                .Items(Pages)
+                .Items(_pages)
                 .OnRenderItem<RxListBox, Page>(
                     _ => new RxTextBlock()
                             .Text(_.ToString()))
@@ -34,30 +34,25 @@ namespace AvaloniaReactorUI.DemoApp
                 {
                     if (args.AddedItems.Count > 0)
                     {
-                        var selectedPage = (Page)args.AddedItems[0];
+                        var selectedPage = (Page)args.AddedItems[0]!;
                         SetState(s => s.CurrentPage = selectedPage);
                     }
                 });
 
         private VisualNode CurrentPage()
         {
-            switch (State.CurrentPage)
+            return State.CurrentPage switch
             {
-                case Page.Home:
-                    return new RxTextBlock()
-                        .Text("Avalonia + ReactorUI = Love!")
-                        .FontSize(24)
-                        .VCenter()
-                        .HCenter();
-                case Page.Counter:
-                    return new CounterComponent();
-                case Page.Items:
-                    return new ItemsControlComponent();
-                case Page.Timer:
-                    return new TimerComponent();
-                default:
-                    throw new NotSupportedException();
-            }
+                Page.Home => new RxTextBlock()
+                                       .Text("Avalonia + ReactorUI = Love!")
+                                       .FontSize(24)
+                                       .VCenter()
+                                       .HCenter(),
+                Page.Counter => new CounterComponent(),
+                Page.Items => new ItemsControlComponent(),
+                Page.Timer => new TimerComponent(),
+                _ => throw new NotSupportedException(),
+            };
         }
 
         public override VisualNode Render() =>

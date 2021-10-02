@@ -36,12 +36,12 @@ namespace AvaloniaReactorUI.Internals
                 Path.GetDirectoryName(assemblyPath) ?? throw new InvalidOperationException($"Unable to get directory name of {assemblyPath}"),
                 Path.GetFileNameWithoutExtension(assemblyPath) + ".pdb");
 
-            //var assembly = File.Exists(assemblyPdbPath) ?
-            //    Assembly.Load(Utils.ReadFileBytesWithoutLock(assemblyPath))
-            //    :
-            //    Assembly.Load(Utils.ReadFileBytesWithoutLock(assemblyPath), Utils.ReadFileBytesWithoutLock(assemblyPdbPath));
+            var assembly = File.Exists(assemblyPdbPath) ?
+                Assembly.Load(Utils.ReadFileBytesWithoutLock(assemblyPath))
+                :
+                Assembly.Load(Utils.ReadFileBytesWithoutLock(assemblyPath), Utils.ReadFileBytesWithoutLock(assemblyPdbPath));
 
-            var assembly = Utils.LoadAssemblyWithoutLock(assemblyPath);
+            //var assembly = Utils.LoadAssemblyWithoutLock(assemblyPath);
 
             var type = assembly.GetType(typeof(T).FullName ?? throw new InvalidOperationException("Unable to get component type full name"))
                 ?? throw new InvalidOperationException("Unable to get type of the component to load");

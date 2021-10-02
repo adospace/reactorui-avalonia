@@ -12,10 +12,9 @@ namespace AvaloniaReactorUI
     {
         void AppendAnimatable<T>(object key, T animation, Action<T> action) where T : RxAnimation;
 
+        Action<object, PropertyChangingEventArgs>? PropertyChangingAction { get; set; }
 
-        Action<object, PropertyChangingEventArgs> PropertyChangingAction { get; set; }
-        Action<object, PropertyChangedEventArgs> PropertyChangedAction { get; set; }
-
+        Action<object, PropertyChangedEventArgs>? PropertyChangedAction { get; set; }
     }
 
     public static class VisualNodeExtensions
@@ -41,7 +40,7 @@ namespace AvaloniaReactorUI
             return node;
         }
 
-        public static T WithAnimation<T>(this T node, Easing easing = null, double duration = 600) where T : VisualNode
+        public static T WithAnimation<T>(this T node, Easing? easing = null, double duration = 600) where T : VisualNode
         {
             node.EnableCurrentAnimatableProperties(easing, duration);
             return node;
@@ -66,7 +65,7 @@ namespace AvaloniaReactorUI
                 throw new ArgumentNullException(nameof(value));
             }
 
-            node.SetMetadata(value.GetType().FullName, value);
+            node.SetMetadata(value.GetType().FullName ?? throw new InvalidOperationException(), value);
             return node;
         }
 
@@ -83,11 +82,11 @@ namespace AvaloniaReactorUI
 
         protected bool _stateChanged = true;
 
-        private readonly Dictionary<object, Animatable> _animatables = new Dictionary<object, Animatable>();
+        private readonly Dictionary<object, Animatable> _animatables = new();
 
-        private readonly Dictionary<string, object> _metadata = new Dictionary<string, object>();
+        private readonly Dictionary<string, object?> _metadata = new();
 
-        private IReadOnlyList<VisualNode> _children = null;
+        private IReadOnlyList<VisualNode>? _children = null;
 
         private bool _invalidated = false;
 
@@ -97,10 +96,10 @@ namespace AvaloniaReactorUI
         }
 
         public int ChildIndex { get; private set; }
-        public object Key { get; set; }
-        public Action<object, PropertyChangedEventArgs> PropertyChangedAction { get; set; }
-        public Action<object, System.ComponentModel.PropertyChangingEventArgs> PropertyChangingAction { get; set; }
-        protected readonly Dictionary<AvaloniaProperty, object> _attachedProperties = new Dictionary<AvaloniaProperty, object>();
+        public object? Key { get; set; }
+        public Action<object, PropertyChangedEventArgs>? PropertyChangedAction { get; set; }
+        public Action<object, PropertyChangingEventArgs>? PropertyChangingAction { get; set; }
+        protected readonly Dictionary<AvaloniaProperty, object> _attachedProperties = new();
   
         public void SetAttachedProperty(AvaloniaProperty property, object value)
             => _attachedProperties[property] = value;
@@ -112,7 +111,7 @@ namespace AvaloniaReactorUI
             {
                 if (_children == null)
                 {
-                    _children = new List<VisualNode>(RenderChildren().Where(_ => _ != null));
+                    _children = new List<VisualNode>(RenderChildren().Where(_ => _ != null)!);
                     for (int i = 0; i < _children.Count; i++)
                     {
                         _children[i].ChildIndex = i;
@@ -125,7 +124,7 @@ namespace AvaloniaReactorUI
 
         internal bool IsAnimationFrameRequested { get; private set; } = false;
         internal bool IsLayoutCycleRequired { get; set; } = true;
-        internal VisualNode Parent { get; private set; }
+        internal VisualNode? Parent { get; private set; }
 
         public void AppendAnimatable<T>(object key, T animation, Action<T> action) where T : RxAnimation
         {
@@ -149,7 +148,7 @@ namespace AvaloniaReactorUI
             _animatables[key] = newAnimatableProperty;
         }
 
-        public T GetMetadata<T>(string key, T defaultValue = default)
+        public T? GetMetadata<T>(string key, T? defaultValue = default)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -157,13 +156,13 @@ namespace AvaloniaReactorUI
             }
 
             if (_metadata.TryGetValue(key, out var value))
-                return (T)value;
+                return (T?)value;
 
             return defaultValue;
         }
 
-        public T GetMetadata<T>(T defaultValue = default)
-            => GetMetadata(typeof(T).FullName, defaultValue);
+        public T? GetMetadata<T>(T? defaultValue = default)
+            => GetMetadata(typeof(T).FullName ?? throw new InvalidOperationException(), defaultValue);
 
         public void SetMetadata<T>(string key, T value)
         {
@@ -177,7 +176,7 @@ namespace AvaloniaReactorUI
 
         public void SetMetadata<T>(T value)
         {
-            _metadata[typeof(T).FullName] = value;
+            _metadata[typeof(T).FullName ?? throw new InvalidOperationException()] = value;
         }
 
         internal void AddChild(VisualNode widget, AvaloniaObject childNativeControl)
@@ -216,20 +215,20 @@ namespace AvaloniaReactorUI
             };
         }
 
-        internal void EnableCurrentAnimatableProperties(Easing easing = null, double duration = 600)
+        internal void EnableCurrentAnimatableProperties(Easing? easing = null, double duration = 600)
         {
             foreach (var _ in _animatables.Where(_ => _.Value.IsEnabled == null).Select(_ => _.Value))
             {
                 if (_.Animation is RxTweenAnimation tweenAnimation)
                 {
-                    tweenAnimation.Easing = tweenAnimation.Easing ?? easing;
-                    tweenAnimation.Duration = tweenAnimation.Duration ?? duration;
+                    tweenAnimation.Easing ??= easing;
+                    tweenAnimation.Duration ??= duration;
                     _.IsEnabled = true;
                 }
             };
         }
 
-        internal virtual void Layout(VisualNode parent = null)
+        internal virtual void Layout(VisualNode? parent = null)
         {
             if (parent != null)
                 Parent = parent;
@@ -322,13 +321,13 @@ namespace AvaloniaReactorUI
             }
         }
 
-        protected T GetParent<T>() where T : VisualNode
+        protected T? GetParent<T>() where T : VisualNode
         {
             var parent = Parent;
             while (parent != null && !(parent is T))
                 parent = parent.Parent;
 
-            return (T)parent;
+            return (T?)parent;
         }
 
         protected void Invalidate()
@@ -405,7 +404,7 @@ namespace AvaloniaReactorUI
         
         }
 
-        protected virtual IEnumerable<VisualNode> RenderChildren()
+        protected virtual IEnumerable<VisualNode?> RenderChildren()
         {
             yield break;
         }
@@ -452,19 +451,19 @@ namespace AvaloniaReactorUI
 
     public abstract class VisualNode<T> : VisualNode, IVisualNodeWithNativeControl where T : AvaloniaObject, new()
     {
-        protected AvaloniaObject _nativeControl;
+        protected AvaloniaObject? _nativeControl;
 
-        private readonly Action<T> _componentRefAction;
+        private readonly Action<T?>? _componentRefAction;
 
         protected VisualNode()
         { }
 
-        protected VisualNode(Action<T> componentRefAction)
+        protected VisualNode(Action<T?> componentRefAction)
         {
             _componentRefAction = componentRefAction;
         }
 
-        protected T NativeControl { get => (T)_nativeControl; }
+        protected T? NativeControl { get => (T?)_nativeControl; }
 
         internal override void MergeWith(VisualNode newNode)
         {
@@ -537,7 +536,7 @@ namespace AvaloniaReactorUI
         {
             foreach (var attachedProperty in _attachedProperties)
             {
-                NativeControl.SetValue(attachedProperty.Key, attachedProperty.Value);
+                NativeControl?.SetValue(attachedProperty.Key, attachedProperty.Value);
             }
 
             //if (PropertyChangedAction != null)

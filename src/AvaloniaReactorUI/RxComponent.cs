@@ -19,7 +19,7 @@ namespace AvaloniaReactorUI
     {
         public abstract VisualNode Render();
 
-        private readonly List<VisualNode> _children = new List<VisualNode>();
+        private readonly List<VisualNode> _children = new();
 
         public IEnumerator<VisualNode> GetEnumerator()
         {
@@ -44,7 +44,7 @@ namespace AvaloniaReactorUI
         protected new IReadOnlyList<VisualNode> Children()
             => _children;
 
-        private IRxHostElement GetPageHost()
+        private IRxHostElement? GetPageHost()
         {
             var current = Parent;
             while (current != null && !(current is IRxHostElement))
@@ -53,7 +53,7 @@ namespace AvaloniaReactorUI
             return current as IRxHostElement;
         }
 
-        protected Window ContainerWindow
+        protected Window? ContainerWindow
         {
             get
             {
@@ -68,12 +68,12 @@ namespace AvaloniaReactorUI
                 nativeControl.SetValue(attachedProperty.Key, attachedProperty.Value);
             }
 
-            Parent.AddChild(this, nativeControl);
+            Parent?.AddChild(this, nativeControl);
         }
 
         protected sealed override void OnRemoveChild(VisualNode widget, AvaloniaObject nativeControl)
         {
-            Parent.RemoveChild(this, nativeControl);
+            Parent?.RemoveChild(this, nativeControl);
             
             foreach (var attachedProperty in _attachedProperties)
             {
@@ -149,11 +149,8 @@ namespace AvaloniaReactorUI
         protected virtual void OnUpdated()
         { }
 
-        //public INavigation Navigation
-        //    => RxApplication.Instance.Navigation;
-
-        public RxContext Context
-            => RxApplication.Instance.Context;
+        public static RxContext? Context
+            => RxApplication.Instance?.Context;
 
     }
 
@@ -192,7 +189,7 @@ namespace AvaloniaReactorUI
 
     public abstract class RxComponentWithProps<P> : RxComponent, IRxComponentWithProps where P : class, IProps, new()
     {
-        public RxComponentWithProps(P props = null)
+        public RxComponentWithProps(P? props = null)
         {
             Props = props ?? new P();
         }
@@ -204,9 +201,9 @@ namespace AvaloniaReactorUI
 
     public abstract class RxComponent<S, P> : RxComponentWithProps<P>, IRxComponentWithState where S : class, IState, new() where P : class, IProps, new()
     {
-        private IRxComponentWithState _newComponent;
+        private IRxComponentWithState? _newComponent;
         
-        protected RxComponent(S state = null, P props = null)
+        protected RxComponent(S? state = null, P? props = null)
             : base(props)
         {
             State = state ?? new S();
@@ -272,7 +269,7 @@ namespace AvaloniaReactorUI
 
     public abstract class RxComponent<S> : RxComponent<S, EmptyProps> where S : class, IState, new()
     {
-        protected RxComponent(S state = null, EmptyProps props = null)
+        protected RxComponent(S? state = null, EmptyProps? props = null)
             : base(state, props)
         {
         }

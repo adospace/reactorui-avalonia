@@ -10,7 +10,7 @@ namespace AvaloniaReactorUI.ScaffoldApp
 {
     class MainWindowViewModel : ViewModelBase
     {
-        private MainWindow _view;
+        private readonly MainWindow _view;
 
         public MainWindowViewModel(MainWindow view)
         {
@@ -28,8 +28,8 @@ namespace AvaloniaReactorUI.ScaffoldApp
 
         //public string AssemblyPath { get; set; }
 
-        private string _assemblyPath;
-        public string AssemblyPath
+        private string? _assemblyPath;
+        public string? AssemblyPath
         {
             get => _assemblyPath;
             set
@@ -42,8 +42,8 @@ namespace AvaloniaReactorUI.ScaffoldApp
             }
         }
 
-        private string _sourceCode;
-        public string SourceCode
+        private string? _sourceCode;
+        public string? SourceCode
         {
             get => _sourceCode;
             set
@@ -56,8 +56,8 @@ namespace AvaloniaReactorUI.ScaffoldApp
             }
         }
 
-        private Type _selectedType;
-        public Type SelectedType
+        private Type? _selectedType;
+        public Type? SelectedType
         {
             get => _selectedType;
             set

@@ -59,6 +59,8 @@ namespace AvaloniaReactorUI
 
         partial void OnBeginUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             var thisAsIRxGrid = (IRxGrid)this;
             NativeControl.RowDefinitions = thisAsIRxGrid.Rows;
             NativeControl.ColumnDefinitions = thisAsIRxGrid.Columns;

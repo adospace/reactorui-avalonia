@@ -24,7 +24,7 @@ namespace AvaloniaReactorUI.HotReloader
 
             TryBuildProject(true);
 
-            _fileSystemWatcher = new FileSystemWatcher(
+            using var fs = new FileSystemWatcher(
                 _folderToMonitor,
                 "*.cs")
             {
@@ -38,6 +38,7 @@ namespace AvaloniaReactorUI.HotReloader
                 IncludeSubdirectories = true
             };
 
+            _fileSystemWatcher = fs;
             _fileSystemWatcher.Changed += OnFileChanged;
             _fileSystemWatcher.Error += OnFileError;
 
@@ -50,12 +51,9 @@ namespace AvaloniaReactorUI.HotReloader
 
             exitEvent.WaitOne();
 
-
             _fileSystemWatcher.EnableRaisingEvents = false;
             _fileSystemWatcher.Changed -= OnFileChanged;
             _fileSystemWatcher.Error -= OnFileError;
-            _fileSystemWatcher.Dispose();
-            _fileSystemWatcher = null;
         }
 
         private static void OnFileError(object sender, ErrorEventArgs e)
@@ -76,15 +74,12 @@ namespace AvaloniaReactorUI.HotReloader
 
             try
             {
-                //if (!File.Exists(_assemblyPdbPath))
-                //{
                 var pdbAssemblyName = Path.GetFileNameWithoutExtension(_assemblyPath) + ".pdb";
                 var pdbAssemblyPath = Path.Combine(Path.GetDirectoryName(_assemblyPath) ?? throw new InvalidOperationException(), pdbAssemblyName);
 
                 Console.WriteLine($"Creating empty pdb file {pdbAssemblyPath}...");
                 File.Delete(pdbAssemblyPath);
                 File.WriteAllBytes(pdbAssemblyPath, Array.Empty<byte>());
-                //}
 
                 if (!TryBuildProject())
                 {
@@ -100,6 +95,11 @@ namespace AvaloniaReactorUI.HotReloader
 
         private static bool TryBuildProject(bool fullBuild = false)
         {
+            if (_folderToMonitor == null || _assemblyPath == null)
+            {
+                throw new InvalidOperationException();
+            }
+
             try
             {
                 var outputFolder = Path.Combine(_folderToMonitor, $"bin/WpfReactorUI/temp_generated");
@@ -109,7 +109,7 @@ namespace AvaloniaReactorUI.HotReloader
                 Run("dotnet", cmdLine, _folderToMonitor);
 
                 var pdbAssemblyName = Path.GetFileNameWithoutExtension(_assemblyPath) + ".pdb";
-                var pdbAssemblyPath = Path.Combine(Path.GetDirectoryName(_assemblyPath), pdbAssemblyName);
+                var pdbAssemblyPath = Path.Combine(Path.GetDirectoryName(_assemblyPath) ?? throw new InvalidOperationException(), pdbAssemblyName);
                 var generatedPdbFilePath = Path.Combine(outputFolder, pdbAssemblyName);
 
                 Console.WriteLine($"Copy from {generatedPdbFilePath} to {pdbAssemblyPath}");
@@ -120,7 +120,6 @@ namespace AvaloniaReactorUI.HotReloader
 
                 Console.WriteLine($"Copy from {generatedFilePath} to {_assemblyPath}");
                 File.Copy(generatedFilePath, _assemblyPath, true);
-
 
                 return true;
             }

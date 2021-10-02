@@ -95,7 +95,13 @@ namespace AvaloniaReactorUI
             
             #line default
             #line hidden
-            this.Write("> ");
+            
+            #line 42 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(NullableTypeHelper.IsNullable(property) ? "?" : string.Empty));
+            
+            #line default
+            #line hidden
+            this.Write(">? ");
             
             #line 42 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
@@ -116,7 +122,7 @@ namespace AvaloniaReactorUI
             
             #line default
             #line hidden
-            this.Write("        Action ");
+            this.Write("        Action? ");
             
             #line 46 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
@@ -130,7 +136,7 @@ namespace AvaloniaReactorUI
             
             #line default
             #line hidden
-            this.Write("> ");
+            this.Write(">? ");
             
             #line 47 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
@@ -186,8 +192,8 @@ namespace AvaloniaReactorUI
             
             #line default
             #line hidden
-            this.Write("(Action<T> componentRefAction)\r\n            : base(componentRefAction)\r\n        {" +
-                    "\r\n\r\n        }\r\n\r\n        ");
+            this.Write("(Action<T?> componentRefAction)\r\n            : base(componentRefAction)\r\n        " +
+                    "{\r\n\r\n        }\r\n\r\n        ");
             
             #line 64 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  foreach (var property in Properties) { 
@@ -201,7 +207,13 @@ namespace AvaloniaReactorUI
             
             #line default
             #line hidden
-            this.Write("> IRx");
+            
+            #line 65 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(NullableTypeHelper.IsNullable(property) ? "?" : string.Empty));
+            
+            #line default
+            #line hidden
+            this.Write(">? IRx");
             
             #line 65 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
@@ -229,7 +241,7 @@ namespace AvaloniaReactorUI
             
             #line default
             #line hidden
-            this.Write("        Action IRx");
+            this.Write("        Action? IRx");
             
             #line 69 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
@@ -250,7 +262,7 @@ namespace AvaloniaReactorUI
             
             #line default
             #line hidden
-            this.Write("> IRx");
+            this.Write(">? IRx");
             
             #line 70 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
@@ -271,202 +283,231 @@ namespace AvaloniaReactorUI
             
             #line default
             #line hidden
-            this.Write("\r\n        protected override void OnUpdate()\r\n        {\r\n            OnBeginUpdat" +
-                    "e();\r\n\r\n            var thisAsIRx");
+            this.Write("\r\n        ");
             
-            #line 77 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 73 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+ if (Properties.Any()) { 
+            
+            #line default
+            #line hidden
+            this.Write("        protected override void OnUpdate()\r\n        {\r\n            Validate.Ensur" +
+                    "eNotNull(NativeControl);\r\n\r\n            OnBeginUpdate();\r\n\r\n            var this" +
+                    "AsIRx");
+            
+            #line 80 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(" = (IRx");
             
-            #line 77 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 80 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(")this;\r\n            ");
             
-            #line 78 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 81 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  foreach (var property in Properties) { 
             
             #line default
             #line hidden
-            this.Write("            NativeControl.Set(");
+            this.Write("            NativeControl.Set");
             
-            #line 79 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 82 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(NullableTypeHelper.IsNullable(property) ? "Nullable" : string.Empty));
+            
+            #line default
+            #line hidden
+            this.Write("(");
+            
+            #line 82 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 79 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 82 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
             
             #line default
             #line hidden
             this.Write("Property, thisAsIRx");
             
-            #line 79 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 82 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 79 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 82 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
             
             #line default
             #line hidden
             this.Write(");\r\n            ");
             
-            #line 80 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 83 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  } 
             
             #line default
             #line hidden
-            this.Write("\r\n            base.OnUpdate();\r\n\r\n            OnEndUpdate();\r\n        }\r\n\r\n      " +
-                    "  partial void OnBeginUpdate();\r\n        partial void OnEndUpdate();\r\n\r\n        " +
-                    "protected override void OnAttachNativeEvents()\r\n        {\r\n            var thisA" +
-                    "sIRx");
+            this.Write("\r\n            base.OnUpdate();\r\n\r\n            OnEndUpdate();\r\n        }\r\n        " +
+                    "");
             
-            #line 92 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 89 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\r\n        partial void OnBeginUpdate();\r\n        partial void OnEndUpdate();\r\n\r\n " +
+                    "       ");
+            
+            #line 94 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+ if (Events.Any()) { 
+            
+            #line default
+            #line hidden
+            this.Write("        protected override void OnAttachNativeEvents()\r\n        {\r\n            Va" +
+                    "lidate.EnsureNotNull(NativeControl);\r\n\r\n            var thisAsIRx");
+            
+            #line 99 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(" = (IRx");
             
-            #line 92 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 99 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(")this;\r\n            ");
             
-            #line 93 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 100 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  foreach (var ev in Events) { 
             
             #line default
             #line hidden
             this.Write("            if (thisAsIRx");
             
-            #line 94 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 101 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 94 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 101 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
             
             #line default
             #line hidden
             this.Write("Action != null || thisAsIRx");
             
-            #line 94 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 101 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 94 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 101 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
             
             #line default
             #line hidden
             this.Write("ActionWithArgs != null)\r\n            {\r\n                NativeControl.");
             
-            #line 96 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 103 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
             
             #line default
             #line hidden
             this.Write(" += NativeControl_");
             
-            #line 96 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 103 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
             
             #line default
             #line hidden
             this.Write(";\r\n            }\r\n            ");
             
-            #line 98 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 105 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n            base.OnAttachNativeEvents();\r\n        }\r\n\r\n        ");
             
-            #line 103 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 110 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  foreach (var ev in Events) { 
             
             #line default
             #line hidden
             this.Write("        private void NativeControl_");
             
-            #line 104 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 111 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
             
             #line default
             #line hidden
-            this.Write("(object sender, ");
+            this.Write("(object? sender, ");
             
-            #line 104 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 111 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.EventHandlerType.GetGenericArguments()[0].Name));
             
             #line default
             #line hidden
             this.Write(" e)\r\n        {\r\n            var thisAsIRx");
             
-            #line 106 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 113 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(" = (IRx");
             
-            #line 106 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 113 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(")this;\r\n            thisAsIRx");
             
-            #line 107 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 114 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 107 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 114 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
             
             #line default
             #line hidden
             this.Write("Action?.Invoke();\r\n            thisAsIRx");
             
-            #line 108 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 115 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 108 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 115 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
             
             #line default
             #line hidden
             this.Write("ActionWithArgs?.Invoke(e);\r\n        }\r\n        ");
             
-            #line 110 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 117 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  } 
             
             #line default
@@ -474,289 +515,307 @@ namespace AvaloniaReactorUI
             this.Write("\r\n        protected override void OnDetachNativeEvents()\r\n        {\r\n            " +
                     "if (NativeControl != null)\r\n            {\r\n            ");
             
-            #line 116 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 123 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  foreach (var ev in Events) { 
             
             #line default
             #line hidden
             this.Write("            NativeControl.");
             
-            #line 117 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 124 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
             
             #line default
             #line hidden
             this.Write(" -= NativeControl_");
             
-            #line 117 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 124 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
             
             #line default
             #line hidden
             this.Write(";\r\n            ");
             
-            #line 118 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 125 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  } 
             
             #line default
             #line hidden
-            this.Write("            }\r\n\r\n            base.OnDetachNativeEvents();\r\n        }\r\n\r\n    }\r\n  " +
-                    "  ");
+            this.Write("            }\r\n\r\n            base.OnDetachNativeEvents();\r\n        }\r\n        ");
             
-            #line 125 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 130 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("    }\r\n    ");
+            
+            #line 132 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  if (IsTypeNotAbstractWithEmptyConstructur) { 
             
             #line default
             #line hidden
             this.Write("    public partial class Rx");
             
-            #line 126 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 133 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(" : Rx");
             
-            #line 126 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 133 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("<");
             
-            #line 126 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 133 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(">\r\n    {\r\n        public Rx");
             
-            #line 128 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 135 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("()\r\n        { \r\n        \r\n        }\r\n\r\n        public Rx");
             
-            #line 133 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 140 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("(Action<");
             
-            #line 133 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 140 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
-            this.Write("> componentRefAction)\r\n            : base(componentRefAction)\r\n        {\r\n\r\n     " +
-                    "   }\r\n    }\r\n    ");
+            this.Write("?> componentRefAction)\r\n            : base(componentRefAction)\r\n        {\r\n\r\n    " +
+                    "    }\r\n    }\r\n    ");
             
-            #line 139 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 146 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  } 
             
             #line default
             #line hidden
             this.Write("    public static partial class Rx");
             
-            #line 140 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 147 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("Extensions\r\n    {\r\n        ");
             
-            #line 142 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 149 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  foreach (var property in Properties) { 
             
             #line default
             #line hidden
             this.Write("        public static T ");
             
-            #line 143 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 150 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
             
             #line default
             #line hidden
             this.Write("<T>(this T ");
             
-            #line 143 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 150 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 143 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 150 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
+            
+            #line default
+            #line hidden
+            
+            #line 150 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(NullableTypeHelper.IsNullable(property) ? "?" : string.Empty));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 143 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 150 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name.CamelCase()));
             
             #line default
             #line hidden
             this.Write(") where T : IRx");
             
-            #line 143 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 150 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("\r\n        {\r\n            ");
-            
-            #line 145 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write(".");
-            
-            #line 145 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
-            
-            #line default
-            #line hidden
-            this.Write(" = new PropertyValue<");
-            
-            #line 145 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
-            
-            #line default
-            #line hidden
-            this.Write(">(");
-            
-            #line 145 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(property.Name.CamelCase()));
-            
-            #line default
-            #line hidden
-            this.Write(");\r\n            return ");
-            
-            #line 146 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n        }\r\n        ");
-            
-            #line 148 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
- if (property.PropertyType.Name == "Thickness") { 
-            
-            #line default
-            #line hidden
-            this.Write("        public static T ");
-            
-            #line 149 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
-            
-            #line default
-            #line hidden
-            this.Write("<T>(this T ");
-            
-            #line 149 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write(", double leftRight, double topBottom) where T : IRx");
-            
-            #line 149 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n        {\r\n            ");
-            
-            #line 151 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write(".");
-            
-            #line 151 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
-            
-            #line default
-            #line hidden
-            this.Write(" = new PropertyValue<");
-            
-            #line 151 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
-            
-            #line default
-            #line hidden
-            this.Write(">(new Thickness(leftRight, topBottom));\r\n            return ");
             
             #line 152 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
-            this.Write(";\r\n        }\r\n        public static T ");
-            
-            #line 154 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
-            
-            #line default
-            #line hidden
-            this.Write("<T>(this T ");
-            
-            #line 154 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write(", double uniformSize) where T : IRx");
-            
-            #line 154 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n        {\r\n            ");
-            
-            #line 156 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
             this.Write(".");
             
-            #line 156 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 152 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
             
             #line default
             #line hidden
             this.Write(" = new PropertyValue<");
             
-            #line 156 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 152 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
             
             #line default
             #line hidden
-            this.Write(">(new Thickness(uniformSize));\r\n            return ");
             
-            #line 157 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 152 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(NullableTypeHelper.IsNullable(property) ? "?" : string.Empty));
+            
+            #line default
+            #line hidden
+            this.Write(">(");
+            
+            #line 152 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(property.Name.CamelCase()));
+            
+            #line default
+            #line hidden
+            this.Write(");\r\n            return ");
+            
+            #line 153 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(";\r\n        }\r\n        ");
             
+            #line 155 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+ if (property.PropertyType.Name == "Thickness") { 
+            
+            #line default
+            #line hidden
+            this.Write("        public static T ");
+            
+            #line 156 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
+            
+            #line default
+            #line hidden
+            this.Write("<T>(this T ");
+            
+            #line 156 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write(", double leftRight, double topBottom) where T : IRx");
+            
+            #line 156 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n        {\r\n            ");
+            
+            #line 158 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write(".");
+            
+            #line 158 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" = new PropertyValue<");
+            
+            #line 158 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
+            
+            #line default
+            #line hidden
+            this.Write(">(new Thickness(leftRight, topBottom));\r\n            return ");
+            
             #line 159 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n        }\r\n        public static T ");
+            
+            #line 161 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
+            
+            #line default
+            #line hidden
+            this.Write("<T>(this T ");
+            
+            #line 161 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write(", double uniformSize) where T : IRx");
+            
+            #line 161 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n        {\r\n            ");
+            
+            #line 163 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write(".");
+            
+            #line 163 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" = new PropertyValue<");
+            
+            #line 163 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
+            
+            #line default
+            #line hidden
+            this.Write(">(new Thickness(uniformSize));\r\n            return ");
+            
+            #line 164 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n        }\r\n        ");
+            
+            #line 166 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  } 
             
             #line default
             #line hidden
             this.Write("            ");
             
-            #line 160 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 167 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  if (property.PropertyType.Name == "ImageSource") { 
                var propertyName = property.Name.Length <= 6 ? property.Name : property.Name.Substring(0, property.Name.Length - 6); 
             
@@ -764,189 +823,189 @@ namespace AvaloniaReactorUI
             #line hidden
             this.Write("\r\n        public static T ");
             
-            #line 163 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 170 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(propertyName));
             
             #line default
             #line hidden
             this.Write("<T>(this T ");
             
-            #line 163 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 170 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(", string file) where T : IRx");
             
-            #line 163 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 170 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("\r\n        {\r\n            ");
             
-            #line 165 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 172 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 165 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 172 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
             
             #line default
             #line hidden
             this.Write(" = new PropertyValue<");
             
-            #line 165 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 172 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
             
             #line default
             #line hidden
             this.Write(">(ImageSource.FromFile(file));\r\n            return ");
             
-            #line 166 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 173 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(";\r\n        }\r\n        public static T ");
             
-            #line 168 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 175 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(propertyName));
             
             #line default
             #line hidden
             this.Write("<T>(this T ");
             
-            #line 168 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 175 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(", string resourceName, Assembly sourceAssembly) where T : IRx");
             
-            #line 168 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 175 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("\r\n        {\r\n            ");
             
-            #line 170 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 177 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 170 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 177 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
             
             #line default
             #line hidden
             this.Write(" = new PropertyValue<");
             
-            #line 170 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 177 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
             
             #line default
             #line hidden
             this.Write(">(ImageSource.FromResource(resourceName, sourceAssembly));\r\n            return ");
             
-            #line 171 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 178 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(";\r\n        }\r\n        public static T ");
             
-            #line 173 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 180 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(propertyName));
             
             #line default
             #line hidden
             this.Write("<T>(this T ");
             
-            #line 173 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 180 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(", Uri imageUri) where T : IRx");
             
-            #line 173 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 180 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("\r\n        {\r\n            ");
             
-            #line 175 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 182 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 175 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 182 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
             
             #line default
             #line hidden
             this.Write(" = new PropertyValue<");
             
-            #line 175 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 182 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
             
             #line default
             #line hidden
             this.Write(">(ImageSource.FromUri(imageUri));\r\n            return ");
             
-            #line 176 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 183 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(";\r\n        }\r\n        public static T ");
             
-            #line 178 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 185 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(propertyName));
             
             #line default
             #line hidden
             this.Write("<T>(this T ");
             
-            #line 178 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 185 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(", Uri imageUri, bool cachingEnabled, TimeSpan cacheValidity) where T : IRx");
             
-            #line 178 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 185 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("\r\n        {\r\n            ");
             
-            #line 180 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 187 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 180 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 187 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
             
             #line default
             #line hidden
             this.Write(" = new PropertyValue<");
             
-            #line 180 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 187 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
             
             #line default
@@ -955,203 +1014,203 @@ namespace AvaloniaReactorUI
                     "     CachingEnabled = cachingEnabled,\r\n                CacheValidity = cacheVali" +
                     "dity\r\n            });\r\n            return ");
             
-            #line 186 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 193 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(";\r\n        }\r\n        public static T ");
             
-            #line 188 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 195 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(propertyName));
             
             #line default
             #line hidden
             this.Write("<T>(this T ");
             
-            #line 188 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 195 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(", Func<Stream> imageStream) where T : IRx");
             
-            #line 188 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 195 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("\r\n        {\r\n            ");
             
-            #line 190 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 197 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 190 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 197 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.Name));
             
             #line default
             #line hidden
             this.Write(" = new PropertyValue<");
             
-            #line 190 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 197 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(property.PropertyType.Name.ToResevedWordTypeName()));
             
             #line default
             #line hidden
             this.Write(">(ImageSource.FromStream(imageStream));\r\n            return ");
             
-            #line 191 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 198 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(";\r\n        }\r\n            ");
             
-            #line 193 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 200 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  } 
             
             #line default
             #line hidden
             this.Write("        ");
             
-            #line 194 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 201 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  } 
             
             #line default
             #line hidden
             this.Write("        ");
             
-            #line 195 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 202 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  foreach (var ev in Events) { 
             
             #line default
             #line hidden
             this.Write("        public static T On");
             
-            #line 196 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 203 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
             
             #line default
             #line hidden
             this.Write("<T>(this T ");
             
-            #line 196 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 203 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write(", Action ");
             
-            #line 196 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 203 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name.ToLowerInvariant()));
             
             #line default
             #line hidden
             this.Write("Action) where T : IRx");
             
-            #line 196 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 203 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write("\r\n        {\r\n            ");
-            
-            #line 198 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write(".");
-            
-            #line 198 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
-            
-            #line default
-            #line hidden
-            this.Write("Action = ");
-            
-            #line 198 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write("Action;\r\n            return ");
-            
-            #line 199 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n        }\r\n\r\n        public static T On");
-            
-            #line 202 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
-            
-            #line default
-            #line hidden
-            this.Write("<T>(this T ");
-            
-            #line 202 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write(", Action<");
-            
-            #line 202 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ev.EventHandlerType.GetGenericArguments()[0].Name));
-            
-            #line default
-            #line hidden
-            this.Write("> ");
-            
-            #line 202 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write("ActionWithArgs) where T : IRx");
-            
-            #line 202 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n        {\r\n            ");
-            
-            #line 204 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write(".");
-            
-            #line 204 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
-            
-            #line default
-            #line hidden
-            this.Write("ActionWithArgs = ");
-            
-            #line 204 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name.ToLowerInvariant()));
-            
-            #line default
-            #line hidden
-            this.Write("ActionWithArgs;\r\n            return ");
             
             #line 205 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
             
             #line default
             #line hidden
+            this.Write(".");
+            
+            #line 205 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
+            
+            #line default
+            #line hidden
+            this.Write("Action = ");
+            
+            #line 205 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write("Action;\r\n            return ");
+            
+            #line 206 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n        }\r\n\r\n        public static T On");
+            
+            #line 209 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
+            
+            #line default
+            #line hidden
+            this.Write("<T>(this T ");
+            
+            #line 209 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write(", Action<");
+            
+            #line 209 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ev.EventHandlerType.GetGenericArguments()[0].Name));
+            
+            #line default
+            #line hidden
+            this.Write("> ");
+            
+            #line 209 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write("ActionWithArgs) where T : IRx");
+            
+            #line 209 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n        {\r\n            ");
+            
+            #line 211 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write(".");
+            
+            #line 211 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name));
+            
+            #line default
+            #line hidden
+            this.Write("ActionWithArgs = ");
+            
+            #line 211 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ev.Name.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
+            this.Write("ActionWithArgs;\r\n            return ");
+            
+            #line 212 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName.ToLowerInvariant()));
+            
+            #line default
+            #line hidden
             this.Write(";\r\n        }\r\n        ");
             
-            #line 207 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
+            #line 214 "C:\Source\github\reactorui-avalonia\src\AvaloniaReactorUI.ScaffoldApp\TypeSourceGenerator.tt"
  } 
             
             #line default

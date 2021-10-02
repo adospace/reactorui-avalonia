@@ -17,7 +17,7 @@ namespace AvaloniaReactorUI
 
     public partial class RxContentControl<T> : IEnumerable<VisualNode>
     {
-        private readonly List<VisualNode> _contents = new List<VisualNode>();
+        private readonly List<VisualNode> _contents = new();
         public RxContentControl(VisualNode content)
         {
             _contents.Add(content);
@@ -40,6 +40,8 @@ namespace AvaloniaReactorUI
 
         protected override void OnAddChild(VisualNode widget, AvaloniaObject childControl)
         {
+            Validate.EnsureNotNull(NativeControl);
+
             NativeControl.Content = childControl;
 
             base.OnAddChild(widget, childControl);
@@ -47,6 +49,8 @@ namespace AvaloniaReactorUI
 
         protected override void OnRemoveChild(VisualNode widget, AvaloniaObject childControl)
         {
+            Validate.EnsureNotNull(NativeControl);
+
             NativeControl.Content = null;
 
             base.OnRemoveChild(widget, childControl);
@@ -64,6 +68,8 @@ namespace AvaloniaReactorUI
 
         partial void OnBeginUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             if (Content != null)
             {
                 NativeControl.Content = Content;

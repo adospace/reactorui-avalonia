@@ -23,7 +23,7 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxItemsControl : IRxTemplatedControl
     {
-        PropertyValue<IEnumerable> Items { get; set; }
+        PropertyValue<IEnumerable>? Items { get; set; }
 
     }
 
@@ -34,17 +34,19 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxItemsControl(Action<T> componentRefAction)
+        public RxItemsControl(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<IEnumerable> IRxItemsControl.Items { get; set; }
+        PropertyValue<IEnumerable>? IRxItemsControl.Items { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxItemsControl = (IRxItemsControl)this;
@@ -58,23 +60,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxItemsControl = (IRxItemsControl)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxItemsControl : RxItemsControl<ItemsControl>
     {
@@ -83,7 +68,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxItemsControl(Action<ItemsControl> componentRefAction)
+        public RxItemsControl(Action<ItemsControl?> componentRefAction)
             : base(componentRefAction)
         {
 

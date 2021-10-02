@@ -12,7 +12,7 @@ namespace AvaloniaReactorUI
 {
     public abstract class RxApplication : VisualNode, IRxHostElement
     {
-        public static RxApplication Instance { get; private set; }
+        public static RxApplication? Instance { get; private set; }
         protected readonly Application _application;
 
         //internal IComponentLoader ComponentLoader { get; set; } = new LocalComponentLoader();
@@ -29,7 +29,7 @@ namespace AvaloniaReactorUI
             _application = application ?? throw new ArgumentNullException(nameof(application));
         }
 
-        public Action<UnhandledExceptionEventArgs> UnhandledException { get; set; }
+        public Action<UnhandledExceptionEventArgs>? UnhandledException { get; set; }
 
         internal void FireUnhandledExpectionEvent(Exception ex)
         {
@@ -63,7 +63,7 @@ namespace AvaloniaReactorUI
 
         public RxContext Context { get; } = new RxContext();
 
-        public Window ContainerWindow
+        public Window? ContainerWindow
         {
             get
             {
@@ -78,7 +78,7 @@ namespace AvaloniaReactorUI
 
     public class RxApplication<T> : RxApplication where T : RxComponent, new()
     {
-        protected RxComponent _rootComponent;
+        protected RxComponent? _rootComponent;
         private bool _sleeping = true;
 
 
@@ -124,11 +124,11 @@ namespace AvaloniaReactorUI
             return this;
         }
 
-        private void OnComponentAssemblyChanged(object sender, EventArgs e)
+        private void OnComponentAssemblyChanged(object? sender, EventArgs e)
         {
             try
             {
-                var newComponent = ComponentLoader.Instance.LoadComponent<T>();
+                var newComponent = ComponentLoader.Instance?.LoadComponent<T>();
 
                 if (newComponent != null)
                 {
@@ -181,7 +181,7 @@ namespace AvaloniaReactorUI
             }
         }
 
-        protected override IEnumerable<VisualNode> RenderChildren()
+        protected override IEnumerable<VisualNode?> RenderChildren()
         {
             yield return _rootComponent;
         }

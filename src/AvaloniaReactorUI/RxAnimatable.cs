@@ -23,8 +23,8 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxAnimatable : IVisualNode
     {
-        PropertyValue<IClock> Clock { get; set; }
-        PropertyValue<Transitions> Transitions { get; set; }
+        PropertyValue<IClock>? Clock { get; set; }
+        PropertyValue<Transitions?>? Transitions { get; set; }
 
     }
 
@@ -35,23 +35,25 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxAnimatable(Action<T> componentRefAction)
+        public RxAnimatable(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<IClock> IRxAnimatable.Clock { get; set; }
-        PropertyValue<Transitions> IRxAnimatable.Transitions { get; set; }
+        PropertyValue<IClock>? IRxAnimatable.Clock { get; set; }
+        PropertyValue<Transitions?>? IRxAnimatable.Transitions { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxAnimatable = (IRxAnimatable)this;
             NativeControl.Set(Animatable.ClockProperty, thisAsIRxAnimatable.Clock);
-            NativeControl.Set(Animatable.TransitionsProperty, thisAsIRxAnimatable.Transitions);
+            NativeControl.SetNullable(Animatable.TransitionsProperty, thisAsIRxAnimatable.Transitions);
 
             base.OnUpdate();
 
@@ -61,23 +63,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxAnimatable = (IRxAnimatable)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxAnimatable : RxAnimatable<Animatable>
     {
@@ -86,7 +71,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxAnimatable(Action<Animatable> componentRefAction)
+        public RxAnimatable(Action<Animatable?> componentRefAction)
             : base(componentRefAction)
         {
 
@@ -99,9 +84,9 @@ namespace AvaloniaReactorUI
             animatable.Clock = new PropertyValue<IClock>(clock);
             return animatable;
         }
-        public static T Transitions<T>(this T animatable, Transitions transitions) where T : IRxAnimatable
+        public static T Transitions<T>(this T animatable, Transitions? transitions) where T : IRxAnimatable
         {
-            animatable.Transitions = new PropertyValue<Transitions>(transitions);
+            animatable.Transitions = new PropertyValue<Transitions?>(transitions);
             return animatable;
         }
     }

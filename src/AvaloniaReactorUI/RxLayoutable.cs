@@ -23,16 +23,16 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxLayoutable : IRxVisual
     {
-        PropertyValue<double> Width { get; set; }
-        PropertyValue<double> Height { get; set; }
-        PropertyValue<double> MinWidth { get; set; }
-        PropertyValue<double> MaxWidth { get; set; }
-        PropertyValue<double> MinHeight { get; set; }
-        PropertyValue<double> MaxHeight { get; set; }
-        PropertyValue<Thickness> Margin { get; set; }
-        PropertyValue<HorizontalAlignment> HorizontalAlignment { get; set; }
-        PropertyValue<VerticalAlignment> VerticalAlignment { get; set; }
-        PropertyValue<bool> UseLayoutRounding { get; set; }
+        PropertyValue<double>? Width { get; set; }
+        PropertyValue<double>? Height { get; set; }
+        PropertyValue<double>? MinWidth { get; set; }
+        PropertyValue<double>? MaxWidth { get; set; }
+        PropertyValue<double>? MinHeight { get; set; }
+        PropertyValue<double>? MaxHeight { get; set; }
+        PropertyValue<Thickness>? Margin { get; set; }
+        PropertyValue<HorizontalAlignment>? HorizontalAlignment { get; set; }
+        PropertyValue<VerticalAlignment>? VerticalAlignment { get; set; }
+        PropertyValue<bool>? UseLayoutRounding { get; set; }
 
     }
 
@@ -43,26 +43,28 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxLayoutable(Action<T> componentRefAction)
+        public RxLayoutable(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<double> IRxLayoutable.Width { get; set; }
-        PropertyValue<double> IRxLayoutable.Height { get; set; }
-        PropertyValue<double> IRxLayoutable.MinWidth { get; set; }
-        PropertyValue<double> IRxLayoutable.MaxWidth { get; set; }
-        PropertyValue<double> IRxLayoutable.MinHeight { get; set; }
-        PropertyValue<double> IRxLayoutable.MaxHeight { get; set; }
-        PropertyValue<Thickness> IRxLayoutable.Margin { get; set; }
-        PropertyValue<HorizontalAlignment> IRxLayoutable.HorizontalAlignment { get; set; }
-        PropertyValue<VerticalAlignment> IRxLayoutable.VerticalAlignment { get; set; }
-        PropertyValue<bool> IRxLayoutable.UseLayoutRounding { get; set; }
+        PropertyValue<double>? IRxLayoutable.Width { get; set; }
+        PropertyValue<double>? IRxLayoutable.Height { get; set; }
+        PropertyValue<double>? IRxLayoutable.MinWidth { get; set; }
+        PropertyValue<double>? IRxLayoutable.MaxWidth { get; set; }
+        PropertyValue<double>? IRxLayoutable.MinHeight { get; set; }
+        PropertyValue<double>? IRxLayoutable.MaxHeight { get; set; }
+        PropertyValue<Thickness>? IRxLayoutable.Margin { get; set; }
+        PropertyValue<HorizontalAlignment>? IRxLayoutable.HorizontalAlignment { get; set; }
+        PropertyValue<VerticalAlignment>? IRxLayoutable.VerticalAlignment { get; set; }
+        PropertyValue<bool>? IRxLayoutable.UseLayoutRounding { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxLayoutable = (IRxLayoutable)this;
@@ -85,23 +87,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxLayoutable = (IRxLayoutable)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxLayoutable : RxLayoutable<Layoutable>
     {
@@ -110,7 +95,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxLayoutable(Action<Layoutable> componentRefAction)
+        public RxLayoutable(Action<Layoutable?> componentRefAction)
             : base(componentRefAction)
         {
 

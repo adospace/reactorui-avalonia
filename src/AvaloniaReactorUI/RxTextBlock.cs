@@ -23,20 +23,20 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxTextBlock : IRxControl
     {
-        PropertyValue<IBrush> Background { get; set; }
-        PropertyValue<Thickness> Padding { get; set; }
-        PropertyValue<FontFamily> FontFamily { get; set; }
-        PropertyValue<double> FontSize { get; set; }
-        PropertyValue<FontStyle> FontStyle { get; set; }
-        PropertyValue<FontWeight> FontWeight { get; set; }
-        PropertyValue<IBrush> Foreground { get; set; }
-        PropertyValue<double> LineHeight { get; set; }
-        PropertyValue<int> MaxLines { get; set; }
-        PropertyValue<string> Text { get; set; }
-        PropertyValue<TextAlignment> TextAlignment { get; set; }
-        PropertyValue<TextWrapping> TextWrapping { get; set; }
-        PropertyValue<TextTrimming> TextTrimming { get; set; }
-        PropertyValue<TextDecorationCollection> TextDecorations { get; set; }
+        PropertyValue<IBrush>? Background { get; set; }
+        PropertyValue<Thickness>? Padding { get; set; }
+        PropertyValue<FontFamily>? FontFamily { get; set; }
+        PropertyValue<double>? FontSize { get; set; }
+        PropertyValue<FontStyle>? FontStyle { get; set; }
+        PropertyValue<FontWeight>? FontWeight { get; set; }
+        PropertyValue<IBrush>? Foreground { get; set; }
+        PropertyValue<double>? LineHeight { get; set; }
+        PropertyValue<int>? MaxLines { get; set; }
+        PropertyValue<string>? Text { get; set; }
+        PropertyValue<TextAlignment>? TextAlignment { get; set; }
+        PropertyValue<TextWrapping>? TextWrapping { get; set; }
+        PropertyValue<TextTrimming>? TextTrimming { get; set; }
+        PropertyValue<TextDecorationCollection>? TextDecorations { get; set; }
 
     }
 
@@ -47,30 +47,32 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxTextBlock(Action<T> componentRefAction)
+        public RxTextBlock(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<IBrush> IRxTextBlock.Background { get; set; }
-        PropertyValue<Thickness> IRxTextBlock.Padding { get; set; }
-        PropertyValue<FontFamily> IRxTextBlock.FontFamily { get; set; }
-        PropertyValue<double> IRxTextBlock.FontSize { get; set; }
-        PropertyValue<FontStyle> IRxTextBlock.FontStyle { get; set; }
-        PropertyValue<FontWeight> IRxTextBlock.FontWeight { get; set; }
-        PropertyValue<IBrush> IRxTextBlock.Foreground { get; set; }
-        PropertyValue<double> IRxTextBlock.LineHeight { get; set; }
-        PropertyValue<int> IRxTextBlock.MaxLines { get; set; }
-        PropertyValue<string> IRxTextBlock.Text { get; set; }
-        PropertyValue<TextAlignment> IRxTextBlock.TextAlignment { get; set; }
-        PropertyValue<TextWrapping> IRxTextBlock.TextWrapping { get; set; }
-        PropertyValue<TextTrimming> IRxTextBlock.TextTrimming { get; set; }
-        PropertyValue<TextDecorationCollection> IRxTextBlock.TextDecorations { get; set; }
+        PropertyValue<IBrush>? IRxTextBlock.Background { get; set; }
+        PropertyValue<Thickness>? IRxTextBlock.Padding { get; set; }
+        PropertyValue<FontFamily>? IRxTextBlock.FontFamily { get; set; }
+        PropertyValue<double>? IRxTextBlock.FontSize { get; set; }
+        PropertyValue<FontStyle>? IRxTextBlock.FontStyle { get; set; }
+        PropertyValue<FontWeight>? IRxTextBlock.FontWeight { get; set; }
+        PropertyValue<IBrush>? IRxTextBlock.Foreground { get; set; }
+        PropertyValue<double>? IRxTextBlock.LineHeight { get; set; }
+        PropertyValue<int>? IRxTextBlock.MaxLines { get; set; }
+        PropertyValue<string>? IRxTextBlock.Text { get; set; }
+        PropertyValue<TextAlignment>? IRxTextBlock.TextAlignment { get; set; }
+        PropertyValue<TextWrapping>? IRxTextBlock.TextWrapping { get; set; }
+        PropertyValue<TextTrimming>? IRxTextBlock.TextTrimming { get; set; }
+        PropertyValue<TextDecorationCollection>? IRxTextBlock.TextDecorations { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxTextBlock = (IRxTextBlock)this;
@@ -97,23 +99,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxTextBlock = (IRxTextBlock)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxTextBlock : RxTextBlock<TextBlock>
     {
@@ -122,7 +107,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxTextBlock(Action<TextBlock> componentRefAction)
+        public RxTextBlock(Action<TextBlock?> componentRefAction)
             : base(componentRefAction)
         {
 

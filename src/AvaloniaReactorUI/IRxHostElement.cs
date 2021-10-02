@@ -8,6 +8,6 @@ namespace AvaloniaReactorUI
 
         void Stop();
 
-        Window ContainerWindow { get; }
+        Window? ContainerWindow { get; }
     }
 }

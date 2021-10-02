@@ -23,8 +23,8 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxContentControl : IRxTemplatedControl
     {
-        PropertyValue<HorizontalAlignment> HorizontalContentAlignment { get; set; }
-        PropertyValue<VerticalAlignment> VerticalContentAlignment { get; set; }
+        PropertyValue<HorizontalAlignment>? HorizontalContentAlignment { get; set; }
+        PropertyValue<VerticalAlignment>? VerticalContentAlignment { get; set; }
 
     }
 
@@ -35,18 +35,20 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxContentControl(Action<T> componentRefAction)
+        public RxContentControl(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<HorizontalAlignment> IRxContentControl.HorizontalContentAlignment { get; set; }
-        PropertyValue<VerticalAlignment> IRxContentControl.VerticalContentAlignment { get; set; }
+        PropertyValue<HorizontalAlignment>? IRxContentControl.HorizontalContentAlignment { get; set; }
+        PropertyValue<VerticalAlignment>? IRxContentControl.VerticalContentAlignment { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxContentControl = (IRxContentControl)this;
@@ -61,23 +63,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxContentControl = (IRxContentControl)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxContentControl : RxContentControl<ContentControl>
     {
@@ -86,7 +71,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxContentControl(Action<ContentControl> componentRefAction)
+        public RxContentControl(Action<ContentControl?> componentRefAction)
             : base(componentRefAction)
         {
 

@@ -23,8 +23,8 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxStackPanel : IRxPanel
     {
-        PropertyValue<double> Spacing { get; set; }
-        PropertyValue<Orientation> Orientation { get; set; }
+        PropertyValue<double>? Spacing { get; set; }
+        PropertyValue<Orientation>? Orientation { get; set; }
 
     }
 
@@ -35,18 +35,20 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxStackPanel(Action<T> componentRefAction)
+        public RxStackPanel(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<double> IRxStackPanel.Spacing { get; set; }
-        PropertyValue<Orientation> IRxStackPanel.Orientation { get; set; }
+        PropertyValue<double>? IRxStackPanel.Spacing { get; set; }
+        PropertyValue<Orientation>? IRxStackPanel.Orientation { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxStackPanel = (IRxStackPanel)this;
@@ -61,23 +63,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxStackPanel = (IRxStackPanel)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxStackPanel : RxStackPanel<StackPanel>
     {
@@ -86,7 +71,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxStackPanel(Action<StackPanel> componentRefAction)
+        public RxStackPanel(Action<StackPanel?> componentRefAction)
             : base(componentRefAction)
         {
 

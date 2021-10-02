@@ -23,13 +23,13 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxSelectingItemsControl : IRxItemsControl
     {
-        PropertyValue<bool> AutoScrollToSelectedItem { get; set; }
-        PropertyValue<int> SelectedIndex { get; set; }
-        PropertyValue<object> SelectedItem { get; set; }
-        PropertyValue<bool> IsTextSearchEnabled { get; set; }
+        PropertyValue<bool>? AutoScrollToSelectedItem { get; set; }
+        PropertyValue<int>? SelectedIndex { get; set; }
+        PropertyValue<object?>? SelectedItem { get; set; }
+        PropertyValue<bool>? IsTextSearchEnabled { get; set; }
 
-        Action SelectionChangedAction { get; set; }
-        Action<SelectionChangedEventArgs> SelectionChangedActionWithArgs { get; set; }
+        Action? SelectionChangedAction { get; set; }
+        Action<SelectionChangedEventArgs>? SelectionChangedActionWithArgs { get; set; }
     }
 
     public partial class RxSelectingItemsControl<T> : RxItemsControl<T>, IRxSelectingItemsControl where T : SelectingItemsControl, new()
@@ -39,28 +39,30 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxSelectingItemsControl(Action<T> componentRefAction)
+        public RxSelectingItemsControl(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<bool> IRxSelectingItemsControl.AutoScrollToSelectedItem { get; set; }
-        PropertyValue<int> IRxSelectingItemsControl.SelectedIndex { get; set; }
-        PropertyValue<object> IRxSelectingItemsControl.SelectedItem { get; set; }
-        PropertyValue<bool> IRxSelectingItemsControl.IsTextSearchEnabled { get; set; }
+        PropertyValue<bool>? IRxSelectingItemsControl.AutoScrollToSelectedItem { get; set; }
+        PropertyValue<int>? IRxSelectingItemsControl.SelectedIndex { get; set; }
+        PropertyValue<object?>? IRxSelectingItemsControl.SelectedItem { get; set; }
+        PropertyValue<bool>? IRxSelectingItemsControl.IsTextSearchEnabled { get; set; }
 
-        Action IRxSelectingItemsControl.SelectionChangedAction { get; set; }
-        Action<SelectionChangedEventArgs> IRxSelectingItemsControl.SelectionChangedActionWithArgs { get; set; }
+        Action? IRxSelectingItemsControl.SelectionChangedAction { get; set; }
+        Action<SelectionChangedEventArgs>? IRxSelectingItemsControl.SelectionChangedActionWithArgs { get; set; }
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxSelectingItemsControl = (IRxSelectingItemsControl)this;
             NativeControl.Set(SelectingItemsControl.AutoScrollToSelectedItemProperty, thisAsIRxSelectingItemsControl.AutoScrollToSelectedItem);
             NativeControl.Set(SelectingItemsControl.SelectedIndexProperty, thisAsIRxSelectingItemsControl.SelectedIndex);
-            NativeControl.Set(SelectingItemsControl.SelectedItemProperty, thisAsIRxSelectingItemsControl.SelectedItem);
+            NativeControl.SetNullable(SelectingItemsControl.SelectedItemProperty, thisAsIRxSelectingItemsControl.SelectedItem);
             NativeControl.Set(SelectingItemsControl.IsTextSearchEnabledProperty, thisAsIRxSelectingItemsControl.IsTextSearchEnabled);
 
             base.OnUpdate();
@@ -73,6 +75,8 @@ namespace AvaloniaReactorUI
 
         protected override void OnAttachNativeEvents()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             var thisAsIRxSelectingItemsControl = (IRxSelectingItemsControl)this;
             if (thisAsIRxSelectingItemsControl.SelectionChangedAction != null || thisAsIRxSelectingItemsControl.SelectionChangedActionWithArgs != null)
             {
@@ -82,7 +86,7 @@ namespace AvaloniaReactorUI
             base.OnAttachNativeEvents();
         }
 
-        private void NativeControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void NativeControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             var thisAsIRxSelectingItemsControl = (IRxSelectingItemsControl)this;
             thisAsIRxSelectingItemsControl.SelectionChangedAction?.Invoke();
@@ -98,7 +102,6 @@ namespace AvaloniaReactorUI
 
             base.OnDetachNativeEvents();
         }
-
     }
     public partial class RxSelectingItemsControl : RxSelectingItemsControl<SelectingItemsControl>
     {
@@ -107,7 +110,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxSelectingItemsControl(Action<SelectingItemsControl> componentRefAction)
+        public RxSelectingItemsControl(Action<SelectingItemsControl?> componentRefAction)
             : base(componentRefAction)
         {
 
@@ -125,9 +128,9 @@ namespace AvaloniaReactorUI
             selectingitemscontrol.SelectedIndex = new PropertyValue<int>(selectedIndex);
             return selectingitemscontrol;
         }
-        public static T SelectedItem<T>(this T selectingitemscontrol, object selectedItem) where T : IRxSelectingItemsControl
+        public static T SelectedItem<T>(this T selectingitemscontrol, object? selectedItem) where T : IRxSelectingItemsControl
         {
-            selectingitemscontrol.SelectedItem = new PropertyValue<object>(selectedItem);
+            selectingitemscontrol.SelectedItem = new PropertyValue<object?>(selectedItem);
             return selectingitemscontrol;
         }
         public static T IsTextSearchEnabled<T>(this T selectingitemscontrol, bool isTextSearchEnabled) where T : IRxSelectingItemsControl

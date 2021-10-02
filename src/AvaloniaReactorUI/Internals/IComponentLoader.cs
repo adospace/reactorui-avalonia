@@ -15,8 +15,8 @@ namespace AvaloniaReactorUI.Internals
 
     internal static class ComponentLoader
     {
-        static IComponentLoader _instance;
-        public static IComponentLoader Instance
+        static IComponentLoader? _instance;
+        public static IComponentLoader? Instance
         {
             get => _instance;
             set

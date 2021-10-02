@@ -23,7 +23,7 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxGrid : IRxPanel
     {
-        PropertyValue<bool> ShowGridLines { get; set; }
+        PropertyValue<bool>? ShowGridLines { get; set; }
 
     }
 
@@ -34,17 +34,19 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxGrid(Action<T> componentRefAction)
+        public RxGrid(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<bool> IRxGrid.ShowGridLines { get; set; }
+        PropertyValue<bool>? IRxGrid.ShowGridLines { get; set; }
 
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxGrid = (IRxGrid)this;
@@ -58,23 +60,6 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
-        protected override void OnAttachNativeEvents()
-        {
-            var thisAsIRxGrid = (IRxGrid)this;
-
-            base.OnAttachNativeEvents();
-        }
-
-
-        protected override void OnDetachNativeEvents()
-        {
-            if (NativeControl != null)
-            {
-            }
-
-            base.OnDetachNativeEvents();
-        }
-
     }
     public partial class RxGrid : RxGrid<Grid>
     {
@@ -83,7 +68,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxGrid(Action<Grid> componentRefAction)
+        public RxGrid(Action<Grid?> componentRefAction)
             : base(componentRefAction)
         {
 

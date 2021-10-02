@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using AvaloniaReactorUI.Internals;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace AvaloniaReactorUI
 {
     public partial class RxPanel<T> : IEnumerable<VisualNode>
     {
-        private readonly List<VisualNode> _internalChildren = new List<VisualNode>();
+        private readonly List<VisualNode> _internalChildren = new();
 
         protected override IEnumerable<VisualNode> RenderChildren()
         {
@@ -19,6 +20,8 @@ namespace AvaloniaReactorUI
 
         protected override void OnAddChild(VisualNode widget, AvaloniaObject childControl)
         {
+            Validate.EnsureNotNull(NativeControl);
+
             if (childControl is IControl control)
             {
                 NativeControl.Children.Insert(widget.ChildIndex, control);
@@ -33,6 +36,8 @@ namespace AvaloniaReactorUI
 
         protected override void OnRemoveChild(VisualNode widget, AvaloniaObject childControl)
         {
+            Validate.EnsureNotNull(NativeControl);
+
             NativeControl.Children.Remove((IControl)childControl);
 
             base.OnRemoveChild(widget, childControl);
@@ -48,7 +53,7 @@ namespace AvaloniaReactorUI
             return _internalChildren.GetEnumerator();
         }
 
-        public void Add(params VisualNode[] nodes)
+        public void Add(params VisualNode?[] nodes)
         {
             if (nodes is null)
             {
@@ -56,10 +61,15 @@ namespace AvaloniaReactorUI
             }
 
             foreach (var node in nodes)
-                _internalChildren.Add(node);
+            {
+                if (node != null)
+                {
+                    _internalChildren.Add(node);
+                }
+            }
         }
 
-        public void Add(object genericNode)
+        public void Add(object? genericNode)
         {
             if (genericNode == null)
             {

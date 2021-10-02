@@ -23,16 +23,16 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxButton : IRxContentControl
     {
-        PropertyValue<ClickMode> ClickMode { get; set; }
-        PropertyValue<ICommand> Command { get; set; }
-        PropertyValue<KeyGesture> HotKey { get; set; }
-        PropertyValue<object> CommandParameter { get; set; }
-        PropertyValue<bool> IsDefault { get; set; }
-        PropertyValue<bool> IsCancel { get; set; }
-        PropertyValue<FlyoutBase> Flyout { get; set; }
+        PropertyValue<ClickMode>? ClickMode { get; set; }
+        PropertyValue<ICommand>? Command { get; set; }
+        PropertyValue<KeyGesture>? HotKey { get; set; }
+        PropertyValue<object>? CommandParameter { get; set; }
+        PropertyValue<bool>? IsDefault { get; set; }
+        PropertyValue<bool>? IsCancel { get; set; }
+        PropertyValue<FlyoutBase>? Flyout { get; set; }
 
-        Action ClickAction { get; set; }
-        Action<RoutedEventArgs> ClickActionWithArgs { get; set; }
+        Action? ClickAction { get; set; }
+        Action<RoutedEventArgs>? ClickActionWithArgs { get; set; }
     }
 
     public partial class RxButton<T> : RxContentControl<T>, IRxButton where T : Button, new()
@@ -42,25 +42,27 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxButton(Action<T> componentRefAction)
+        public RxButton(Action<T?> componentRefAction)
             : base(componentRefAction)
         {
 
         }
 
-        PropertyValue<ClickMode> IRxButton.ClickMode { get; set; }
-        PropertyValue<ICommand> IRxButton.Command { get; set; }
-        PropertyValue<KeyGesture> IRxButton.HotKey { get; set; }
-        PropertyValue<object> IRxButton.CommandParameter { get; set; }
-        PropertyValue<bool> IRxButton.IsDefault { get; set; }
-        PropertyValue<bool> IRxButton.IsCancel { get; set; }
-        PropertyValue<FlyoutBase> IRxButton.Flyout { get; set; }
+        PropertyValue<ClickMode>? IRxButton.ClickMode { get; set; }
+        PropertyValue<ICommand>? IRxButton.Command { get; set; }
+        PropertyValue<KeyGesture>? IRxButton.HotKey { get; set; }
+        PropertyValue<object>? IRxButton.CommandParameter { get; set; }
+        PropertyValue<bool>? IRxButton.IsDefault { get; set; }
+        PropertyValue<bool>? IRxButton.IsCancel { get; set; }
+        PropertyValue<FlyoutBase>? IRxButton.Flyout { get; set; }
 
-        Action IRxButton.ClickAction { get; set; }
-        Action<RoutedEventArgs> IRxButton.ClickActionWithArgs { get; set; }
+        Action? IRxButton.ClickAction { get; set; }
+        Action<RoutedEventArgs>? IRxButton.ClickActionWithArgs { get; set; }
 
         protected override void OnUpdate()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             OnBeginUpdate();
 
             var thisAsIRxButton = (IRxButton)this;
@@ -82,6 +84,8 @@ namespace AvaloniaReactorUI
 
         protected override void OnAttachNativeEvents()
         {
+            Validate.EnsureNotNull(NativeControl);
+
             var thisAsIRxButton = (IRxButton)this;
             if (thisAsIRxButton.ClickAction != null || thisAsIRxButton.ClickActionWithArgs != null)
             {
@@ -91,7 +95,7 @@ namespace AvaloniaReactorUI
             base.OnAttachNativeEvents();
         }
 
-        private void NativeControl_Click(object sender, RoutedEventArgs e)
+        private void NativeControl_Click(object? sender, RoutedEventArgs e)
         {
             var thisAsIRxButton = (IRxButton)this;
             thisAsIRxButton.ClickAction?.Invoke();
@@ -107,7 +111,6 @@ namespace AvaloniaReactorUI
 
             base.OnDetachNativeEvents();
         }
-
     }
     public partial class RxButton : RxButton<Button>
     {
@@ -116,7 +119,7 @@ namespace AvaloniaReactorUI
 
         }
 
-        public RxButton(Action<Button> componentRefAction)
+        public RxButton(Action<Button?> componentRefAction)
             : base(componentRefAction)
         {
 
