@@ -63,10 +63,9 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxLayoutable = (IRxLayoutable)this;
             NativeControl.Set(Layoutable.WidthProperty, thisAsIRxLayoutable.Width);
             NativeControl.Set(Layoutable.HeightProperty, thisAsIRxLayoutable.Height);
@@ -78,6 +77,7 @@ namespace AvaloniaReactorUI
             NativeControl.Set(Layoutable.HorizontalAlignmentProperty, thisAsIRxLayoutable.HorizontalAlignment);
             NativeControl.Set(Layoutable.VerticalAlignmentProperty, thisAsIRxLayoutable.VerticalAlignment);
             NativeControl.Set(Layoutable.UseLayoutRoundingProperty, thisAsIRxLayoutable.UseLayoutRounding);
+
 
             base.OnUpdate();
 

@@ -59,10 +59,9 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxVisual = (IRxVisual)this;
             NativeControl.Set(Visual.ClipToBoundsProperty, thisAsIRxVisual.ClipToBounds);
             NativeControl.SetNullable(Visual.ClipProperty, thisAsIRxVisual.Clip);
@@ -72,6 +71,7 @@ namespace AvaloniaReactorUI
             NativeControl.SetNullable(Visual.RenderTransformProperty, thisAsIRxVisual.RenderTransform);
             NativeControl.Set(Visual.RenderTransformOriginProperty, thisAsIRxVisual.RenderTransformOrigin);
             NativeControl.Set(Visual.ZIndexProperty, thisAsIRxVisual.ZIndex);
+
 
             base.OnUpdate();
 

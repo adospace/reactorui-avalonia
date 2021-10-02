@@ -67,10 +67,9 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxTemplatedControl = (IRxTemplatedControl)this;
             NativeControl.SetNullable(TemplatedControl.BackgroundProperty, thisAsIRxTemplatedControl.Background);
             NativeControl.SetNullable(TemplatedControl.BorderBrushProperty, thisAsIRxTemplatedControl.BorderBrush);
@@ -82,6 +81,7 @@ namespace AvaloniaReactorUI
             NativeControl.Set(TemplatedControl.FontWeightProperty, thisAsIRxTemplatedControl.FontWeight);
             NativeControl.SetNullable(TemplatedControl.ForegroundProperty, thisAsIRxTemplatedControl.Foreground);
             NativeControl.Set(TemplatedControl.PaddingProperty, thisAsIRxTemplatedControl.Padding);
+
 
             base.OnUpdate();
 

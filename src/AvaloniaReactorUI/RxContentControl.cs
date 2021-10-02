@@ -47,13 +47,13 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxContentControl = (IRxContentControl)this;
             NativeControl.Set(ContentControl.HorizontalContentAlignmentProperty, thisAsIRxContentControl.HorizontalContentAlignment);
             NativeControl.Set(ContentControl.VerticalContentAlignmentProperty, thisAsIRxContentControl.VerticalContentAlignment);
+
 
             base.OnUpdate();
 

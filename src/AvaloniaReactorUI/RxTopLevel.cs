@@ -47,13 +47,13 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxTopLevel = (IRxTopLevel)this;
             NativeControl.Set(TopLevel.TransparencyLevelHintProperty, thisAsIRxTopLevel.TransparencyLevelHint);
             NativeControl.Set(TopLevel.TransparencyBackgroundFallbackProperty, thisAsIRxTopLevel.TransparencyBackgroundFallback);
+
 
             base.OnUpdate();
 

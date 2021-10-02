@@ -119,10 +119,9 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxInputElement = (IRxInputElement)this;
             NativeControl.Set(InputElement.FocusableProperty, thisAsIRxInputElement.Focusable);
             NativeControl.Set(InputElement.IsEnabledProperty, thisAsIRxInputElement.IsEnabled);
@@ -130,6 +129,7 @@ namespace AvaloniaReactorUI
             NativeControl.Set(InputElement.IsHitTestVisibleProperty, thisAsIRxInputElement.IsHitTestVisible);
             NativeControl.Set(InputElement.IsTabStopProperty, thisAsIRxInputElement.IsTabStop);
             NativeControl.Set(InputElement.TabIndexProperty, thisAsIRxInputElement.TabIndex);
+
 
             base.OnUpdate();
 

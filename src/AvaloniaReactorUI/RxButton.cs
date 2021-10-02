@@ -61,10 +61,9 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxButton = (IRxButton)this;
             NativeControl.Set(Button.ClickModeProperty, thisAsIRxButton.ClickMode);
             NativeControl.Set(Button.CommandProperty, thisAsIRxButton.Command);
@@ -73,6 +72,7 @@ namespace AvaloniaReactorUI
             NativeControl.Set(Button.IsDefaultProperty, thisAsIRxButton.IsDefault);
             NativeControl.Set(Button.IsCancelProperty, thisAsIRxButton.IsCancel);
             NativeControl.Set(Button.FlyoutProperty, thisAsIRxButton.Flyout);
+
 
             base.OnUpdate();
 

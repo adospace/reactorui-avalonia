@@ -45,12 +45,12 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxItemsControl = (IRxItemsControl)this;
             NativeControl.Set(ItemsControl.ItemsProperty, thisAsIRxItemsControl.Items);
+
 
             base.OnUpdate();
 

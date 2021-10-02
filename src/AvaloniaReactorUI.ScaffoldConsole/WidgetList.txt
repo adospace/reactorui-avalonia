@@ -18,3 +18,4 @@ Avalonia.Controls.ItemsControl
 Avalonia.Controls.Primitives.SelectingItemsControl
 Avalonia.Controls.ListBox
 Avalonia.Controls.Grid
+Avalonia.Controls.TextBox

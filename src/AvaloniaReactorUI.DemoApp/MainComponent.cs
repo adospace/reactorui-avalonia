@@ -11,6 +11,7 @@ namespace AvaloniaReactorUI.DemoApp
         Counter,
         Timer,
         Items,
+        TextBox
     }
 
     public class MainComponentState : IState
@@ -20,7 +21,7 @@ namespace AvaloniaReactorUI.DemoApp
 
     public class MainComponent : RxComponent<MainComponentState>
     {
-        private static readonly Page[] _pages = new[] { Page.Home, Page.Counter, Page.Timer, Page.Items };
+        private static readonly Page[] _pages = new[] { Page.Home, Page.Counter, Page.Timer, Page.Items, Page.TextBox };
 
         private VisualNode Menu()=> 
             new RxListBox()
@@ -44,13 +45,14 @@ namespace AvaloniaReactorUI.DemoApp
             return State.CurrentPage switch
             {
                 Page.Home => new RxTextBlock()
-                                       .Text("Avalonia + ReactorUI = Love!")
-                                       .FontSize(24)
-                                       .VCenter()
-                                       .HCenter(),
+                    .Text("Avalonia + ReactorUI = Love!")
+                    .FontSize(24)
+                    .VCenter()
+                    .HCenter(),
                 Page.Counter => new CounterComponent(),
                 Page.Items => new ItemsControlComponent(),
                 Page.Timer => new TimerComponent(),
+                Page.TextBox => new TextBoxComponent(),
                 _ => throw new NotSupportedException(),
             };
         }

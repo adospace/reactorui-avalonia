@@ -71,10 +71,9 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxTextBlock = (IRxTextBlock)this;
             NativeControl.Set(TextBlock.BackgroundProperty, thisAsIRxTextBlock.Background);
             NativeControl.Set(TextBlock.PaddingProperty, thisAsIRxTextBlock.Padding);
@@ -90,6 +89,7 @@ namespace AvaloniaReactorUI
             NativeControl.Set(TextBlock.TextWrappingProperty, thisAsIRxTextBlock.TextWrapping);
             NativeControl.Set(TextBlock.TextTrimmingProperty, thisAsIRxTextBlock.TextTrimming);
             NativeControl.Set(TextBlock.TextDecorationsProperty, thisAsIRxTextBlock.TextDecorations);
+
 
             base.OnUpdate();
 

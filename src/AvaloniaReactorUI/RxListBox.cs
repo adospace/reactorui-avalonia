@@ -51,15 +51,15 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxListBox = (IRxListBox)this;
             NativeControl.Set(ListBox.SelectedItemsProperty, thisAsIRxListBox.SelectedItems);
             NativeControl.Set(ListBox.SelectionProperty, thisAsIRxListBox.Selection);
             NativeControl.Set(ListBox.SelectionModeProperty, thisAsIRxListBox.SelectionMode);
             NativeControl.Set(ListBox.VirtualizationModeProperty, thisAsIRxListBox.VirtualizationMode);
+
 
             base.OnUpdate();
 

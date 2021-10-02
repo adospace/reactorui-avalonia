@@ -47,13 +47,13 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxAnimatable = (IRxAnimatable)this;
             NativeControl.Set(Animatable.ClockProperty, thisAsIRxAnimatable.Clock);
             NativeControl.SetNullable(Animatable.TransitionsProperty, thisAsIRxAnimatable.Transitions);
+
 
             base.OnUpdate();
 

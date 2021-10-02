@@ -53,14 +53,14 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxControl = (IRxControl)this;
             NativeControl.SetNullable(Control.TagProperty, thisAsIRxControl.Tag);
             NativeControl.SetNullable(Control.ContextMenuProperty, thisAsIRxControl.ContextMenu);
             NativeControl.SetNullable(Control.ContextFlyoutProperty, thisAsIRxControl.ContextFlyout);
+
 
             base.OnUpdate();
 

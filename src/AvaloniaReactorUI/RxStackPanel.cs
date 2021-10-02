@@ -47,13 +47,13 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxStackPanel = (IRxStackPanel)this;
             NativeControl.Set(StackPanel.SpacingProperty, thisAsIRxStackPanel.Spacing);
             NativeControl.Set(StackPanel.OrientationProperty, thisAsIRxStackPanel.Orientation);
+
 
             base.OnUpdate();
 

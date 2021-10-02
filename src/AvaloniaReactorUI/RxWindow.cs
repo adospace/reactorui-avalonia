@@ -67,10 +67,9 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxWindow = (IRxWindow)this;
             NativeControl.Set(Window.SizeToContentProperty, thisAsIRxWindow.SizeToContent);
             NativeControl.Set(Window.ExtendClientAreaToDecorationsHintProperty, thisAsIRxWindow.ExtendClientAreaToDecorationsHint);
@@ -84,6 +83,7 @@ namespace AvaloniaReactorUI
             NativeControl.Set(Window.IconProperty, thisAsIRxWindow.Icon);
             NativeControl.Set(Window.WindowStartupLocationProperty, thisAsIRxWindow.WindowStartupLocation);
             NativeControl.Set(Window.CanResizeProperty, thisAsIRxWindow.CanResize);
+
 
             base.OnUpdate();
 

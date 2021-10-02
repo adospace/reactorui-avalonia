@@ -45,12 +45,12 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxPanel = (IRxPanel)this;
             NativeControl.Set(Panel.BackgroundProperty, thisAsIRxPanel.Background);
+
 
             base.OnUpdate();
 

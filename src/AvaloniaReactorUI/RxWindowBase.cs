@@ -45,12 +45,12 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxWindowBase = (IRxWindowBase)this;
             NativeControl.Set(WindowBase.TopmostProperty, thisAsIRxWindowBase.Topmost);
+
 
             base.OnUpdate();
 

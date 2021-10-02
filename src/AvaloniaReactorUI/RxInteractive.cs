@@ -41,6 +41,14 @@ namespace AvaloniaReactorUI
 
 
 
+        protected override void OnUpdate()
+        {
+            OnBeginUpdate();
+
+            base.OnUpdate();
+
+            OnEndUpdate();
+        }
 
         partial void OnBeginUpdate();
         partial void OnEndUpdate();

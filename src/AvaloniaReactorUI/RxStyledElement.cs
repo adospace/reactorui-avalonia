@@ -45,12 +45,12 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxStyledElement = (IRxStyledElement)this;
             NativeControl.SetNullable(StyledElement.DataContextProperty, thisAsIRxStyledElement.DataContext);
+
 
             base.OnUpdate();
 

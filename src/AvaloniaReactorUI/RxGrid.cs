@@ -45,12 +45,12 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxGrid = (IRxGrid)this;
             NativeControl.Set(Grid.ShowGridLinesProperty, thisAsIRxGrid.ShowGridLines);
+
 
             base.OnUpdate();
 

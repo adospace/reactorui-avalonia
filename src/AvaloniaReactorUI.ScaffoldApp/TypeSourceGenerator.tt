@@ -70,23 +70,23 @@ namespace AvaloniaReactorUI
         Action<<#= ev.EventHandlerType.GetGenericArguments()[0].Name #>>? IRx<#= TypeName #>.<#= ev.Name #>ActionWithArgs { get; set; }
         <# } #>
 
-        <# if (Properties.Any()) { #>
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
+            <# if (Properties.Any()) { #>
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRx<#= TypeName #> = (IRx<#= TypeName #>)this;
             <# foreach (var property in Properties) { #>
             NativeControl.Set<#= NullableTypeHelper.IsNullable(property) ? "Nullable" : string.Empty #>(<#= TypeName #>.<#= property.Name #>Property, thisAsIRx<#= TypeName #>.<#= property.Name #>);
+            <# } #>
+
             <# } #>
 
             base.OnUpdate();
 
             OnEndUpdate();
         }
-        <# } #>
 
         partial void OnBeginUpdate();
         partial void OnEndUpdate();

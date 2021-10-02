@@ -55,15 +55,15 @@ namespace AvaloniaReactorUI
 
         protected override void OnUpdate()
         {
-            Validate.EnsureNotNull(NativeControl);
-
             OnBeginUpdate();
 
+            Validate.EnsureNotNull(NativeControl);
             var thisAsIRxSelectingItemsControl = (IRxSelectingItemsControl)this;
             NativeControl.Set(SelectingItemsControl.AutoScrollToSelectedItemProperty, thisAsIRxSelectingItemsControl.AutoScrollToSelectedItem);
             NativeControl.Set(SelectingItemsControl.SelectedIndexProperty, thisAsIRxSelectingItemsControl.SelectedIndex);
             NativeControl.SetNullable(SelectingItemsControl.SelectedItemProperty, thisAsIRxSelectingItemsControl.SelectedItem);
             NativeControl.Set(SelectingItemsControl.IsTextSearchEnabledProperty, thisAsIRxSelectingItemsControl.IsTextSearchEnabled);
+
 
             base.OnUpdate();
 
