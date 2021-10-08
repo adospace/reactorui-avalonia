@@ -3,27 +3,35 @@ using System.Collections.Generic;
 
 namespace AvaloniaReactorUI
 {
-    public class RxContext : Dictionary<string, object>
+    public sealed class RxContext
     {
-        public RxContext()
-        { }
-
-        public RxContext(Action<RxContext> builderAction)
+        public RxContext(RxComponent owner)
         {
-            if (builderAction is null)
+            Owner = owner;
+        }
+
+        public Dictionary<string, object> Properties { get; } = new();
+
+        public ParameterContext Parameters { get; } = new ParameterContext();
+
+        public RxComponent Owner { get; }
+
+        internal void MigrateTo(RxContext context)
+        {
+            foreach (var propertEntry in Properties)
             {
-                throw new ArgumentNullException(nameof(builderAction));
+                context.Properties[propertEntry.Key] = propertEntry.Value;
             }
 
-            builderAction(this);
+            Parameters.MigrateTo(context.Parameters);
         }
     }
 
     public static class RxContextExtensions
     {
-        public static T? Get<T>(this RxContext context, string key, T? defaultValue = default)
+        public static T? GetProperty<T>(this RxContext context, string key, T? defaultValue = default)
         {
-            if (context.TryGetValue(key, out var value))
+            if (context.Properties.TryGetValue(key, out var value))
                 return (T)value;
 
             return defaultValue;

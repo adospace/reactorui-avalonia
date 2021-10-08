@@ -10,13 +10,15 @@ using Avalonia.Threading;
 
 namespace AvaloniaReactorUI
 {
-    public interface IRxComponent
-    {
-        RxContext Context { get; }
-    }
-
     public abstract class RxComponent : VisualNode, IEnumerable<VisualNode>
     {
+        public RxComponent()
+        {
+            Context = new RxContext(this);
+        }
+
+        public RxContext Context { get; }
+
         public abstract VisualNode Render();
 
         private readonly List<VisualNode> _children = new();
@@ -105,6 +107,11 @@ namespace AvaloniaReactorUI
 
         internal override void MergeWith(VisualNode newNode)
         {
+            if (newNode is RxComponent newComponent)
+            {
+                Context.MigrateTo(newComponent.Context);
+            }
+
             if (newNode.GetType().FullName == GetType().FullName)
             {
                 ((RxComponent)newNode)._isMounted = true;
@@ -149,18 +156,16 @@ namespace AvaloniaReactorUI
         protected virtual void OnUpdated()
         { }
 
-        public static RxContext? Context
-            => RxApplication.Instance?.Context;
-
-    }
-
-    public static class RxComponentExtensions
-    {
-        public static T WithContext<T>(this T node, string key, object value) where T : IRxComponent
+        internal void InvalidateComponent()
         {
-            node.Context[key] = value;
-            return node;
+            if (!Dispatcher.UIThread.CheckAccess())
+                Dispatcher.UIThread.Post(Invalidate);
+            else
+                Invalidate();
         }
+
+        public IParameter<T> Parameter<T>(string? name = null) where T : new()
+            => Context.Parameters.GetOrCreate<T>(name);
     }
 
     internal interface IRxComponentWithState
@@ -183,28 +188,11 @@ namespace AvaloniaReactorUI
     {
     }
 
-    public interface IProps
-    {
-    }
-
-    public abstract class RxComponentWithProps<P> : RxComponent, IRxComponentWithProps where P : class, IProps, new()
-    {
-        public RxComponentWithProps(P? props = null)
-        {
-            Props = props ?? new P();
-        }
-
-        public P Props { get; private set; }
-        object IRxComponentWithProps.Props => Props;
-        public PropertyInfo[] PropsProperties => typeof(P).GetProperties().Where(_ => _.CanWrite).ToArray();
-    }
-
-    public abstract class RxComponent<S, P> : RxComponentWithProps<P>, IRxComponentWithState where S : class, IState, new() where P : class, IProps, new()
+    public abstract class RxComponent<S> : RxComponent, IRxComponentWithState where S : class, IState, new()
     {
         private IRxComponentWithState? _newComponent;
         
-        protected RxComponent(S? state = null, P? props = null)
-            : base(props)
+        protected RxComponent(S? state = null)
         {
             State = state ?? new S();
         }
@@ -255,24 +243,7 @@ namespace AvaloniaReactorUI
                 State.CopyPropertiesTo(newComponentWithState.State, newComponentWithState.StateProperties);
             }
 
-            if (newNode is IRxComponentWithProps newComponentWithProps)
-            {
-                Props.CopyPropertiesTo(newComponentWithProps.Props, newComponentWithProps.PropsProperties);
-            }
-
             base.MergeWith(newNode);
         }
     }
-
-    public class EmptyProps : IProps
-    { }
-
-    public abstract class RxComponent<S> : RxComponent<S, EmptyProps> where S : class, IState, new()
-    {
-        protected RxComponent(S? state = null, EmptyProps? props = null)
-            : base(state, props)
-        {
-        }
-    }
-
 }
