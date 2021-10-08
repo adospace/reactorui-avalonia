@@ -90,7 +90,7 @@ namespace AvaloniaReactorUI
 
         protected internal override void OnLayoutCycleRequested()
         {
-            Layout();
+            //Layout();
             base.OnLayoutCycleRequested();
         }
     }
@@ -104,7 +104,7 @@ namespace AvaloniaReactorUI
                 {
                     VisualNode newRoot = renderFunc(item);
                     var itemTemplateNode = new ItemTemplateNode(newRoot);
-                    itemTemplateNode.Layout();
+                    itemTemplateNode.Layout(itemscontrol);
                     return itemTemplateNode.RootControl;
                 }));
 

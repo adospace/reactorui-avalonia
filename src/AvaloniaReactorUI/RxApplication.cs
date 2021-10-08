@@ -47,11 +47,11 @@ namespace AvaloniaReactorUI
         // public static RxApplication CreateWithHotReload<T>(Application application) where T : RxComponent, new()
         //     => new RxHotReloadApplication<T>(application);
 
-        public RxApplication WithContext(string key, object value)
-        {
-            Context[key] = value;
-            return this;
-        }
+        //public RxApplication WithContext(string key, object value)
+        //{
+        //    Context.Properties[key] = value;
+        //    return this;
+        //}
 
         public RxApplication OnUnhandledException(Action<UnhandledExceptionEventArgs> action)
         {
@@ -61,7 +61,7 @@ namespace AvaloniaReactorUI
 
         //public INavigation Navigation => _application.MainWindow?.Navigation;
 
-        public RxContext Context { get; } = new RxContext();
+        //ublic RxContext Context { get; }
 
         public Window? ContainerWindow
         {
@@ -172,7 +172,7 @@ namespace AvaloniaReactorUI
         {
             try
             {
-                Layout();
+                Layout(this);
                 SetupAnimationTimer();
             }
             catch (Exception ex)

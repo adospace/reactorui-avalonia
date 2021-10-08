@@ -8,11 +8,12 @@ namespace AvaloniaReactorUI
         public RxContext(RxComponent owner)
         {
             Owner = owner;
+            Parameters = new ParameterContext(this);
         }
 
         public Dictionary<string, object> Properties { get; } = new();
 
-        public ParameterContext Parameters { get; } = new ParameterContext();
+        public ParameterContext Parameters { get; }
 
         public RxComponent Owner { get; }
 

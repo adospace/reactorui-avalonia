@@ -164,8 +164,40 @@ namespace AvaloniaReactorUI
                 Invalidate();
         }
 
-        public IParameter<T> Parameter<T>(string? name = null) where T : new()
-            => Context.Parameters.GetOrCreate<T>(name);
+        public IParameter<T> CreateParameter<T>(string? name = null) where T : new()
+            => Context.Parameters.Create<T>(name);
+
+        //private RxComponent? FindParent()
+        //{
+        //    var parent = Parent;
+        //    while (parent != null && parent is not RxComponent)
+        //    {
+        //        parent = parent.Parent;
+        //    }
+
+        //    return parent as RxComponent;
+        //}
+
+        public IParameter<T> GetParameter<T>(string? name = null) where T : new()
+        {
+            IParameter<T>? parameter = Context.Parameters.Get<T>(name);
+
+            while (true)
+            { 
+                var parentComponent = GetParent<RxComponent>();
+                if (parentComponent == null)
+                    break;
+                parameter = parentComponent.Context.Parameters.Get<T>(name);
+
+                if (parameter != null)
+                {
+                    Context.Parameters.Register(parameter = new ParameterReference<T>(Context.Parameters, (parameter as IParameterWithReferences<T>) ?? throw new InvalidOperationException($"Parameter '{name}' is not of type {typeof(T).FullName}")));
+                    break;
+                }
+            }
+
+            return parameter ?? throw new InvalidOperationException($"Unable to find parameter with name '{typeof(T).FullName}'");
+        }
     }
 
     internal interface IRxComponentWithState

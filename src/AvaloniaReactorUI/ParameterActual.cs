@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AvaloniaReactorUI.Internals;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +7,28 @@ using System.Threading.Tasks;
 
 namespace AvaloniaReactorUI
 {
-    public interface IParameter<T> where T : new()
+    public interface IParameter
     {
         string Name { get; }
 
+        object GetValue();
+    }
+
+    public interface IParameter<T> : IParameter where T : new()
+    {
         T Value { get; }
 
         void Set(Action<T> setAction);
+
+        ParameterContext Context { get; }
     }
 
-    internal class ParameterActual<T> : IParameter<T> where T : new()
+    internal interface IParameterWithReferences<T> : IParameter<T> where T : new()
+    {
+        void RegisterReference(ParameterReference<T> reference);
+    }
+
+    internal class ParameterActual<T> : IParameterWithReferences<T> where T : new()
     {
         private readonly HashSet<ParameterReference<T>> _parameterReferences = new();
 
@@ -28,14 +41,20 @@ namespace AvaloniaReactorUI
         public ParameterContext Context { get; }
         public string Name { get; }
 
-        private T _value = new();
+        private readonly T _value = new();
 
         public T Value => _value;
+
+        object IParameter.GetValue() => Value!;
 
         public void Set(Action<T> setAction)
         {
             setAction(_value);
             Context.Owner.Owner.InvalidateComponent();
+            foreach (var componetOfReferencedParameter in _parameterReferences)
+            {
+                componetOfReferencedParameter.Context.Owner.Owner.InvalidateComponent();
+            }
         }
 
         public void RegisterReference(ParameterReference<T> reference)
@@ -46,15 +65,22 @@ namespace AvaloniaReactorUI
 
     internal class ParameterReference<T> : IParameter<T> where T : new()
     {
-        public ParameterReference(ParameterActual<T> actualParameter)
+        private readonly IParameter<T> _actualParameter;
+        
+        public ParameterReference(ParameterContext context, IParameterWithReferences<T> actualParameter)
         {
+            Context = context;
             _actualParameter = actualParameter;
+            actualParameter.RegisterReference(this);
         }
 
         public string Name => _actualParameter.Name;
-        private readonly ParameterActual<T> _actualParameter;
+
+        public ParameterContext Context { get; }
 
         public T Value => _actualParameter.Value;
+
+        object IParameter.GetValue() => Value!;
 
         public void Set(Action<T> setAction)
         {
@@ -64,7 +90,7 @@ namespace AvaloniaReactorUI
 
     public sealed class ParameterContext
     {
-        private Dictionary<string, object> _parameters = new();
+        private readonly Dictionary<string, IParameter> _parameters = new();
 
         public RxContext Owner { get; }
 
@@ -77,11 +103,14 @@ namespace AvaloniaReactorUI
         {
             foreach (var parameterEntry in _parameters)
             {
-                destinationContext._parameters[parameterEntry.Key] = parameterEntry.Value;
+                if (destinationContext._parameters.TryGetValue(parameterEntry.Key, out var destinationParameter))
+                {
+                    parameterEntry.Value.CopyPropertiesTo(destinationParameter.GetValue(), destinationParameter.GetValue().GetType().GetProperties().Where(_ => _.CanWrite).ToArray());
+                }
             }
         }
 
-        public IParameter<T> GetOrCreate<T>(string? name = null) where T : new()
+        public IParameter<T> Create<T>(string? name = null) where T : new()
         {
             name ??= typeof(T).FullName ?? throw new InvalidOperationException();
             _parameters.TryGetValue(name, out var parameter);
@@ -90,12 +119,22 @@ namespace AvaloniaReactorUI
             {
                 _parameters[name] = parameter = new ParameterActual<T>(this, name);
             }
-            else
-            {
-                _parameters[name] = parameter = new ParameterReference<T>((parameter as ParameterActual<T>) ?? throw new InvalidOperationException($"Parameter '{name}' is not of type {typeof(T).FullName}"));
-            }
 
             return (IParameter<T>)parameter;
+        }
+
+        public IParameter<T>? Get<T>(string? name = null) where T : new()
+        {
+            name ??= typeof(T).FullName ?? throw new InvalidOperationException();
+            _parameters.TryGetValue(name, out var parameter);
+
+            return parameter as IParameter<T>;
+        }
+
+        public void Register<T>(IParameter<T> parameter, string? name = null) where T : new()
+        {
+            name ??= typeof(T).FullName ?? throw new InvalidOperationException();
+            _parameters[name] = parameter;
         }
     }
     
