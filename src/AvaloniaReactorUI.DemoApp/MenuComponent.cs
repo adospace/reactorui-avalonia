@@ -14,6 +14,7 @@ namespace AvaloniaReactorUI.DemoApp
             {
                 new RxMenuItem("Menu1")
                 {
+                    new RxCheckBox(),
                     new RxMenuItem("Menu1-Child1")
                     {
                         new RxMenuItem("Menu1-Child1-Child1")

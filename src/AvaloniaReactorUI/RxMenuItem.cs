@@ -26,7 +26,6 @@ namespace AvaloniaReactorUI
         PropertyValue<ICommand?>? Command { get; set; }
         PropertyValue<KeyGesture?>? HotKey { get; set; }
         PropertyValue<object>? CommandParameter { get; set; }
-        PropertyValue<object>? Icon { get; set; }
         PropertyValue<KeyGesture>? InputGesture { get; set; }
         PropertyValue<bool>? IsSelected { get; set; }
         PropertyValue<bool>? IsSubMenuOpen { get; set; }
@@ -57,7 +56,6 @@ namespace AvaloniaReactorUI
         PropertyValue<ICommand?>? IRxMenuItem.Command { get; set; }
         PropertyValue<KeyGesture?>? IRxMenuItem.HotKey { get; set; }
         PropertyValue<object>? IRxMenuItem.CommandParameter { get; set; }
-        PropertyValue<object>? IRxMenuItem.Icon { get; set; }
         PropertyValue<KeyGesture>? IRxMenuItem.InputGesture { get; set; }
         PropertyValue<bool>? IRxMenuItem.IsSelected { get; set; }
         PropertyValue<bool>? IRxMenuItem.IsSubMenuOpen { get; set; }
@@ -80,7 +78,6 @@ namespace AvaloniaReactorUI
             NativeControl.SetNullable(MenuItem.CommandProperty, thisAsIRxMenuItem.Command);
             NativeControl.SetNullable(MenuItem.HotKeyProperty, thisAsIRxMenuItem.HotKey);
             NativeControl.Set(MenuItem.CommandParameterProperty, thisAsIRxMenuItem.CommandParameter);
-            NativeControl.Set(MenuItem.IconProperty, thisAsIRxMenuItem.Icon);
             NativeControl.Set(MenuItem.InputGestureProperty, thisAsIRxMenuItem.InputGesture);
             NativeControl.Set(MenuItem.IsSelectedProperty, thisAsIRxMenuItem.IsSelected);
             NativeControl.Set(MenuItem.IsSubMenuOpenProperty, thisAsIRxMenuItem.IsSubMenuOpen);
@@ -185,11 +182,6 @@ namespace AvaloniaReactorUI
         public static T CommandParameter<T>(this T menuitem, object commandParameter) where T : IRxMenuItem
         {
             menuitem.CommandParameter = new PropertyValue<object>(commandParameter);
-            return menuitem;
-        }
-        public static T Icon<T>(this T menuitem, object icon) where T : IRxMenuItem
-        {
-            menuitem.Icon = new PropertyValue<object>(icon);
             return menuitem;
         }
         public static T InputGesture<T>(this T menuitem, KeyGesture inputGesture) where T : IRxMenuItem

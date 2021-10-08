@@ -26,21 +26,21 @@ namespace AvaloniaReactorUI
     {
     }
 
-    public partial class RxMenuItem<T> : RxHeaderedSelectingItemsControl<T>, IRxMenuItem, IEnumerable<RxMenuItem> where T : MenuItem, new()
+    public partial class RxMenuItem<T> : RxHeaderedSelectingItemsControl<T>, IRxMenuItem, IEnumerable<VisualNode> where T : MenuItem, new()
     {
-        private readonly List<RxMenuItem> _contents = new();
+        private readonly List<VisualNode> _contents = new();
 
         public RxMenuItem(string header)
         {
             ((IRxMenuItem)this).Header = new PropertyValue<object>(header);
         }
 
-        public void Add(RxMenuItem child)
+        public void Add(VisualNode child)
         {
             _contents.Add(child);
         }
 
-        public IEnumerator<RxMenuItem> GetEnumerator()
+        public IEnumerator<VisualNode> GetEnumerator()
         {
             return _contents.GetEnumerator();
         }
@@ -54,7 +54,14 @@ namespace AvaloniaReactorUI
                 NativeControl.Items ??= new ObservableCollection<MenuItem>();
                 Validate.EnsureNotNull(NativeControl.Items as ObservableCollection<MenuItem>).Add(menuItem);
             }
-
+            else if (childControl is Image image)
+            {
+                NativeControl.Icon = image;
+            }
+            else if (childControl is CheckBox checkBox)
+            {
+                NativeControl.Icon = checkBox;
+            }
 
             base.OnAddChild(widget, childControl);
         }
@@ -67,11 +74,19 @@ namespace AvaloniaReactorUI
             {
                 Validate.EnsureNotNull(NativeControl.Items as ObservableCollection<MenuItem>).Remove(menuItem);
             }
+            else if (childControl is Image)
+            {
+                NativeControl.Icon = null!;
+            }
+            else if (childControl is CheckBox)
+            {
+                NativeControl.Icon = null!;
+            }
 
             base.OnRemoveChild(widget, childControl);
         }
 
-        protected override IEnumerable<RxMenuItem> RenderChildren()
+        protected override IEnumerable<VisualNode> RenderChildren()
         {
             return _contents;
         }
