@@ -24,3 +24,6 @@ Avalonia.Controls.Primitives.HeaderedItemsControl
 Avalonia.Controls.TreeViewItem
 Avalonia.Controls.ItemsRepeater
 Avalonia.Controls.DataGrid AvaloniaReactorUI.DataGrid
+Avalonia.Controls.CheckBox
+Avalonia.Controls.ComboBox
+Avalonia.Controls.Primitives.ToggleButton

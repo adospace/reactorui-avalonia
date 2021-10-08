@@ -23,12 +23,12 @@ namespace AvaloniaReactorUI
 {
     public partial interface IRxDataGrid : IRxTemplatedControl
     {
-        DataGridColumn[] Columns { get; set; }
+        DataGridColumn[]? Columns { get; set; }
     }
 
     public partial class RxDataGrid<T> : RxTemplatedControl<T>, IRxDataGrid where T : DataGrid, new()
     {
-        DataGridColumn[] IRxDataGrid.Columns { get; set; }
+        DataGridColumn[]? IRxDataGrid.Columns { get; set; }
 
         partial void OnBeginUpdate()
         {
@@ -36,31 +36,38 @@ namespace AvaloniaReactorUI
 
             var thisAsIRxDataGrid = (IRxDataGrid)this;
             int iColumn = 0;
-            while (true)
+            if (thisAsIRxDataGrid.Columns != null)
             {
-                if (iColumn < thisAsIRxDataGrid.Columns.Length && iColumn < NativeControl.Columns.Count)
+                while (true)
                 {
-                    if (thisAsIRxDataGrid.Columns[iColumn] != NativeControl.Columns[iColumn])
+                    if (iColumn < thisAsIRxDataGrid.Columns.Length && iColumn < NativeControl.Columns.Count)
+                    {
+                        if (thisAsIRxDataGrid.Columns[iColumn] != NativeControl.Columns[iColumn])
+                        {
+                            NativeControl.Columns.RemoveAt(iColumn);
+                            NativeControl.Columns.Insert(iColumn, thisAsIRxDataGrid.Columns[iColumn]);
+                        }
+
+                        iColumn++;
+                    }
+                    else if (iColumn < thisAsIRxDataGrid.Columns.Length && iColumn >= NativeControl.Columns.Count)
+                    {
+                        NativeControl.Columns.Add(thisAsIRxDataGrid.Columns[iColumn]);
+                        iColumn++;
+                    }
+                    else if (iColumn >= thisAsIRxDataGrid.Columns.Length && iColumn < NativeControl.Columns.Count)
                     {
                         NativeControl.Columns.RemoveAt(iColumn);
-                        NativeControl.Columns.Insert(iColumn, thisAsIRxDataGrid.Columns[iColumn]);
                     }
-
-                    iColumn++;
+                    else
+                    {
+                        break;
+                    }
                 }
-                else if (iColumn < thisAsIRxDataGrid.Columns.Length && iColumn >= NativeControl.Columns.Count)
-                {
-                    NativeControl.Columns.Add(thisAsIRxDataGrid.Columns[iColumn]);
-                    iColumn++;
-                }
-                else if (iColumn >= thisAsIRxDataGrid.Columns.Length && iColumn < NativeControl.Columns.Count)
-                {
-                    NativeControl.Columns.RemoveAt(iColumn);
-                }
-                else
-                {
-                    break;
-                }
+            }
+            else
+            {
+                NativeControl.Columns.Clear();
             }
         }
     }
