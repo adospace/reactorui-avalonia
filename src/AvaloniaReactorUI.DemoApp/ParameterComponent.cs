@@ -26,8 +26,7 @@ namespace AvaloniaReactorUI.DemoApp
             {
                 new RxButton()
                     .Content("Increment from parent")
-                    .OnClick(()=> _customParameter.Set(_=>_.Numeric++)),
-
+                    .OnClick(()=> _customParameter.Set(_=>_.Numeric += 1   )),                
                 new RxTextBlock()
                     .Text(_customParameter.Value.Numeric.ToString()!),
 

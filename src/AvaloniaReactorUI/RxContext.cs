@@ -11,7 +11,7 @@ namespace AvaloniaReactorUI
             Parameters = new ParameterContext(this);
         }
 
-        public Dictionary<string, object> Properties { get; } = new();
+        //public Dictionary<string, object> Properties { get; } = new();
 
         public ParameterContext Parameters { get; }
 
@@ -19,10 +19,10 @@ namespace AvaloniaReactorUI
 
         internal void MigrateTo(RxContext context)
         {
-            foreach (var propertEntry in Properties)
-            {
-                context.Properties[propertEntry.Key] = propertEntry.Value;
-            }
+            //foreach (var propertEntry in Properties)
+            //{
+            //    context.Properties[propertEntry.Key] = propertEntry.Value;
+            //}
 
             Parameters.MigrateTo(context.Parameters);
         }
@@ -30,12 +30,12 @@ namespace AvaloniaReactorUI
 
     public static class RxContextExtensions
     {
-        public static T? GetProperty<T>(this RxContext context, string key, T? defaultValue = default)
-        {
-            if (context.Properties.TryGetValue(key, out var value))
-                return (T)value;
+        //public static T? GetProperty<T>(this RxContext context, string key, T? defaultValue = default)
+        //{
+        //    if (context.Properties.TryGetValue(key, out var value))
+        //        return (T)value;
 
-            return defaultValue;
-        }
+        //    return defaultValue;
+        //}
     }
 }

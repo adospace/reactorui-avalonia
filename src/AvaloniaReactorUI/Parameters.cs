@@ -28,11 +28,11 @@ namespace AvaloniaReactorUI
         void RegisterReference(ParameterReference<T> reference);
     }
 
-    internal class ParameterActual<T> : IParameterWithReferences<T> where T : new()
+    internal class Parameters<T> : IParameterWithReferences<T> where T : new()
     {
-        private readonly HashSet<ParameterReference<T>> _parameterReferences = new();
+        private readonly HashSet<WeakReference<ParameterReference<T>>> _parameterReferences = new();
 
-        public ParameterActual(ParameterContext context, string name)
+        public Parameters(ParameterContext context, string name)
         {
             Context = context;
             Name = name;
@@ -51,15 +51,23 @@ namespace AvaloniaReactorUI
         {
             setAction(_value);
             Context.Owner.Owner.InvalidateComponent();
-            foreach (var componetOfReferencedParameter in _parameterReferences)
+
+            foreach (var componetOfReferencedParameter in _parameterReferences.ToList())
             {
-                componetOfReferencedParameter.Context.Owner.Owner.InvalidateComponent();
+                if (componetOfReferencedParameter.TryGetTarget(out var componetOfReferencedParameterValue))
+                {
+                    componetOfReferencedParameterValue.Context.Owner.Owner.InvalidateComponent();
+                }
+                else
+                {
+                    _parameterReferences.Remove(componetOfReferencedParameter);
+                }                
             }
         }
 
         public void RegisterReference(ParameterReference<T> reference)
         {
-            _parameterReferences.Add(reference);
+            _parameterReferences.Add(new WeakReference<ParameterReference<T>>(reference));
         }
     }
 
@@ -105,7 +113,9 @@ namespace AvaloniaReactorUI
             {
                 if (destinationContext._parameters.TryGetValue(parameterEntry.Key, out var destinationParameter))
                 {
-                    parameterEntry.Value.CopyPropertiesTo(destinationParameter.GetValue(), destinationParameter.GetValue().GetType().GetProperties().Where(_ => _.CanWrite).ToArray());
+                    CopyObjectExtensions.CopyPropertiesTo(
+                        parameterEntry.Value.GetValue(),
+                        destinationParameter.GetValue());
                 }
             }
         }
@@ -117,7 +127,7 @@ namespace AvaloniaReactorUI
 
             if (parameter == null)
             {
-                _parameters[name] = parameter = new ParameterActual<T>(this, name);
+                _parameters[name] = parameter = new Parameters<T>(this, name);
             }
 
             return (IParameter<T>)parameter;

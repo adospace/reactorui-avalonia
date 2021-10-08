@@ -24,7 +24,7 @@ namespace AvaloniaReactorUI.HotReloader
 
             TryBuildProject(true);
 
-            using var fs = new FileSystemWatcher(
+            _fileSystemWatcher = new FileSystemWatcher(
                 _folderToMonitor,
                 "*.cs")
             {
@@ -38,7 +38,6 @@ namespace AvaloniaReactorUI.HotReloader
                 IncludeSubdirectories = true
             };
 
-            _fileSystemWatcher = fs;
             _fileSystemWatcher.Changed += OnFileChanged;
             _fileSystemWatcher.Error += OnFileError;
 
@@ -51,9 +50,12 @@ namespace AvaloniaReactorUI.HotReloader
 
             exitEvent.WaitOne();
 
+
             _fileSystemWatcher.EnableRaisingEvents = false;
             _fileSystemWatcher.Changed -= OnFileChanged;
             _fileSystemWatcher.Error -= OnFileError;
+            _fileSystemWatcher.Dispose();
+            _fileSystemWatcher = null;
         }
 
         private static void OnFileError(object sender, ErrorEventArgs e)

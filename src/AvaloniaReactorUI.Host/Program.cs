@@ -27,7 +27,7 @@ namespace AvaloniaReactorUI.Host
             }
 
             bool isDll = Path.GetExtension(assemblyPath).ToLowerInvariant() == ".dll";
-            if (isDll)
+            if (!isDll)
             {
                 Trace.WriteLine($"[AvaloniaReactorUI] WARNING: Assembly path extension is not '.dll'");
             }

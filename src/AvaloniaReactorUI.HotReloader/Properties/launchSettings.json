@@ -2,7 +2,7 @@
   "profiles": {
     "AvaloniaReactorUI.HotReloader": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\Source\\github\\reactorui-avalonia\\src\\AvaloniaReactorUI.DemoApp C:\\Source\\github\\reactorui-avalonia\\src\\AvaloniaReactorUI.DemoApp\\bin\\Debug\\net5.0\\AvaloniaReactorUI.DemoApp.dll"
+      "commandLineArgs": "C:\\Source\\github\\AvalonCode\\reactorui-avalonia\\src\\AvaloniaReactorUI.DemoApp C:\\Source\\github\\AvalonCode\\reactorui-avalonia\\src\\AvaloniaReactorUI.DemoApp\\bin\\Debug\\net5.0\\AvaloniaReactorUI.DemoApp.dll"
     }
   }
 }
