@@ -19,3 +19,7 @@ Avalonia.Controls.Primitives.SelectingItemsControl
 Avalonia.Controls.ListBox
 Avalonia.Controls.Grid
 Avalonia.Controls.TextBox
+Avalonia.Controls.TreeView
+Avalonia.Controls.Primitives.HeaderedItemsControl
+Avalonia.Controls.TreeViewItem
+

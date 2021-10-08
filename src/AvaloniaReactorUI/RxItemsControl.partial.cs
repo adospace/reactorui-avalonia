@@ -110,5 +110,19 @@ namespace AvaloniaReactorUI
 
             return itemscontrol;
         }
+
+        public static T OnRenderTreeItem<T, I>(this T itemscontrol, Func<I, VisualNode> renderFunc, Func<I, IEnumerable> itemsSelectorFunc) where T : IRxItemsControl
+        {
+            itemscontrol.ItemTemplate = new PropertyValue<IDataTemplate>(
+                new FuncTreeDataTemplate<I>((item, ns) =>
+                {
+                    VisualNode newRoot = renderFunc(item);
+                    var itemTemplateNode = new ItemTemplateNode(newRoot);
+                    itemTemplateNode.Layout(itemscontrol);
+                    return (itemTemplateNode.RootControl as Control) ?? throw new InvalidOperationException();
+                }, itemsSelectorFunc));
+
+            return itemscontrol;
+        }
     }
 }

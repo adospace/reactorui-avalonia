@@ -40,19 +40,17 @@ namespace AvaloniaReactorUI.DemoApp
 
     partial class ParameterChildComponent : RxComponent
     {
-        private IParameter<CustomParameter> _customParameter;
-
         public override VisualNode Render()
         {
-            _customParameter = GetParameter<CustomParameter>();
+            var customParameter = GetParameter<CustomParameter>();
             return new RxStackPanel
             {
                 new RxButton()
                     .Content("Increment from child")
-                    .OnClick(()=> _customParameter.Set(_=>_.Numeric++)),
+                    .OnClick(()=> customParameter.Set(_=>_.Numeric++)),
 
                 new RxTextBlock()
-                    .Text(_customParameter.Value.Numeric.ToString()!),
+                    .Text(customParameter.Value.Numeric.ToString()!),
             }
             .Spacing(10);
         }

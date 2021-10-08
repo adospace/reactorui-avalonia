@@ -31,6 +31,9 @@ namespace AvaloniaReactorUI.ScaffoldConsole
 
             foreach (var classNameToGenerate in File.ReadAllLines("WidgetList.txt"))
             {
+                if (string.IsNullOrWhiteSpace(classNameToGenerate))
+                    continue;
+
                 var typeToGenerate = types[classNameToGenerate];
                 var targetPath = Path.Combine(args[0], $"Rx{typeToGenerate.Name}.cs");
                 Console.WriteLine($"Generating {typeToGenerate.FullName} to {targetPath}...");

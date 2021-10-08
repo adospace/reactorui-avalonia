@@ -20,7 +20,7 @@ namespace AvaloniaReactorUI
         public static void SetNullable<T>(this AvaloniaObject avaloniaObject, AvaloniaProperty<T?> property, PropertyValue<T?>? propertyValue)
         {
             if (propertyValue == null)
-                avaloniaObject.SetValue(property, AvaloniaProperty.UnsetValue);
+                avaloniaObject.ClearValue(property);
             else
                 avaloniaObject.SetValue(property, propertyValue.Value);
         }
@@ -35,7 +35,7 @@ namespace AvaloniaReactorUI
             }
 
             if (propertyValue == null)
-                avaloniaObject.SetValue(property, AvaloniaProperty.UnsetValue);
+                avaloniaObject.ClearValue(property);
             else
                 avaloniaObject.SetValue(property, propertyValue.Value);
         }
