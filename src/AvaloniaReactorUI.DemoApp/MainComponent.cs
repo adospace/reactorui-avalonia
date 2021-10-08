@@ -13,7 +13,8 @@ namespace AvaloniaReactorUI.DemoApp
         Items,
         TextBox,
         Parameters,
-        TreeView
+        TreeView,
+        DataGrid
     }
 
     public class MainComponentState : IState
@@ -23,7 +24,7 @@ namespace AvaloniaReactorUI.DemoApp
 
     public class MainComponent : RxComponent<MainComponentState>
     {
-        private static readonly Page[] _pages = new[] { Page.Home, Page.Counter, Page.Timer, Page.Items, Page.TextBox, Page.Parameters, Page.TreeView };
+        private static readonly Page[] _pages = new[] { Page.Home, Page.Counter, Page.Timer, Page.Items, Page.TextBox, Page.Parameters, Page.TreeView, Page.DataGrid };
 
         private VisualNode Menu()=> 
             new RxListBox()
@@ -57,6 +58,7 @@ namespace AvaloniaReactorUI.DemoApp
                 Page.TextBox => new TextBoxComponent(),
                 Page.Parameters => new ParameterParentComponent(),
                 Page.TreeView => new TreeViewComponent(),
+                Page.DataGrid => new DataGridComponent(),
                 _ => throw new NotSupportedException(),
             };
         }

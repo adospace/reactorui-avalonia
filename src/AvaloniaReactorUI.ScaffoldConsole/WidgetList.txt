@@ -22,4 +22,5 @@ Avalonia.Controls.TextBox
 Avalonia.Controls.TreeView
 Avalonia.Controls.Primitives.HeaderedItemsControl
 Avalonia.Controls.TreeViewItem
-
+Avalonia.Controls.ItemsRepeater
+Avalonia.Controls.DataGrid AvaloniaReactorUI.DataGrid

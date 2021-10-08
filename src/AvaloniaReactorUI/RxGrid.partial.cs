@@ -62,8 +62,15 @@ namespace AvaloniaReactorUI
             Validate.EnsureNotNull(NativeControl);
 
             var thisAsIRxGrid = (IRxGrid)this;
-            NativeControl.RowDefinitions = thisAsIRxGrid.Rows;
-            NativeControl.ColumnDefinitions = thisAsIRxGrid.Columns;
+            if (NativeControl.RowDefinitions.ToString() != thisAsIRxGrid.Rows.ToString())
+            {
+                NativeControl.RowDefinitions = thisAsIRxGrid.Rows;
+            }
+
+            if (NativeControl.ColumnDefinitions.ToString() != thisAsIRxGrid.Columns.ToString())
+            {
+                NativeControl.ColumnDefinitions = thisAsIRxGrid.Columns;
+            }
         }
     }
 

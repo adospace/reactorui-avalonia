@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvaloniaReactorUI.ScaffoldC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvaloniaReactorUI.Host", "AvaloniaReactorUI.Host\AvaloniaReactorUI.Host.csproj", "{CCB1E6B8-4B7C-4BE9-8DC3-4D09B5567714}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaReactorUI.HotReloader", "AvaloniaReactorUI.HotReloader\AvaloniaReactorUI.HotReloader.csproj", "{89B2D13B-E365-4053-A3DC-F04AFA00DC8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvaloniaReactorUI.HotReloader", "AvaloniaReactorUI.HotReloader\AvaloniaReactorUI.HotReloader.csproj", "{89B2D13B-E365-4053-A3DC-F04AFA00DC8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaReactorUI.DataGrid", "AvaloniaReactorUI.DataGrid\AvaloniaReactorUI.DataGrid.csproj", "{43521B0E-2BD2-4262-B309-C7BD1A27EE55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{89B2D13B-E365-4053-A3DC-F04AFA00DC8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89B2D13B-E365-4053-A3DC-F04AFA00DC8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89B2D13B-E365-4053-A3DC-F04AFA00DC8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43521B0E-2BD2-4262-B309-C7BD1A27EE55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43521B0E-2BD2-4262-B309-C7BD1A27EE55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43521B0E-2BD2-4262-B309-C7BD1A27EE55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43521B0E-2BD2-4262-B309-C7BD1A27EE55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

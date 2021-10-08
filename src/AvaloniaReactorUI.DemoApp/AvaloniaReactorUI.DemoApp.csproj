@@ -16,6 +16,7 @@
     </AvaloniaResource>
   </ItemGroup>
   <ItemGroup>
+   <ProjectReference Include="..\AvaloniaReactorUI.DataGrid\AvaloniaReactorUI.DataGrid.csproj" />
    <ProjectReference Include="..\AvaloniaReactorUI\AvaloniaReactorUI.csproj" />
   </ItemGroup>
   <ItemGroup>
