@@ -33,4 +33,7 @@ Avalonia.Controls.Menu
 Avalonia.Controls.MenuBase
 Avalonia.Controls.MenuItem
 Avalonia.Controls.Primitives.HeaderedSelectingItemsControl
+Avalonia.Controls.TabControl
+Avalonia.Controls.TabItem
+Avalonia.Controls.Primitives.HeaderedContentControl
 

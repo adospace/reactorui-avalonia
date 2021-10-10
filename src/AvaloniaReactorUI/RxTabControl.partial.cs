@@ -18,39 +18,38 @@ using Avalonia.Controls.Selection;
 using Avalonia.Input.TextInput;
 
 using AvaloniaReactorUI.Internals;
-using System.Linq;
 using System.Collections.ObjectModel;
 
 namespace AvaloniaReactorUI
 {
-    public partial interface IRxMenuBase : IRxSelectingItemsControl
+    public partial interface IRxTabControl : IRxSelectingItemsControl
     {
     }
 
-    public partial class RxMenuBase<T> : RxSelectingItemsControl<T>, IRxMenuBase, IEnumerable<RxMenuItem> where T : MenuBase, new()
+    public partial class RxTabControl<T> : RxSelectingItemsControl<T>, IRxTabControl, IEnumerable<RxTabItem> where T : TabControl, new()
     {
-        private readonly List<RxMenuItem> _menuItems = new();
+        private readonly List<RxTabItem> _contents = new();
 
-        public void Add(RxMenuItem child)
+        public void Add(RxTabItem child)
         {
-            _menuItems.Add(child);
+            _contents.Add(child);
         }
 
-        public IEnumerator<RxMenuItem> GetEnumerator()
+        public IEnumerator<RxTabItem> GetEnumerator()
         {
-            return _menuItems.GetEnumerator();
+            return _contents.GetEnumerator();
         }
 
         protected override void OnAddChild(VisualNode widget, AvaloniaObject childControl)
         {
             Validate.EnsureNotNull(NativeControl);
 
-            if (childControl is MenuItem menuItem)
+            if (childControl is TabItem tabItem)
             {
-                NativeControl.Items ??= new ObservableCollection<MenuItem>();
-                Validate.EnsureNotNull(NativeControl.Items as ObservableCollection<MenuItem>).Add(menuItem);
+                NativeControl.Items ??= new ObservableCollection<TabItem>();
+                Validate.EnsureNotNull(NativeControl.Items as ObservableCollection<TabItem>).Add(tabItem);
             }
-            
+
 
             base.OnAddChild(widget, childControl);
         }
@@ -59,27 +58,28 @@ namespace AvaloniaReactorUI
         {
             Validate.EnsureNotNull(NativeControl);
 
-            if (childControl is MenuItem menuItem)
+            if (childControl is TabItem tabItem)
             {
-                Validate.EnsureNotNull(NativeControl.Items as ObservableCollection<MenuItem>).Remove(menuItem);
+                Validate.EnsureNotNull(NativeControl.Items as ObservableCollection<TabItem>).Remove(tabItem);
             }
 
             base.OnRemoveChild(widget, childControl);
         }
 
-        protected override IEnumerable<RxMenuItem> RenderChildren()
+        protected override IEnumerable<RxTabItem> RenderChildren()
         {
-            return _menuItems;
+            return _contents;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }
-    }
 
-    public static partial class RxMenuBaseExtensions
+
+    }
+    public static partial class RxTabControlExtensions
     {
-    }
 
+    }
 }

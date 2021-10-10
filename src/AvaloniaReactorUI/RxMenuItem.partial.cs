@@ -28,21 +28,21 @@ namespace AvaloniaReactorUI
 
     public partial class RxMenuItem<T> : RxHeaderedSelectingItemsControl<T>, IRxMenuItem, IEnumerable<VisualNode> where T : MenuItem, new()
     {
-        private readonly List<VisualNode> _contents = new();
+        private readonly List<VisualNode> _menuItems = new();
 
-        public RxMenuItem(string header)
+        public RxMenuItem(object header)
         {
             ((IRxMenuItem)this).Header = new PropertyValue<object>(header);
         }
 
         public void Add(VisualNode child)
         {
-            _contents.Add(child);
+            _menuItems.Add(child);
         }
 
         public IEnumerator<VisualNode> GetEnumerator()
         {
-            return _contents.GetEnumerator();
+            return _menuItems.GetEnumerator();
         }
 
         protected override void OnAddChild(VisualNode widget, AvaloniaObject childControl)
@@ -88,7 +88,7 @@ namespace AvaloniaReactorUI
 
         protected override IEnumerable<VisualNode> RenderChildren()
         {
-            return _contents;
+            return _menuItems;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -58,10 +58,7 @@ namespace AvaloniaReactorUI.Internals
         {
             while (!_exitFlag)
             {
-                if (!_hotReloadEvent.WaitOne(100))
-                {
-                    continue;
-                }
+                _hotReloadEvent.WaitOne();
 
                 if (!_exitFlag)
                 {

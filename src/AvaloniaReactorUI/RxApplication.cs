@@ -39,9 +39,19 @@ namespace AvaloniaReactorUI
                 _componentLoader = new WaitEventComponentLoader(assemblyFileName);//new AssemblyFileComponentLoader(assemblyFileName);
             }
 
+            if (application.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime classicDesktopStyleApplicationLifetime)
+            {
+                classicDesktopStyleApplicationLifetime.Exit += Application_Exit;
+            }
+
             Instance = this;
 
             _application = application ?? throw new ArgumentNullException(nameof(application));
+        }
+
+        private void Application_Exit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+        {
+            Stop();
         }
 
         public Action<UnhandledExceptionEventArgs>? UnhandledException { get; set; }
