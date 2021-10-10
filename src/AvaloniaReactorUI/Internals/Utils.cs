@@ -49,7 +49,7 @@ namespace AvaloniaReactorUI.Internals
             if (!File.Exists(assemblyPdbPath))
             {
                 assembly = Assembly.Load(ReadFileBytesWithoutLock(assemblyPath));
-                Trace.WriteLine($"[WpfReactorUI] Assembly '{assemblyPath}' loaded");
+                Trace.WriteLine($"[AvaloniaReactorUI] Assembly '{assemblyPath}' loaded");
             }
             else
             {
@@ -57,10 +57,10 @@ namespace AvaloniaReactorUI.Internals
                 File.Delete(assemblyPdbPath);
                 //var ghostAssemblyFilePath = Path.Combine(folderPath, assemblyName + "_ghost.pdb");
                 //File.Move(assemblyPdbPath, ghostAssemblyFilePath, true);
-                //Trace.WriteLine($"[WpfReactorUI] Assembly pdb '{assemblyPdbPath}' loaded from {ghostAssemblyFilePath}");
+                //Trace.WriteLine($"[AvaloniaReactorUI] Assembly pdb '{assemblyPdbPath}' loaded from {ghostAssemblyFilePath}");
                 assembly = Assembly.Load(ReadFileBytesWithoutLock(assemblyPath), pdbBuffer);
-                Trace.WriteLine($"[WpfReactorUI] Assembly '{assemblyPath}' loaded");
-                Trace.WriteLine($"[WpfReactorUI] Assembly pdb '{assemblyPdbPath}' loaded");
+                Trace.WriteLine($"[AvaloniaReactorUI] Assembly '{assemblyPath}' loaded");
+                Trace.WriteLine($"[AvaloniaReactorUI] Assembly pdb '{assemblyPdbPath}' loaded");
 
                 //File.WriteAllBytes(assemblyPdbPath, Array.Empty<byte>());
             }

@@ -5,10 +5,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\AvaloniaReactorUI\Internals\Utils.cs" Link="Utils.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.7" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AvaloniaReactorUI\AvaloniaReactorUI.csproj" />
   </ItemGroup>
 </Project>

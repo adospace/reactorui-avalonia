@@ -104,7 +104,7 @@ namespace AvaloniaReactorUI.HotReloader
 
             try
             {
-                var outputFolder = Path.Combine(_folderToMonitor, $"bin/WpfReactorUI/temp_generated");
+                var outputFolder = Path.Combine(_folderToMonitor, $"bin/AvaloniaReactorUI/temp_generated");
 
                 var cmdLine = $"build {(!fullBuild ? "--no-restore --no-dependencies" : "")} --output \"{outputFolder}\"";
                 Console.WriteLine($"Executing '{cmdLine}'");
