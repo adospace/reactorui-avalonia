@@ -296,7 +296,7 @@ namespace AvaloniaReactorUI.HotReloadVsExtension
                 var outputFolder = Path.Combine(projectFolder, $"bin/AvaloniaReactorUI/temp_generated");
 
                 var cmdLine = $"build {(!fullBuild ? "--no-restore --no-dependencies" : "")} --output \"{outputFolder}\"";
-                outputPane.OutputString($"Executing 'dotnet {cmdLine}'");
+                outputPane.OutputString($"Executing 'dotnet {cmdLine}'{Environment.NewLine}");
                 await RunDotnetAndWaitForExit(cmdLine, projectFolder, outputPane);
                 
                 var pdbAssemblyName = Path.GetFileNameWithoutExtension(assemblyPath) + ".pdb";

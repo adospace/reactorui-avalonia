@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Version Condition=" '$(APPVEYOR_BUILD_VERSION)' == '' ">0.0.1-local</Version>
     <Version Condition=" '$(APPVEYOR_BUILD_VERSION)' != '' ">$(APPVEYOR_BUILD_VERSION)-beta</Version>
     <Authors>adospace</Authors>
@@ -20,6 +20,6 @@
   </PropertyGroup>  
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.7" />
+    <PackageReference Include="Avalonia" Version="0.10.8" />
   </ItemGroup>
 </Project>

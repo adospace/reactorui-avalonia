@@ -10,6 +10,7 @@ namespace AvaloniaReactorUI.HotReloader
         private static string? _folderToMonitor;
         private static FileSystemWatcher? _fileSystemWatcher;
         private static string? _assemblyPath;
+        private static EventWaitHandle _hotReloadEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "AvaloniaReactorUI.HotReload");
 
         static void Main(string[] args)
         {
@@ -87,6 +88,8 @@ namespace AvaloniaReactorUI.HotReloader
                 {
                     TryBuildProject();
                 }
+
+                _hotReloadEvent.Set();
             }
             finally
             {

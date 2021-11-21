@@ -495,25 +495,25 @@ namespace AvaloniaReactorUI
 
         protected override void OnMigrated(VisualNode newNode)
         {
-            if (NativeControl != null)
-            {
-                //NativeControl.PropertyChanged -= NativeControl_PropertyChanged;
-                //NativeControl.PropertyChanging -= NativeControl_PropertyChanging;
+            //if (NativeControl != null)
+            //{
+            //    //NativeControl.PropertyChanged -= NativeControl_PropertyChanged;
+            //    //NativeControl.PropertyChanging -= NativeControl_PropertyChanging;
 
-                foreach (var attachedProperty in _attachedProperties)
-                {
-                    if (attachedProperty.Key.GetMetadata<T>() is IDirectPropertyMetadata directPropertyMetadata)
-                    {
-                        NativeControl.SetValue(attachedProperty.Key, directPropertyMetadata.UnsetValue);
-                    }
-                    else if (attachedProperty.Key.GetMetadata<T>() is IStyledPropertyMetadata styledPropertyMetadata)
-                    {
-                        NativeControl.SetValue(attachedProperty.Key, styledPropertyMetadata.DefaultValue);
-                    }
-                }
-            }
+            //    foreach (var attachedProperty in _attachedProperties)
+            //    {
+            //        if (attachedProperty.Key.GetMetadata<T>() is IDirectPropertyMetadata directPropertyMetadata)
+            //        {
+            //            NativeControl.SetValue(attachedProperty.Key, directPropertyMetadata.UnsetValue);
+            //        }
+            //        else if (attachedProperty.Key.GetMetadata<T>() is IStyledPropertyMetadata styledPropertyMetadata)
+            //        {
+            //            NativeControl.SetValue(attachedProperty.Key, styledPropertyMetadata.DefaultValue);
+            //        }
+            //    }
+            //}
 
-            _attachedProperties.Clear();
+            //_attachedProperties.Clear();
 
             base.OnMigrated(newNode);
         }
@@ -547,6 +547,7 @@ namespace AvaloniaReactorUI
         {
             foreach (var attachedProperty in _attachedProperties)
             {
+                System.Diagnostics.Trace.WriteLine($"{NativeControl} {attachedProperty.Key} = {attachedProperty.Value}");
                 NativeControl?.SetValue(attachedProperty.Key, attachedProperty.Value);
             }
 

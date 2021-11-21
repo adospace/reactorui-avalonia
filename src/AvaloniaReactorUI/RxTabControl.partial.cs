@@ -28,16 +28,16 @@ namespace AvaloniaReactorUI
 
     public partial class RxTabControl<T> : RxSelectingItemsControl<T>, IRxTabControl, IEnumerable<RxTabItem> where T : TabControl, new()
     {
-        private readonly List<RxTabItem> _contents = new();
+        private readonly List<RxTabItem> _tabItems = new();
 
         public void Add(RxTabItem child)
         {
-            _contents.Add(child);
+            _tabItems.Add(child);
         }
 
         public IEnumerator<RxTabItem> GetEnumerator()
         {
-            return _contents.GetEnumerator();
+            return _tabItems.GetEnumerator();
         }
 
         protected override void OnAddChild(VisualNode widget, AvaloniaObject childControl)
@@ -68,7 +68,7 @@ namespace AvaloniaReactorUI
 
         protected override IEnumerable<RxTabItem> RenderChildren()
         {
-            return _contents;
+            return _tabItems;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

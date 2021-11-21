@@ -67,6 +67,7 @@ namespace AvaloniaReactorUI
         {
             foreach (var attachedProperty in _attachedProperties)
             {
+                System.Diagnostics.Trace.WriteLine($"{nativeControl} {attachedProperty.Key} = {attachedProperty.Value}");
                 nativeControl.SetValue(attachedProperty.Key, attachedProperty.Value);
             }
 
@@ -77,17 +78,17 @@ namespace AvaloniaReactorUI
         {
             Parent?.RemoveChild(this, nativeControl);
             
-            foreach (var attachedProperty in _attachedProperties)
-            {
-                if (attachedProperty.Key.GetMetadata(nativeControl.GetType()) is IDirectPropertyMetadata directPropertyMetadata)
-                {
-                    nativeControl.SetValue(attachedProperty.Key, directPropertyMetadata.UnsetValue);
-                }
-                else if (attachedProperty.Key.GetMetadata(nativeControl.GetType()) is IStyledPropertyMetadata styledPropertyMetadata)
-                {
-                    nativeControl.SetValue(attachedProperty.Key, styledPropertyMetadata.DefaultValue);
-                }
-            }           
+            //foreach (var attachedProperty in _attachedProperties)
+            //{
+            //    if (attachedProperty.Key.GetMetadata(nativeControl.GetType()) is IDirectPropertyMetadata directPropertyMetadata)
+            //    {
+            //        nativeControl.SetValue(attachedProperty.Key, directPropertyMetadata.UnsetValue);
+            //    }
+            //    else if (attachedProperty.Key.GetMetadata(nativeControl.GetType()) is IStyledPropertyMetadata styledPropertyMetadata)
+            //    {
+            //        nativeControl.SetValue(attachedProperty.Key, styledPropertyMetadata.DefaultValue);
+            //    }
+            //}           
         }
 
         protected sealed override IEnumerable<VisualNode> RenderChildren()

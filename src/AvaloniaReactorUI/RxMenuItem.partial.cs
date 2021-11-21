@@ -51,8 +51,7 @@ namespace AvaloniaReactorUI
 
             if (childControl is MenuItem menuItem)
             {
-                NativeControl.Items ??= new ObservableCollection<MenuItem>();
-                Validate.EnsureNotNull(NativeControl.Items as ObservableCollection<MenuItem>).Add(menuItem);
+                Validate.EnsureNotNull(NativeControl.Items as IList).Add(menuItem);
             }
             else if (childControl is Image image)
             {
@@ -72,7 +71,7 @@ namespace AvaloniaReactorUI
 
             if (childControl is MenuItem menuItem)
             {
-                Validate.EnsureNotNull(NativeControl.Items as ObservableCollection<MenuItem>).Remove(menuItem);
+                Validate.EnsureNotNull(NativeControl.Items as IList).Remove(menuItem);
             }
             else if (childControl is Image)
             {

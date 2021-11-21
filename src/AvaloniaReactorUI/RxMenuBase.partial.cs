@@ -47,8 +47,7 @@ namespace AvaloniaReactorUI
 
             if (childControl is MenuItem menuItem)
             {
-                NativeControl.Items ??= new ObservableCollection<MenuItem>();
-                Validate.EnsureNotNull(NativeControl.Items as ObservableCollection<MenuItem>).Add(menuItem);
+                Validate.EnsureNotNull(NativeControl.Items as IList).Add(menuItem);
             }
             
 
@@ -61,16 +60,17 @@ namespace AvaloniaReactorUI
 
             if (childControl is MenuItem menuItem)
             {
-                Validate.EnsureNotNull(NativeControl.Items as ObservableCollection<MenuItem>).Remove(menuItem);
+                Validate.EnsureNotNull(NativeControl.Items as IList).Remove(menuItem);
             }
 
             base.OnRemoveChild(widget, childControl);
         }
 
-        protected override IEnumerable<RxMenuItem> RenderChildren()
+        protected override IEnumerable<VisualNode?> RenderChildren()
         {
             return _menuItems;
         }
+
 
         IEnumerator IEnumerable.GetEnumerator()
         {
