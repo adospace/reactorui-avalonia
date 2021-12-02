@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
 using Microsoft.CodeAnalysis;
@@ -29,6 +30,9 @@ namespace AvaloniaReactorUI.ScaffoldApp
                 .Where(_ => _.PropertyType != typeof(IDataTemplate))
                 .Where(_ => !(_typeToScaffold == typeof(StyledElement) && _.Name == "Name"))
                 .Where(_ => !(_typeToScaffold == typeof(ContentControl) && _.Name == "Content"))
+                .Where(_ => !(_typeToScaffold == typeof(HeaderedItemsControl) && _.Name == "Header"))
+                .Where(_ => !(_typeToScaffold == typeof(ItemsControl) && _.Name == "Items"))
+                .Where(_ => !(_typeToScaffold == typeof(MenuItem) && _.Name == "Icon"))
 
                 .Distinct(new PropertyInfoEqualityComparer())
                 .ToDictionary(_ => _.Name, _ => _);

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AvaloniaReactorUI.Host": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Source\\github\\AvalonCode\\src\\AvalonCode\\bin\\Debug\\net6.0\\AvalonCode.dll"
+    }
+  }
+}

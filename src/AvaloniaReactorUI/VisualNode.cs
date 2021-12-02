@@ -15,6 +15,16 @@ namespace AvaloniaReactorUI
         Action<object, PropertyChangingEventArgs>? PropertyChangingAction { get; set; }
 
         Action<object, PropertyChangedEventArgs>? PropertyChangedAction { get; set; }
+
+        IVisualNode? Parent { get; }
+
+        void AddChild(VisualNode widget, AvaloniaObject childNativeControl);
+
+        void RequestAnimationFrame();
+
+        void RequireLayoutCycle();
+
+        void RemoveChild(VisualNode visualNode, AvaloniaObject nativeControl);
     }
 
     public static class VisualNodeExtensions
@@ -124,7 +134,9 @@ namespace AvaloniaReactorUI
 
         internal bool IsAnimationFrameRequested { get; private set; } = false;
         internal bool IsLayoutCycleRequired { get; set; } = true;
-        internal VisualNode? Parent { get; private set; }
+        internal IVisualNode? Parent { get; private set; }
+
+        IVisualNode? IVisualNode.Parent => Parent;
 
         public void AppendAnimatable<T>(object key, T animation, Action<T> action) where T : RxAnimation
         {
@@ -179,7 +191,7 @@ namespace AvaloniaReactorUI
             _metadata[typeof(T).FullName ?? throw new InvalidOperationException()] = value;
         }
 
-        internal void AddChild(VisualNode widget, AvaloniaObject childNativeControl)
+        void IVisualNode.AddChild(VisualNode widget, AvaloniaObject childNativeControl)
         {
             OnAddChild(widget, childNativeControl);
         }
@@ -228,10 +240,9 @@ namespace AvaloniaReactorUI
             };
         }
 
-        internal virtual void Layout(VisualNode? parent = null)
+        internal virtual void Layout(IVisualNode parent)
         {
-            if (parent != null)
-                Parent = parent;
+            Parent = parent;
 
             if (!IsLayoutCycleRequired)
                 return;
@@ -257,7 +268,7 @@ namespace AvaloniaReactorUI
                 OnUpdate();
 
             foreach (var child in Children)
-                child.Layout();
+                child.Layout(this);
         }
 
         internal virtual void MergeChildrenFrom(IReadOnlyList<VisualNode> oldChildren)
@@ -299,7 +310,7 @@ namespace AvaloniaReactorUI
             Parent = null;
         }
 
-        internal void RemoveChild(VisualNode widget, AvaloniaObject childNativeControl)
+        void IVisualNode.RemoveChild(VisualNode widget, AvaloniaObject childNativeControl)
         {
             OnRemoveChild(widget, childNativeControl);
         }
@@ -317,11 +328,11 @@ namespace AvaloniaReactorUI
         {
             if (_animatables.Any(_ => _.Value.IsEnabled.GetValueOrDefault() && !_.Value.Animation.IsCompleted()))
             {
-                RequestAnimationFrame();
+                ((IVisualNode)this).RequestAnimationFrame();
             }
         }
 
-        protected T? GetParent<T>() where T : VisualNode
+        protected T? GetParent<T>() where T : IVisualNode
         {
             var parent = Parent;
             while (parent != null && !(parent is T))
@@ -334,7 +345,7 @@ namespace AvaloniaReactorUI
         {
             _invalidated = true;
 
-            RequireLayoutCycle();
+            ((IVisualNode)this).RequireLayoutCycle();
 
             OnInvalidated();
             //System.Diagnostics.Debug.WriteLine($"{this}->Invalidated()");
@@ -422,13 +433,13 @@ namespace AvaloniaReactorUI
             return animated;
         }
 
-        private void RequestAnimationFrame()
+        void IVisualNode.RequestAnimationFrame()
         {
             IsAnimationFrameRequested = true;
             Parent?.RequestAnimationFrame();
         }
 
-        private void RequireLayoutCycle()
+        void IVisualNode.RequireLayoutCycle()
         {
             if (IsLayoutCycleRequired)
                 return;
@@ -484,25 +495,25 @@ namespace AvaloniaReactorUI
 
         protected override void OnMigrated(VisualNode newNode)
         {
-            if (NativeControl != null)
-            {
-                //NativeControl.PropertyChanged -= NativeControl_PropertyChanged;
-                //NativeControl.PropertyChanging -= NativeControl_PropertyChanging;
+            //if (NativeControl != null)
+            //{
+            //    //NativeControl.PropertyChanged -= NativeControl_PropertyChanged;
+            //    //NativeControl.PropertyChanging -= NativeControl_PropertyChanging;
 
-                foreach (var attachedProperty in _attachedProperties)
-                {
-                    if (attachedProperty.Key.GetMetadata<T>() is IDirectPropertyMetadata directPropertyMetadata)
-                    {
-                        NativeControl.SetValue(attachedProperty.Key, directPropertyMetadata.UnsetValue);
-                    }
-                    else if (attachedProperty.Key.GetMetadata<T>() is IStyledPropertyMetadata styledPropertyMetadata)
-                    {
-                        NativeControl.SetValue(attachedProperty.Key, styledPropertyMetadata.DefaultValue);
-                    }
-                }
-            }
+            //    foreach (var attachedProperty in _attachedProperties)
+            //    {
+            //        if (attachedProperty.Key.GetMetadata<T>() is IDirectPropertyMetadata directPropertyMetadata)
+            //        {
+            //            NativeControl.SetValue(attachedProperty.Key, directPropertyMetadata.UnsetValue);
+            //        }
+            //        else if (attachedProperty.Key.GetMetadata<T>() is IStyledPropertyMetadata styledPropertyMetadata)
+            //        {
+            //            NativeControl.SetValue(attachedProperty.Key, styledPropertyMetadata.DefaultValue);
+            //        }
+            //    }
+            //}
 
-            _attachedProperties.Clear();
+            //_attachedProperties.Clear();
 
             base.OnMigrated(newNode);
         }
@@ -536,6 +547,7 @@ namespace AvaloniaReactorUI
         {
             foreach (var attachedProperty in _attachedProperties)
             {
+                System.Diagnostics.Trace.WriteLine($"{NativeControl} {attachedProperty.Key} = {attachedProperty.Value}");
                 NativeControl?.SetValue(attachedProperty.Key, attachedProperty.Value);
             }
 

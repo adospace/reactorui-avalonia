@@ -22,11 +22,13 @@ namespace AvaloniaReactorUI
     public partial interface IRxItemsControl
     {
         PropertyValue<IDataTemplate>? ItemTemplate { get; set; }
+        PropertyValue<IEnumerable>? Items { get; set; }
     }
 
     public partial class RxItemsControl<T>
     {
         PropertyValue<IDataTemplate>? IRxItemsControl.ItemTemplate { get; set; }
+        PropertyValue<IEnumerable>? IRxItemsControl.Items { get; set; }
 
         partial void OnBeginUpdate()
         {
@@ -36,7 +38,12 @@ namespace AvaloniaReactorUI
             NativeControl.Set(ItemsControl.ItemTemplateProperty, thisAsIRxLayoutable.ItemTemplate);
             //WARNING: changing ItemTemplate after the first time (i.e. when the listbox ItemContainerGenerator is already created)
             //doesn't re-create the item containers (see Avalonia source ItemsControl.cs:452)
-            //Somenthing that will be fixed in coming releases
+            //Something that will be fixed in coming releases
+
+            if (thisAsIRxLayoutable.Items != null)
+            {
+                NativeControl.Items = thisAsIRxLayoutable.Items.Value;
+            }
         }
     }
 
@@ -90,7 +97,7 @@ namespace AvaloniaReactorUI
 
         protected internal override void OnLayoutCycleRequested()
         {
-            Layout();
+            //Layout();
             base.OnLayoutCycleRequested();
         }
     }
@@ -104,10 +111,30 @@ namespace AvaloniaReactorUI
                 {
                     VisualNode newRoot = renderFunc(item);
                     var itemTemplateNode = new ItemTemplateNode(newRoot);
-                    itemTemplateNode.Layout();
+                    itemTemplateNode.Layout(itemscontrol);
                     return itemTemplateNode.RootControl;
                 }));
 
+            return itemscontrol;
+        }
+
+        public static T OnRenderTreeItem<T, I>(this T itemscontrol, Func<I, VisualNode> renderFunc, Func<I, IEnumerable> itemsSelectorFunc) where T : IRxItemsControl
+        {
+            itemscontrol.ItemTemplate = new PropertyValue<IDataTemplate>(
+                new FuncTreeDataTemplate<I>((item, ns) =>
+                {
+                    VisualNode newRoot = renderFunc(item);
+                    var itemTemplateNode = new ItemTemplateNode(newRoot);
+                    itemTemplateNode.Layout(itemscontrol);
+                    return (itemTemplateNode.RootControl as Control) ?? throw new InvalidOperationException();
+                }, itemsSelectorFunc));
+
+            return itemscontrol;
+        }
+
+        public static T Items<T>(this T itemscontrol, IEnumerable items) where T : IRxItemsControl
+        {
+            itemscontrol.Items = new PropertyValue<IEnumerable>(items);
             return itemscontrol;
         }
     }

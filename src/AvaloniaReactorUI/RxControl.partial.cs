@@ -55,7 +55,7 @@ namespace AvaloniaReactorUI
                 {
                     VisualNode newRoot = renderFunc(item);
                     var itemTemplateNode = new ItemTemplateNode(newRoot);
-                    itemTemplateNode.Layout();
+                    itemTemplateNode.Layout(itemscontrol);
                     return itemTemplateNode.RootControl;
                 }));
 

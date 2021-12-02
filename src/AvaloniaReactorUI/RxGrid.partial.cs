@@ -62,16 +62,32 @@ namespace AvaloniaReactorUI
             Validate.EnsureNotNull(NativeControl);
 
             var thisAsIRxGrid = (IRxGrid)this;
-            NativeControl.RowDefinitions = thisAsIRxGrid.Rows;
-            NativeControl.ColumnDefinitions = thisAsIRxGrid.Columns;
+            if (NativeControl.RowDefinitions.ToString() != thisAsIRxGrid.Rows.ToString())
+            {
+                NativeControl.RowDefinitions = thisAsIRxGrid.Rows;
+            }
+
+            if (NativeControl.ColumnDefinitions.ToString() != thisAsIRxGrid.Columns.ToString())
+            {
+                NativeControl.ColumnDefinitions = thisAsIRxGrid.Columns;
+            }
         }
     }
 
     public partial class RxGrid : RxGrid<Grid>
     {
+        public RxGrid(string rows, string columns)
+            :base(rows, columns)
+        {
+        }
+
+        public RxGrid(RowDefinitions rows, ColumnDefinitions columns)
+            :base(rows, columns)
+        {
+        }
 
     }
-    
+
     public static partial class RxGridExtensions
     {
         public static T Rows<T>(this T grid, string rows) where T : IRxGrid

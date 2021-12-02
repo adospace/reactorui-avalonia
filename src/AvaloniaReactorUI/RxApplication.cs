@@ -5,28 +5,53 @@ using Avalonia.Threading;
 using AvaloniaReactorUI.Internals;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
 namespace AvaloniaReactorUI
 {
-    public abstract class RxApplication : VisualNode, IRxHostElement
+    public interface IRxApplication
+    {
+        IRxHostElement Run();
+        void Stop();
+    }
+
+    public static class RxApplicationBuilder<T> where T : RxComponent, new()
+    {
+        public static IRxApplication Create(Application application)
+            => new RxApplication<T>(application);
+    }
+
+    internal abstract class RxApplication : VisualNode, IRxHostElement, IRxApplication
     {
         public static RxApplication? Instance { get; private set; }
         protected readonly Application _application;
 
-        //internal IComponentLoader ComponentLoader { get; set; } = new LocalComponentLoader();
+        protected readonly IComponentLoader? _componentLoader;
 
         protected RxApplication(Application application)
         {
-            //if (Instance != null)
-            //{
-            //    throw new InvalidOperationException("Only one instance of RxApplication is permitted");
-            //}
+            var assemblyFileName = Environment.GetEnvironmentVariable("AvaloniaReactorUI.Host.HotReloadAssembly");
+
+            if (!string.IsNullOrWhiteSpace(assemblyFileName))
+            {
+                _componentLoader = new WaitEventComponentLoader(assemblyFileName);//new AssemblyFileComponentLoader(assemblyFileName);
+            }
+
+            if (application.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime classicDesktopStyleApplicationLifetime)
+            {
+                classicDesktopStyleApplicationLifetime.Exit += Application_Exit;
+            }
 
             Instance = this;
 
             _application = application ?? throw new ArgumentNullException(nameof(application));
+        }
+
+        private void Application_Exit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+        {
+            Stop();
         }
 
         public Action<UnhandledExceptionEventArgs>? UnhandledException { get; set; }
@@ -41,27 +66,11 @@ namespace AvaloniaReactorUI
 
         public abstract void Stop();
 
-        public static RxApplication Create<T>(Application application) where T : RxComponent, new()
-            => new RxApplication<T>(application);
-
-        // public static RxApplication CreateWithHotReload<T>(Application application) where T : RxComponent, new()
-        //     => new RxHotReloadApplication<T>(application);
-
-        public RxApplication WithContext(string key, object value)
-        {
-            Context[key] = value;
-            return this;
-        }
-
         public RxApplication OnUnhandledException(Action<UnhandledExceptionEventArgs> action)
         {
             UnhandledException = action;
             return this;
         }
-
-        //public INavigation Navigation => _application.MainWindow?.Navigation;
-
-        public RxContext Context { get; } = new RxContext();
 
         public Window? ContainerWindow
         {
@@ -73,12 +82,11 @@ namespace AvaloniaReactorUI
                 return null;
             }
         }
-
     }
 
-    public class RxApplication<T> : RxApplication where T : RxComponent, new()
+    internal sealed class RxApplication<T> : RxApplication where T : RxComponent, new()
     {
-        protected RxComponent? _rootComponent;
+        private RxComponent? _rootComponent;
         private bool _sleeping = true;
 
 
@@ -115,10 +123,10 @@ namespace AvaloniaReactorUI
                 OnLayout();
             }
 
-            if (ComponentLoader.Instance != null)
+            if (_componentLoader != null)
             {
-                ComponentLoader.Instance.ComponentAssemblyChanged += OnComponentAssemblyChanged;
-                ComponentLoader.Instance.Run();
+                _componentLoader.ComponentAssemblyChanged += OnComponentAssemblyChanged;
+                _componentLoader.Run();
             }
 
             return this;
@@ -128,7 +136,9 @@ namespace AvaloniaReactorUI
         {
             try
             {
-                var newComponent = ComponentLoader.Instance?.LoadComponent<T>();
+                Validate.EnsureNotNull(_componentLoader);
+
+                var newComponent = _componentLoader.LoadComponent<T>();
 
                 if (newComponent != null)
                 {
@@ -149,10 +159,10 @@ namespace AvaloniaReactorUI
                 _sleeping = true;
             }
 
-            if (ComponentLoader.Instance != null)
+            if (_componentLoader != null)
             {
-                ComponentLoader.Instance.ComponentAssemblyChanged -= OnComponentAssemblyChanged;
-                ComponentLoader.Instance.Stop();
+                _componentLoader.ComponentAssemblyChanged -= OnComponentAssemblyChanged;
+                _componentLoader.Stop();
             }
         }
 
@@ -172,7 +182,7 @@ namespace AvaloniaReactorUI
         {
             try
             {
-                Layout();
+                Layout(this);
                 SetupAnimationTimer();
             }
             catch (Exception ex)
@@ -198,61 +208,4 @@ namespace AvaloniaReactorUI
             }
         }
     }
-
-    // public class RxHotReloadApplication<T> : RxApplication<T> where T : RxComponent, new()
-    // {
-    //     private readonly HotReloadServer _hotReloadServer;
-
-
-    //     internal RxHotReloadApplication(Application application, int serverPort = 45821) : base(application)
-    //     {
-    //         _hotReloadServer = new HotReloadServer(serverPort);
-    //     }
-
-    //     public override IRxHostElement Run()
-    //     {
-    //         _hotReloadServer.HotReloadCommandIssued += OnHotReloadServer_HotReloadCommandIssued;
-    //         _hotReloadServer.Start();
-
-    //         return base.Run();
-    //     }
-
-    //     private void OnHotReloadServer_HotReloadCommandIssued(object sender, AssemblyToReloadEventArgs e)
-    //     {
-    //         try
-    //         {
-    //             var assemblyPath = e.Path;
-    //             var assemblyPdbPath = Path.Combine(Path.GetDirectoryName(assemblyPath), Path.GetFileNameWithoutExtension(assemblyPath) + ".pdb");
-
-    //             var assembly = File.Exists(assemblyPdbPath) ?
-    //                 Assembly.Load(File.ReadAllBytes(assemblyPath))
-    //                 :
-    //                 Assembly.Load(File.ReadAllBytes(assemblyPath), File.ReadAllBytes(assemblyPdbPath));
-
-    //             var type = assembly.GetType(typeof(T).FullName);
-
-    //             if (type == null)
-    //                 return;
-
-    //             var newComponent = (RxComponent)Activator.CreateInstance(type);
-
-    //             if (newComponent != null)
-    //             {
-    //                 _rootComponent = newComponent;
-    //                 Invalidate();
-    //             }
-    //         }
-    //         catch (Exception ex)
-    //         {
-    //             FireUnhandledExpectionEvent(ex);
-    //         }
-    //     }
-
-    //     public override void Stop()
-    //     {
-    //         _hotReloadServer.Stop();
-
-    //         base.Stop();
-    //     }
-    // }
 }

@@ -20,7 +20,7 @@ namespace AvaloniaReactorUI.DemoApp
                     .FontSize(24)
                     .HCenter(),
                 new RxButton()
-                    .Content("Click to increase counter")
+                    .Content("Click to increase counter 11")
                     .OnClick(() => SetState(_=> _.Count++))
             }
             .Spacing(10)

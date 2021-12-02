@@ -19,3 +19,23 @@ Avalonia.Controls.Primitives.SelectingItemsControl
 Avalonia.Controls.ListBox
 Avalonia.Controls.Grid
 Avalonia.Controls.TextBox
+Avalonia.Controls.TreeView
+Avalonia.Controls.Primitives.HeaderedItemsControl
+Avalonia.Controls.TreeViewItem
+Avalonia.Controls.ItemsRepeater
+Avalonia.Controls.DataGrid AvaloniaReactorUI.DataGrid
+Avalonia.Controls.CheckBox
+Avalonia.Controls.ComboBox
+Avalonia.Controls.Primitives.ToggleButton
+Avalonia.Controls.Primitives.Thumb
+Avalonia.Controls.GridSplitter
+Avalonia.Controls.Menu
+Avalonia.Controls.MenuBase
+Avalonia.Controls.MenuItem
+Avalonia.Controls.Primitives.HeaderedSelectingItemsControl
+Avalonia.Controls.TabControl
+Avalonia.Controls.TabItem
+Avalonia.Controls.Primitives.HeaderedContentControl
+Avalonia.Controls.DockPanel
+Avalonia.Controls.ScrollViewer
+

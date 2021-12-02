@@ -11,15 +11,16 @@ namespace AvaloniaReactorUI.ScaffoldConsole
     {
         static void Main(string[] args)
         {
-            if (args == null ||
-                args.Length == 0)
-            {
-                Console.WriteLine("AvaloniaReactorUI folder not specified");
-                return;
-            }
-
+            //if (args == null ||
+            //    args.Length == 0)
+            //{
+            //    Console.WriteLine("AvaloniaReactorUI base folder not specified (usually src folder)");
+            //    return;
+            //}
+            var basePath = @"..\..\..\..";
             var animatable = new Animatable();
             var button = new Button();
+            var datagrid = new DataGridTextColumn();
             var types = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
                              // alternative: from domainAssembly in domainAssembly.GetExportedTypes()
                          from assemblyType in domainAssembly.GetTypes()
@@ -29,10 +30,22 @@ namespace AvaloniaReactorUI.ScaffoldConsole
                          select assemblyType)
                 .ToDictionary(_ => _.FullName ?? throw new InvalidOperationException(), _ => _);
 
-            foreach (var classNameToGenerate in File.ReadAllLines("WidgetList.txt"))
+            foreach (var classNameToGenerateLine in File.ReadAllLines("WidgetList.txt"))
             {
+                if (string.IsNullOrWhiteSpace(classNameToGenerateLine))
+                    continue;
+
+                var lineTokens = classNameToGenerateLine.Split(" ");
+                var classNameToGenerate = lineTokens[0];
+                var targetBasePath = Path.Combine(basePath, "AvaloniaReactorUI");
+
+                if (lineTokens.Length > 1)
+                {
+                    targetBasePath = Path.Combine(basePath, lineTokens[1]);
+                }
+                
                 var typeToGenerate = types[classNameToGenerate];
-                var targetPath = Path.Combine(args[0], $"Rx{typeToGenerate.Name}.cs");
+                var targetPath = Path.Combine(targetBasePath, $"Rx{typeToGenerate.Name}.cs");
                 Console.WriteLine($"Generating {typeToGenerate.FullName} to {targetPath}...");
 
                 var generator = new TypeSourceGenerator(typeToGenerate);

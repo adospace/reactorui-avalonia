@@ -48,6 +48,12 @@ namespace AvaloniaReactorUI
         PropertyValue<bool>? IsUndoEnabled { get; set; }
         PropertyValue<int>? UndoLimit { get; set; }
 
+        Action? CopyingToClipboardAction { get; set; }
+        Action<RoutedEventArgs>? CopyingToClipboardActionWithArgs { get; set; }
+        Action? CuttingToClipboardAction { get; set; }
+        Action<RoutedEventArgs>? CuttingToClipboardActionWithArgs { get; set; }
+        Action? PastingFromClipboardAction { get; set; }
+        Action<RoutedEventArgs>? PastingFromClipboardActionWithArgs { get; set; }
     }
 
     public partial class RxTextBox<T> : RxTemplatedControl<T>, IRxTextBox where T : TextBox, new()
@@ -88,6 +94,12 @@ namespace AvaloniaReactorUI
         PropertyValue<bool>? IRxTextBox.IsUndoEnabled { get; set; }
         PropertyValue<int>? IRxTextBox.UndoLimit { get; set; }
 
+        Action? IRxTextBox.CopyingToClipboardAction { get; set; }
+        Action<RoutedEventArgs>? IRxTextBox.CopyingToClipboardActionWithArgs { get; set; }
+        Action? IRxTextBox.CuttingToClipboardAction { get; set; }
+        Action<RoutedEventArgs>? IRxTextBox.CuttingToClipboardActionWithArgs { get; set; }
+        Action? IRxTextBox.PastingFromClipboardAction { get; set; }
+        Action<RoutedEventArgs>? IRxTextBox.PastingFromClipboardActionWithArgs { get; set; }
 
         protected override void OnUpdate()
         {
@@ -129,6 +141,57 @@ namespace AvaloniaReactorUI
         partial void OnBeginUpdate();
         partial void OnEndUpdate();
 
+        protected override void OnAttachNativeEvents()
+        {
+            Validate.EnsureNotNull(NativeControl);
+
+            var thisAsIRxTextBox = (IRxTextBox)this;
+            if (thisAsIRxTextBox.CopyingToClipboardAction != null || thisAsIRxTextBox.CopyingToClipboardActionWithArgs != null)
+            {
+                NativeControl.CopyingToClipboard += NativeControl_CopyingToClipboard;
+            }
+            if (thisAsIRxTextBox.CuttingToClipboardAction != null || thisAsIRxTextBox.CuttingToClipboardActionWithArgs != null)
+            {
+                NativeControl.CuttingToClipboard += NativeControl_CuttingToClipboard;
+            }
+            if (thisAsIRxTextBox.PastingFromClipboardAction != null || thisAsIRxTextBox.PastingFromClipboardActionWithArgs != null)
+            {
+                NativeControl.PastingFromClipboard += NativeControl_PastingFromClipboard;
+            }
+
+            base.OnAttachNativeEvents();
+        }
+
+        private void NativeControl_CopyingToClipboard(object? sender, RoutedEventArgs e)
+        {
+            var thisAsIRxTextBox = (IRxTextBox)this;
+            thisAsIRxTextBox.CopyingToClipboardAction?.Invoke();
+            thisAsIRxTextBox.CopyingToClipboardActionWithArgs?.Invoke(e);
+        }
+        private void NativeControl_CuttingToClipboard(object? sender, RoutedEventArgs e)
+        {
+            var thisAsIRxTextBox = (IRxTextBox)this;
+            thisAsIRxTextBox.CuttingToClipboardAction?.Invoke();
+            thisAsIRxTextBox.CuttingToClipboardActionWithArgs?.Invoke(e);
+        }
+        private void NativeControl_PastingFromClipboard(object? sender, RoutedEventArgs e)
+        {
+            var thisAsIRxTextBox = (IRxTextBox)this;
+            thisAsIRxTextBox.PastingFromClipboardAction?.Invoke();
+            thisAsIRxTextBox.PastingFromClipboardActionWithArgs?.Invoke(e);
+        }
+
+        protected override void OnDetachNativeEvents()
+        {
+            if (NativeControl != null)
+            {
+                NativeControl.CopyingToClipboard -= NativeControl_CopyingToClipboard;
+                NativeControl.CuttingToClipboard -= NativeControl_CuttingToClipboard;
+                NativeControl.PastingFromClipboard -= NativeControl_PastingFromClipboard;
+            }
+
+            base.OnDetachNativeEvents();
+        }
     }
     public partial class RxTextBox : RxTextBox<TextBox>
     {
@@ -263,6 +326,39 @@ namespace AvaloniaReactorUI
         public static T UndoLimit<T>(this T textbox, int undoLimit) where T : IRxTextBox
         {
             textbox.UndoLimit = new PropertyValue<int>(undoLimit);
+            return textbox;
+        }
+        public static T OnCopyingToClipboard<T>(this T textbox, Action copyingtoclipboardAction) where T : IRxTextBox
+        {
+            textbox.CopyingToClipboardAction = copyingtoclipboardAction;
+            return textbox;
+        }
+
+        public static T OnCopyingToClipboard<T>(this T textbox, Action<RoutedEventArgs> copyingtoclipboardActionWithArgs) where T : IRxTextBox
+        {
+            textbox.CopyingToClipboardActionWithArgs = copyingtoclipboardActionWithArgs;
+            return textbox;
+        }
+        public static T OnCuttingToClipboard<T>(this T textbox, Action cuttingtoclipboardAction) where T : IRxTextBox
+        {
+            textbox.CuttingToClipboardAction = cuttingtoclipboardAction;
+            return textbox;
+        }
+
+        public static T OnCuttingToClipboard<T>(this T textbox, Action<RoutedEventArgs> cuttingtoclipboardActionWithArgs) where T : IRxTextBox
+        {
+            textbox.CuttingToClipboardActionWithArgs = cuttingtoclipboardActionWithArgs;
+            return textbox;
+        }
+        public static T OnPastingFromClipboard<T>(this T textbox, Action pastingfromclipboardAction) where T : IRxTextBox
+        {
+            textbox.PastingFromClipboardAction = pastingfromclipboardAction;
+            return textbox;
+        }
+
+        public static T OnPastingFromClipboard<T>(this T textbox, Action<RoutedEventArgs> pastingfromclipboardActionWithArgs) where T : IRxTextBox
+        {
+            textbox.PastingFromClipboardActionWithArgs = pastingfromclipboardActionWithArgs;
             return textbox;
         }
     }

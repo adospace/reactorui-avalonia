@@ -87,7 +87,10 @@ namespace AvaloniaReactorUI.ScaffoldApp
         {
             var dlg = new OpenFileDialog
             {
-                Filters = new[] { new FileDialogFilter() { Name = "Assembly files (*.dll,*.exe)", Extensions = new[] { "*.dll", "*.exe" }.ToList() } }.ToList()
+                Filters = new[] 
+                {
+                    new FileDialogFilter() { Name = "Assembly files (*.dll,*.exe)", Extensions = new[] { "dll", "exe" }.ToList() } 
+                }.ToList()
             };
 
             var fileNames = await dlg.ShowAsync(_view);

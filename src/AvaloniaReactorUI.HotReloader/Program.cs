@@ -10,6 +10,7 @@ namespace AvaloniaReactorUI.HotReloader
         private static string? _folderToMonitor;
         private static FileSystemWatcher? _fileSystemWatcher;
         private static string? _assemblyPath;
+        private static EventWaitHandle _hotReloadEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "AvaloniaReactorUI.HotReload");
 
         static void Main(string[] args)
         {
@@ -24,7 +25,7 @@ namespace AvaloniaReactorUI.HotReloader
 
             TryBuildProject(true);
 
-            using var fs = new FileSystemWatcher(
+            _fileSystemWatcher = new FileSystemWatcher(
                 _folderToMonitor,
                 "*.cs")
             {
@@ -38,7 +39,6 @@ namespace AvaloniaReactorUI.HotReloader
                 IncludeSubdirectories = true
             };
 
-            _fileSystemWatcher = fs;
             _fileSystemWatcher.Changed += OnFileChanged;
             _fileSystemWatcher.Error += OnFileError;
 
@@ -51,9 +51,12 @@ namespace AvaloniaReactorUI.HotReloader
 
             exitEvent.WaitOne();
 
+
             _fileSystemWatcher.EnableRaisingEvents = false;
             _fileSystemWatcher.Changed -= OnFileChanged;
             _fileSystemWatcher.Error -= OnFileError;
+            _fileSystemWatcher.Dispose();
+            _fileSystemWatcher = null;
         }
 
         private static void OnFileError(object sender, ErrorEventArgs e)
@@ -85,6 +88,8 @@ namespace AvaloniaReactorUI.HotReloader
                 {
                     TryBuildProject();
                 }
+
+                _hotReloadEvent.Set();
             }
             finally
             {
@@ -102,7 +107,7 @@ namespace AvaloniaReactorUI.HotReloader
 
             try
             {
-                var outputFolder = Path.Combine(_folderToMonitor, $"bin/WpfReactorUI/temp_generated");
+                var outputFolder = Path.Combine(_folderToMonitor, $"bin/AvaloniaReactorUI/temp_generated");
 
                 var cmdLine = $"build {(!fullBuild ? "--no-restore --no-dependencies" : "")} --output \"{outputFolder}\"";
                 Console.WriteLine($"Executing '{cmdLine}'");

@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using System;
 
 namespace AvaloniaReactorUI.DemoApp
 {
@@ -13,7 +14,8 @@ namespace AvaloniaReactorUI.DemoApp
         
         public override void OnFrameworkInitializationCompleted()
         {
-            RxApplication.Create<MainComponent>(this)
+            RxApplicationBuilder<MainComponent>
+                .Create(this)
                 .Run();
 
             base.OnFrameworkInitializationCompleted();
