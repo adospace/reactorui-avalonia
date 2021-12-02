@@ -87,7 +87,7 @@ namespace AvaloniaReactorUI
         partial void OnEndUpdate()
         {
             Validate.EnsureNotNull(NativeControl);
-            
+
             var thisAsIRxLayoutable = (IRxTabControl)this;
             NativeControl.Set(TabControl.ContentTemplateProperty, thisAsIRxLayoutable.ContentTemplate);
         }
