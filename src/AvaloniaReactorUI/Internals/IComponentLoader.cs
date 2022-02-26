@@ -6,7 +6,7 @@ namespace AvaloniaReactorUI.Internals
     {
        RxComponent LoadComponent<T>() where T : RxComponent, new();
 
-       event EventHandler ComponentAssemblyChanged;
+       event EventHandler? ComponentAssemblyChanged;
 
        void Run();
 

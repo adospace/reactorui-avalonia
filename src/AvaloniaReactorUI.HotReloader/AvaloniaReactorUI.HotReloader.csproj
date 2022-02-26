@@ -1,13 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <Version Condition=" '$(APPVEYOR_BUILD_VERSION)' == '' ">0.0.1-local</Version>
+    <Version Condition=" '$(APPVEYOR_BUILD_VERSION)' != '' ">$(APPVEYOR_BUILD_VERSION)-beta</Version>
+    <Authors>adospace</Authors>
+    <Description>This command allows hot-reload of an application written with AvaloniaReactorUI.</Description>
+    <Copyright>Adolfo Marinucci</Copyright>
+    <PackageProjectUrl>https://github.com/adospace/reactorui-avalonia</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/adospace/reactorui-avalonia</RepositoryUrl>
+    <PackageTags>avalonia mvu components reactjs flutter</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>MauiReactor</ToolCommandName>
+  </PropertyGroup>
+
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;ROSLYN_COMPILER</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;ROSLYN_COMPILER</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SimpleExec" Version="8.0.0" />
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.4.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.0.1" />
+    <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

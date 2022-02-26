@@ -4,101 +4,142 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace AvaloniaReactorUI.Internals
 {
-//     internal class HotReloadServer
-//     {
-//         private readonly int _listenPort;
-//         private CancellationTokenSource _cancellationTokenSource;
-//         private TcpListener _serverSocket;
+    internal class HotReloadServer
+    {
+        private CancellationTokenSource? _cancellationTokenSource;
+        private const int _androidListenPort = 45820;
+        private const int _defaultListenPort = 45821;
+        private readonly Action<Assembly> _newAssemblyReceived;
 
-//         public HotReloadServer(int listenPort)
-//         {
-//             _listenPort = listenPort;
-//         }
+        public HotReloadServer(Action<Assembly> newAssemblyReceived)
+        {
+            _newAssemblyReceived = newAssemblyReceived;
+        }
 
-//         public async void Start()
-//         {
-//             lock (this)
-//             {
-//                 if (_cancellationTokenSource != null)
-//                     return;
+        public async void Run()
+        {
+            Stop();
 
-//                 _cancellationTokenSource = new CancellationTokenSource();
-//             }
+            _cancellationTokenSource = new CancellationTokenSource();
 
-//             var cancellationToken = _cancellationTokenSource.Token;
-//             _serverSocket = new TcpListener(IPAddress.Loopback, _listenPort);
+            await Task.WhenAll(
+                ConnectionLoop(_androidListenPort, _cancellationTokenSource.Token),
+                ConnectionLoop(_defaultListenPort, _cancellationTokenSource.Token));
+        }
 
-//             try
-//             {
-//                 _serverSocket.Start(1);
+        public void Stop()
+        {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
+        }
 
-//                 while (!cancellationToken.IsCancellationRequested)
-//                 {
-//                     var connectedClient = await _serverSocket.AcceptTcpClientAsync();
+        private async Task ConnectionLoop(int listenPort, CancellationToken cancellationToken)
+        {
+            TcpListener? tcpListener = null;
 
-//                     HandleClientConnect(connectedClient);
-//                 }
-//             }
-//             catch (TaskCanceledException)
-//             {
-//                 //stop called
-//             }
-//             catch (ObjectDisposedException)
-//             {
-//                 //stop called
-//             }
-//             catch (Exception ex)
-//             {
-//                 System.Diagnostics.Trace.WriteLine(ex);
-//             }
-//             finally
-//             {
-//                 _serverSocket.Stop();
-//                 _serverSocket = null;
+            while (tcpListener == null && !cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    tcpListener = new TcpListener(IPAddress.Any, listenPort);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[AvaloniaReactor] Unable to bind hot-reload server to local address {listenPort}, waiting 60000ms before try again:{Environment.NewLine}{ex}");
 
-//                 lock (this)
-//                     _cancellationTokenSource = null;
-//             }
-//         }
+                    await Task.Delay(60000, cancellationToken);
+                }
+            }
 
-//         private void HandleClientConnect(TcpClient connectedClient)
-//         {
-//             try
-//             {
-//                 connectedClient.ReceiveTimeout = 50000;
-//                 using var sr = new StreamReader(connectedClient.GetStream());
-//                 var command = sr.ReadLine().Split('|');
-//                 if (command[0] == "RELOAD")
-//                 {
-//                     HotReloadCommandIssued?.Invoke(this, new AssemblyToReloadEventArgs(command[1]));
-//                 }
-//             }
-//             catch (Exception)
-//             {
-//             }
-//         }
+            if (tcpListener == null)
+            {
+                return;
+            }
 
-//         public void Stop()
-//         {
-//             lock (this)
-//             {
-//                 if (_cancellationTokenSource == null)
-//                     return;
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    System.Diagnostics.Debug.WriteLine($"[MauiReactor] Hot-Reload server started listening on {listenPort}");
+                    tcpListener.Start();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[MauiReactor] Hot-Reload server is unable to list on port {listenPort}:{Environment.NewLine}{ex}");
+                    await Task.Delay(60000, cancellationToken);
+                    continue;
+                }
 
-//                 if (!_cancellationTokenSource.IsCancellationRequested)
-//                     _cancellationTokenSource.Cancel();
-//             }
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    Socket socketConnectedToClient;
+                    try
+                    {
+                        socketConnectedToClient = await tcpListener.AcceptSocketAsync(cancellationToken);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        break;
+                    }
 
-//             _serverSocket?.Stop();
-//         }
+                    //System.Diagnostics.Debug.WriteLine($"[MauiReactor] Hot-Reload connection accepted from {socketConnectedToClient.RemoteEndPoint}, begin connection loop");
 
-//         public event EventHandler<AssemblyToReloadEventArgs> HotReloadCommandIssued;
-//     }
+                    socketConnectedToClient.ReceiveTimeout = 10000;
+                    socketConnectedToClient.SendTimeout = 10000;
+
+                    await StartConnectionLoop(socketConnectedToClient, cancellationToken);
+
+                    System.Diagnostics.Debug.WriteLine($"[MauiReactor] Hot-Reload completed");
+                }
+            }
+
+            tcpListener.Stop();
+        }
+
+        private async Task StartConnectionLoop(Socket socketConnectedToClient, CancellationToken cancellationToken)
+        {
+            using var socketStream = new NetworkStream(socketConnectedToClient);
+
+            var bufferedStream = new BufferedStream(socketStream);
+
+            int length = await bufferedStream.ReadInt32Async(cancellationToken);
+            if (length == -1)
+                return;
+
+            var assemblyRaw = await bufferedStream.ReadAsync(length, cancellationToken);
+
+            length = await bufferedStream.ReadInt32Async(cancellationToken);
+            if (length > 0)
+            {
+                var assemblySymbolStoreRaw = await bufferedStream.ReadAsync(length, cancellationToken);
+
+                try
+                {
+                    _newAssemblyReceived?.Invoke(Assembly.Load(assemblyRaw, assemblySymbolStoreRaw));
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine(ex);                
+                }
+            }
+            else
+            {
+                _newAssemblyReceived?.Invoke(Assembly.Load(assemblyRaw));
+            }
+
+            await socketStream.WriteAsync(new byte[] { 0x1 }, cancellationToken);
+
+            await socketStream.FlushAsync(cancellationToken);
+        }
+
+    }
 
 }

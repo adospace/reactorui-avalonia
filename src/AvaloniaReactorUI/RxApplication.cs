@@ -36,7 +36,8 @@ namespace AvaloniaReactorUI
 
             if (!string.IsNullOrWhiteSpace(assemblyFileName))
             {
-                _componentLoader = new WaitEventComponentLoader(assemblyFileName);//new AssemblyFileComponentLoader(assemblyFileName);
+                //_componentLoader = new WaitEventComponentLoader(assemblyFileName);//new AssemblyFileComponentLoader(assemblyFileName);
+                _componentLoader = new RemoteComponentLoader();
             }
 
             if (application.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime classicDesktopStyleApplicationLifetime)

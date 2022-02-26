@@ -11,62 +11,53 @@ using System.Threading.Tasks;
 
 namespace AvaloniaReactorUI.Internals
 {
-    //internal class RemoteComponentLoader : IComponentLoader
-    //{
-    //    private Assembly[] _latestAssemblies;
-    //    private readonly HotReloadServer _hotReloadServer;
+    internal class RemoteComponentLoader : IComponentLoader
+    {
+        public event EventHandler? ComponentAssemblyChanged;
 
-    //    public static IComponentLoader Instance { get; set; } = new RemoteComponentLoader();
+        private readonly HotReloadServer _server;
 
-    //    public RemoteComponentLoader(int serverPort = 45821)
-    //    {
-    //        if (Instance != null)
-    //        {
-    //            throw new InvalidOperationException("Only one instance of RxApplication is permitted");
-    //        }
+        private Assembly? _assembly;
 
-    //        Instance = this;
+        public RxComponent? LoadComponent<T>() where T : RxComponent, new()
+        {
+            if (_assembly == null)
+                return new T();
 
-    //        _hotReloadServer = new HotReloadServer(serverPort);
-    //    }
+            var type = _assembly.GetType(typeof(T).FullName ?? throw new InvalidOperationException());
 
-    //    private void OnHotReloadCommandIssued(object sender, EventArgs e)
-    //    {
-    //        _latestAssemblies = new [] { Assembly.LoadFrom(_));
-    //        ComponentAssemblyChanged?.Invoke(this, EventArgs.Empty);
-    //    }
+            if (type == null)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"Unable to hot reload component {typeof(T).FullName}: type not found in received assembly");
+                return null;
+                //throw new InvalidOperationException($"Unable to hot relead component {typeof(T).FullName}: type not found in received assembly");
+            }
 
-    //    public void Run()
-    //    {
-    //        _hotReloadServer.HotReloadCommandIssued += OnHotReloadCommandIssued;
-    //        _hotReloadServer.Start();
-    //    }
+            return (RxComponent?)(Activator.CreateInstance(type) ?? throw new InvalidOperationException());
+        }
 
-    //    public void Stop()
-    //    {
-    //        _hotReloadServer.HotReloadCommandIssued -= OnHotReloadCommandIssued;
-    //        _hotReloadServer.Stop();
-    //    }
+        public RemoteComponentLoader()
+        {
+            _server = new HotReloadServer(ReceivedAssemblyFromHost);
+        }
 
-    //    public event EventHandler ComponentAssemblyChanged;
+        private void ReceivedAssemblyFromHost(Assembly newAssembly)
+        {
+            _assembly = newAssembly;
+            ComponentAssemblyChanged?.Invoke(this, EventArgs.Empty);
+        }
 
-    //    public RxComponent LoadComponent<T>() where T : RxComponent, new()
-    //    {
-    //        if (_latestAssemblies == null)
-    //            return new T();
+        public void Run()
+        {
+            _server.Run();
+        }
 
-    //        foreach (var assembly in _latestAssemblies)
-    //        {
-    //            var type = assembly.GetType(typeof(T).FullName);
+        public void Stop()
+        {
+            _server.Stop();
+        }
+    }
 
-    //            if (type != null)
-    //            {
-    //                return (RxComponent)Activator.CreateInstance(type);
-    //            }
-    //        }
-
-    //        return null;
-    //    }
-    //}
 
 }

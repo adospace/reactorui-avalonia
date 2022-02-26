@@ -21,8 +21,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.10" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.10" />
+    <PackageReference Include="Avalonia" Version="0.10.12" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.12" />
   </ItemGroup>
 
   <ItemGroup>
